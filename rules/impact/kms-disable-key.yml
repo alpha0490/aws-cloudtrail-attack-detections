@@ -1,0 +1,26 @@
+title: AWS KMS Key Disabled or Policy Weakened
+id: f8cb6959-49c7-45e1-af2b-620f4e59a6d7
+status: experimental
+description: Detects disabling a KMS key or its rotation, or rewriting its policy (DisableKey/DisableKeyRotation/PutKeyPolicy). Can break decryption (denial) or grant the attacker control of the key.
+references:
+- https://attack.mitre.org/techniques/T1486/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.impact
+- attack.t1486
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - DisableKey
+    - DisableKeyRotation
+    - PutKeyPolicy
+    eventSource: kms.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate key administration (review the change).
+level: high

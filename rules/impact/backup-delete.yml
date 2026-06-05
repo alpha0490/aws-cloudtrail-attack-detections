@@ -1,0 +1,26 @@
+title: AWS Backup Resources Deleted
+id: bdd7d533-7d3b-4680-9ac7-1ad4b3d47a0d
+status: experimental
+description: Detects deletion of AWS Backup resources (DeleteBackupVault/DeleteRecoveryPoint/DeleteBackupPlan), inhibiting recovery from a destructive attack.
+references:
+- https://attack.mitre.org/techniques/T1490/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.impact
+- attack.t1490
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - DeleteBackupVault
+    - DeleteRecoveryPoint
+    - DeleteBackupPlan
+    eventSource: backup.amazonaws.com
+  condition: selection
+falsepositives:
+- Backup lifecycle management (should be controlled).
+level: high

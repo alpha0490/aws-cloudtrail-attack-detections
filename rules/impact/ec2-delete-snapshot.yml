@@ -1,0 +1,23 @@
+title: AWS EBS Snapshot Deleted
+id: 4108b3ff-fad7-41e2-afc1-1601b16c0451
+status: experimental
+description: Detects deletion of EBS snapshots (DeleteSnapshot), removing volume recovery points.
+references:
+- https://attack.mitre.org/techniques/T1490/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.impact
+- attack.t1490
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: DeleteSnapshot
+    eventSource: ec2.amazonaws.com
+  condition: selection
+falsepositives:
+- Snapshot lifecycle/retention cleanup.
+level: medium

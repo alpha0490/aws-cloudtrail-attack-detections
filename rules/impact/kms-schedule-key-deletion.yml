@@ -1,0 +1,23 @@
+title: AWS KMS Key Deletion Scheduled
+id: 016453a6-4551-4536-837a-312e45b135f5
+status: experimental
+description: Detects scheduling deletion of a KMS key (ScheduleKeyDeletion). Destroying a key renders all data encrypted with it permanently unrecoverable - a ransomware/destruction technique.
+references:
+- https://attack.mitre.org/techniques/T1486/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.impact
+- attack.t1486
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: ScheduleKeyDeletion
+    eventSource: kms.amazonaws.com
+  condition: selection
+falsepositives:
+- Planned key retirement (should be rare and reviewed).
+level: high

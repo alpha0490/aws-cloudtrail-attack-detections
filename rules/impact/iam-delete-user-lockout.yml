@@ -1,0 +1,26 @@
+title: AWS IAM Account Access Removal
+id: 1e5cc5d2-02bc-414d-ba63-5953b914e5ff
+status: experimental
+description: Detects removal of IAM access (DeleteUser/DeleteLoginProfile/DeleteAccessKey), which attackers use to lock out legitimate users/responders. High-signal against accounts other than the caller.
+references:
+- https://attack.mitre.org/techniques/T1531/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.impact
+- attack.t1531
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - DeleteUser
+    - DeleteLoginProfile
+    - DeleteAccessKey
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Offboarding and key cleanup. Correlate with HR/offboarding processes.
+level: medium

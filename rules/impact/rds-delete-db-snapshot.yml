@@ -1,0 +1,25 @@
+title: AWS RDS Snapshot Deleted
+id: a036c815-21be-4dc4-989a-a993475d7d30
+status: experimental
+description: Detects deletion of RDS snapshots (DeleteDBSnapshot/DeleteDBClusterSnapshot), removing database recovery points.
+references:
+- https://attack.mitre.org/techniques/T1490/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.impact
+- attack.t1490
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - DeleteDBSnapshot
+    - DeleteDBClusterSnapshot
+    eventSource: rds.amazonaws.com
+  condition: selection
+falsepositives:
+- Snapshot lifecycle/retention cleanup.
+level: medium

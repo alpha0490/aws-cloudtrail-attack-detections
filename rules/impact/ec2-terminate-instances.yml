@@ -1,0 +1,27 @@
+title: AWS EC2 Instances Terminated or Stopped
+id: 4d7aec63-9704-4952-b1bc-b1e5d34ca51c
+status: experimental
+description: Detects termination/stopping of EC2 instances (TerminateInstances/StopInstances). Bulk operations can indicate destruction or disruption; correlate volume per principal.
+references:
+- https://attack.mitre.org/techniques/T1485/
+- https://attack.mitre.org/techniques/T1496/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.impact
+- attack.t1485
+- attack.t1496
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - TerminateInstances
+    - StopInstances
+    eventSource: ec2.amazonaws.com
+  condition: selection
+falsepositives:
+- Autoscaling and routine instance lifecycle management.
+level: medium

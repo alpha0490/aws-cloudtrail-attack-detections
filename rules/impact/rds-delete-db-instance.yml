@@ -1,0 +1,25 @@
+title: AWS RDS Database Deleted
+id: 87677338-28d8-4e7a-8475-26368cc5a908
+status: experimental
+description: Detects deletion of RDS databases/clusters (DeleteDBInstance/DeleteDBCluster). Destructive; especially severe when SkipFinalSnapshot=true.
+references:
+- https://attack.mitre.org/techniques/T1485/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.impact
+- attack.t1485
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - DeleteDBInstance
+    - DeleteDBCluster
+    eventSource: rds.amazonaws.com
+  condition: selection
+falsepositives:
+- Planned decommissioning of databases.
+level: high

@@ -1,0 +1,23 @@
+title: AWS S3 Bucket Deleted
+id: 9bba11b9-215b-4338-aa2a-a768883acf90
+status: experimental
+description: Detects deletion of an S3 bucket (DeleteBucket). Destructive action that can cause data loss/outage.
+references:
+- https://attack.mitre.org/techniques/T1485/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.impact
+- attack.t1485
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: DeleteBucket
+    eventSource: s3.amazonaws.com
+  condition: selection
+falsepositives:
+- Decommissioning of unused buckets (should be change-controlled).
+level: high

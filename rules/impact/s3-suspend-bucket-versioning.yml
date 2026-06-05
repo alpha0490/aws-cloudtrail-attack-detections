@@ -1,0 +1,23 @@
+title: AWS S3 Bucket Versioning Suspended
+id: 663662ab-5351-4523-be16-91cbce64bd1e
+status: experimental
+description: Detects suspension of S3 bucket versioning (PutBucketVersioning). Disabling versioning removes the ability to recover overwritten/deleted objects - often a precursor to ransomware/destruction. Inspect requestParameters for status=Suspended.
+references:
+- https://attack.mitre.org/techniques/T1490/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.impact
+- attack.t1490
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: PutBucketVersioning
+    eventSource: s3.amazonaws.com
+  condition: selection
+falsepositives:
+- Deliberate, reviewed versioning configuration changes.
+level: medium

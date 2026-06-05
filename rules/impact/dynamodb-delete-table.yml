@@ -1,0 +1,23 @@
+title: AWS DynamoDB Table Deleted
+id: 2f0de56b-2858-46f6-88d2-addc779cb77a
+status: experimental
+description: Detects deletion of a DynamoDB table (DeleteTable), a destructive data-loss action.
+references:
+- https://attack.mitre.org/techniques/T1485/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.impact
+- attack.t1485
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: DeleteTable
+    eventSource: dynamodb.amazonaws.com
+  condition: selection
+falsepositives:
+- Decommissioning of unused tables.
+level: medium

@@ -28,7 +28,6 @@ TACTICS = [
     ("exfiltration", "Exfiltration", "TA0010"),
     ("impact", "Impact", "TA0040"),
 ]
-
 # Authoritative ATT&CK technique names (sourced from MITRE ATT&CK / pySigma).
 TECHNIQUE_NAMES = {
     "T1021.007": "Cloud Services",

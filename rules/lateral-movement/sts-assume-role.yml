@@ -1,0 +1,25 @@
+title: AWS STS AssumeRole
+id: 6103e973-fe74-4fb5-851f-c5daf49606d7
+status: experimental
+description: Detects role assumption (AssumeRole). Ubiquitous in normal operation; high-signal when chained, cross-account, or from unusual principals/IPs. Use as a building block for lateral-movement detections.
+references:
+- https://attack.mitre.org/techniques/T1021/007/
+- https://attack.mitre.org/techniques/T1078/004/
+- https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.lateral-movement
+- attack.t1021.007
+- attack.t1078.004
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: AssumeRole
+    eventSource: sts.amazonaws.com
+  condition: selection
+falsepositives:
+- Pervasive in normal multi-account and service-to-service operation.
+level: low

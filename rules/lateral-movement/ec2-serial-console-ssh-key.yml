@@ -1,0 +1,24 @@
+title: AWS EC2 Serial Console Access
+id: a6023373-10f8-4449-bc81-87f8f897f333
+status: experimental
+description: Detects EC2 serial console access (SendSerialConsoleSSHPublicKey/StartSerialConsoleSession), which provides low-level instance access that can bypass network controls.
+references:
+- https://attack.mitre.org/techniques/T1021/007/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.lateral-movement
+- attack.t1021.007
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - SendSerialConsoleSSHPublicKey
+    - StartSerialConsoleSession
+  condition: selection
+falsepositives:
+- Break-glass instance troubleshooting (serial console is often disabled by default).
+level: medium

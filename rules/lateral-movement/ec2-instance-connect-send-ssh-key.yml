@@ -1,0 +1,23 @@
+title: AWS EC2 Instance Connect SSH Key Pushed
+id: 6f3da1f3-e6e5-491f-9b04-d61f829492ee
+status: experimental
+description: Detects pushing a temporary SSH public key to an instance via EC2 Instance Connect (SendSSHPublicKey), enabling SSH access for lateral movement.
+references:
+- https://attack.mitre.org/techniques/T1021/007/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.lateral-movement
+- attack.t1021.007
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: SendSSHPublicKey
+    eventSource: ec2-instance-connect.amazonaws.com
+  condition: selection
+falsepositives:
+- Administrators using EC2 Instance Connect for legitimate access.
+level: medium

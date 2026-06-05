@@ -1,0 +1,26 @@
+title: AWS STS Cross-Account Role Assumption
+id: 39aac502-407a-4953-93e4-dc7734b811ef
+status: experimental
+description: Detects AssumeRole/AssumeRoleWithSAML/AssumeRoleWithWebIdentity used to move between accounts. Inspect whether the requested role's account differs from the caller's account and whether the target account is external/untrusted (base Sigma cannot compare the two account IDs).
+references:
+- https://attack.mitre.org/techniques/T1021/007/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.lateral-movement
+- attack.t1021.007
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - AssumeRole
+    - AssumeRoleWithSAML
+    - AssumeRoleWithWebIdentity
+    eventSource: sts.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate cross-account automation and federation. Allowlist known trust pairs.
+level: medium

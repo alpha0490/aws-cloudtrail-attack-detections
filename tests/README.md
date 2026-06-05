@@ -45,7 +45,9 @@ CI runs the standalone form on every push/PR that touches `rules/`, `scripts/`, 
   logic-tested here — they need an event stream, not a single event — so they rely on `sigma check`.
 - For higher-fidelity validation, pair this with attack emulation
   ([Stratus Red Team](https://stratus-red-team.cloud/)): run the technique, then confirm the rule
-  fires on the real CloudTrail event it produces.
+  fires on the real CloudTrail event it produces. Cases carrying a `stratus:` key in
+  `test_cases.yaml` are the synthetic stand-ins for those live runs — see
+  [`../docs/validation-with-stratus.md`](../docs/validation-with-stratus.md).
 
 ## Adding a test when you add a rule
 

@@ -242,3 +242,102 @@
       eventSource: ec2.amazonaws.com
       eventName: RunInstances
       requestParameters: { instanceType: m5.large, imageId: ami-0abc123 }
+
+# --- Cases mapped to Stratus Red Team techniques (see docs/validation-with-stratus.md) ---
+
+- rule: rules/persistence/iam-create-login-profile.yml
+  stratus: aws.persistence.iam-create-user-login-profile
+  positive:
+    note: Console login profile created for an IAM user
+    event:
+      eventSource: iam.amazonaws.com
+      eventName: CreateLoginProfile
+      requestParameters: { userName: svc-backdoor }
+  negative:
+    note: Read-only GetLoginProfile
+    event:
+      eventSource: iam.amazonaws.com
+      eventName: GetLoginProfile
+
+- rule: rules/persistence/iam-update-login-profile.yml
+  stratus: aws.persistence.iam-create-user-login-profile
+  positive:
+    note: Existing user's console password reset
+    event:
+      eventSource: iam.amazonaws.com
+      eventName: UpdateLoginProfile
+      requestParameters: { userName: alice }
+  negative:
+    note: Read-only GetLoginProfile
+    event:
+      eventSource: iam.amazonaws.com
+      eventName: GetLoginProfile
+
+- rule: rules/defense-evasion/cloudtrail-delete-trail.yml
+  stratus: aws.defense-evasion.cloudtrail-delete
+  positive:
+    note: CloudTrail trail deleted
+    event:
+      eventSource: cloudtrail.amazonaws.com
+      eventName: DeleteTrail
+      requestParameters: { name: org-trail }
+  negative:
+    note: Read-only GetTrailStatus
+    event:
+      eventSource: cloudtrail.amazonaws.com
+      eventName: GetTrailStatus
+
+- rule: rules/defense-evasion/organizations-leave-or-remove.yml
+  stratus: aws.defense-evasion.organizations-leave
+  positive:
+    note: Account leaves the AWS Organization
+    event:
+      eventSource: organizations.amazonaws.com
+      eventName: LeaveOrganization
+  negative:
+    note: Read-only DescribeOrganization
+    event:
+      eventSource: organizations.amazonaws.com
+      eventName: DescribeOrganization
+
+- rule: rules/credential-access/secretsmanager-get-secret-value.yml
+  stratus: aws.credential-access.secretsmanager-retrieve-secrets
+  positive:
+    note: Secret value retrieved
+    event:
+      eventSource: secretsmanager.amazonaws.com
+      eventName: GetSecretValue
+      requestParameters: { secretId: prod/db/password }
+  negative:
+    note: Read-only DescribeSecret (metadata only, no value)
+    event:
+      eventSource: secretsmanager.amazonaws.com
+      eventName: DescribeSecret
+
+- rule: rules/exfiltration/ec2-modify-image-attribute.yml
+  stratus: aws.exfiltration.ec2-share-ami
+  positive:
+    note: AMI shared (launch permission modified)
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: ModifyImageAttribute
+      requestParameters: { imageId: ami-0abc123, attributeType: launchPermission }
+  negative:
+    note: Read-only DescribeImageAttribute
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: DescribeImageAttribute
+
+- rule: rules/exfiltration/rds-modify-db-snapshot-attribute.yml
+  stratus: aws.exfiltration.rds-share-snapshot
+  positive:
+    note: RDS snapshot shared with another account
+    event:
+      eventSource: rds.amazonaws.com
+      eventName: ModifyDBSnapshotAttribute
+      requestParameters: { dBSnapshotIdentifier: prod-snap, attributeName: restore }
+  negative:
+    note: Read-only DescribeDBSnapshots
+    event:
+      eventSource: rds.amazonaws.com
+      eventName: DescribeDBSnapshots

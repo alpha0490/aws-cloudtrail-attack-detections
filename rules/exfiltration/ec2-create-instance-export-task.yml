@@ -1,0 +1,25 @@
+title: AWS EC2 Instance/Image Export Task
+id: a0841155-a698-4b5d-9eb6-73f3c76f1a4f
+status: experimental
+description: Detects export of an instance or image to S3 (CreateInstanceExportTask/ExportImage), which can stage a full VM image for exfiltration.
+references:
+- https://attack.mitre.org/techniques/T1537/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.exfiltration
+- attack.t1537
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - CreateInstanceExportTask
+    - ExportImage
+    eventSource: ec2.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate VM export/migration workflows.
+level: medium

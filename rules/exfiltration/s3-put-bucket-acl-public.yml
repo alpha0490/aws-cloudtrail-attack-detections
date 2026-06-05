@@ -1,0 +1,23 @@
+title: AWS S3 Bucket ACL Changed to Public
+id: 0f1d2d37-a660-4bfd-a198-f6a204327367
+status: experimental
+description: Detects changes to a bucket ACL (PutBucketAcl) that grant access to AllUsers/AuthenticatedUsers (public). Inspect requestParameters.AccessControlPolicy grants for the global all-users group URI.
+references:
+- https://attack.mitre.org/techniques/T1537/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.exfiltration
+- attack.t1537
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: PutBucketAcl
+    eventSource: s3.amazonaws.com
+  condition: selection
+falsepositives:
+- Rare legitimate public-content buckets (should use explicit, reviewed policy).
+level: high

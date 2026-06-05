@@ -1,0 +1,28 @@
+title: AWS DataSync Task Created
+id: 29fcf4ba-057c-42eb-b231-cbbdb05cda75
+status: experimental
+description: Detects creation of DataSync tasks/locations (CreateTask/CreateLocationS3/CreateLocationObjectStorage), which can move large volumes of data to an external/attacker-controlled location.
+references:
+- https://attack.mitre.org/techniques/T1537/
+- https://attack.mitre.org/techniques/T1567/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.exfiltration
+- attack.t1537
+- attack.t1567
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - CreateTask
+    - CreateLocationS3
+    - CreateLocationObjectStorage
+    eventSource: datasync.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate data-migration and backup jobs.
+level: medium

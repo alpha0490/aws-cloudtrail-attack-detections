@@ -1,0 +1,25 @@
+title: AWS RDS Snapshot Shared Externally
+id: 2977cc74-3f73-45ef-8c1c-d03bd4846003
+status: experimental
+description: Detects sharing of RDS snapshots (ModifyDBSnapshotAttribute/ModifyDBClusterSnapshotAttribute) with other accounts or all (restore=all). A primary database-exfiltration path.
+references:
+- https://attack.mitre.org/techniques/T1537/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.exfiltration
+- attack.t1537
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - ModifyDBSnapshotAttribute
+    - ModifyDBClusterSnapshotAttribute
+    eventSource: rds.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate snapshot sharing with known partner accounts (allowlist).
+level: high

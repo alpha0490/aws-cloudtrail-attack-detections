@@ -1,0 +1,23 @@
+title: AWS S3 Bucket Policy Modified
+id: 4578c2db-0a06-46d1-b73c-42abb5e179a8
+status: experimental
+description: Detects changes to an S3 bucket policy (PutBucketPolicy). Attackers grant access to an external principal/'*' to exfiltrate data. Inspect the policy for Principal '*' or foreign account IDs.
+references:
+- https://attack.mitre.org/techniques/T1537/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.exfiltration
+- attack.t1537
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: PutBucketPolicy
+    eventSource: s3.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate bucket policy changes (review the granted principals).
+level: high

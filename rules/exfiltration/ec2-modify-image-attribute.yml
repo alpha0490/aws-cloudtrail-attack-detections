@@ -1,0 +1,23 @@
+title: AWS AMI Shared Externally
+id: 39e4f856-eea9-46ed-95ef-533bbc57a024
+status: experimental
+description: Detects modification of AMI permissions (ModifyImageAttribute). Sharing/making an AMI public can leak baked-in data and enable restore in an attacker account. Inspect requestParameters.launchPermission for group=all or a foreign account ID.
+references:
+- https://attack.mitre.org/techniques/T1537/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.exfiltration
+- attack.t1537
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: ModifyImageAttribute
+    eventSource: ec2.amazonaws.com
+  condition: selection
+falsepositives:
+- Deliberate AMI sharing with known accounts (allowlist).
+level: high

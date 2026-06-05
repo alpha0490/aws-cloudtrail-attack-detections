@@ -25,3 +25,4 @@ detection:
 falsepositives:
 - Planned organizational restructuring.
 level: high
+tier: alert

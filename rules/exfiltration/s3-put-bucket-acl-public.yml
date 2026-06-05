@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Rare legitimate public-content buckets (should use explicit, reviewed policy).
 level: high
+tier: alert

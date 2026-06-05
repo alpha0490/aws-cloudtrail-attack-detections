@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Legitimate trail configuration changes (review the new settings).
 level: high
+tier: alert

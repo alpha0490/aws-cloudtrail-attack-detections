@@ -36,3 +36,4 @@ tags:
 - attack.t1087.004
 - attack.t1069.003
 level: medium
+tier: hunt

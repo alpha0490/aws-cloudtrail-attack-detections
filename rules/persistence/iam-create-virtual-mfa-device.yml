@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Normal MFA enrollment by users.
 level: low
+tier: hunt

@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - CI/CD pipelines pushing images. Scope to sensitive repositories or unusual principals.
 level: low
+tier: hunt

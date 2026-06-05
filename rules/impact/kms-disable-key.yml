@@ -24,3 +24,4 @@ detection:
 falsepositives:
 - Legitimate key administration (review the change).
 level: high
+tier: alert

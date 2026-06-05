@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Patch/automation pipelines and the AWS SSM service role. Allowlist known automation principals.
 level: medium
+tier: hunt

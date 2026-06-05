@@ -22,3 +22,4 @@ detection:
 falsepositives:
 - Rare account/billing operations that can only be performed by root.
 level: high
+tier: alert

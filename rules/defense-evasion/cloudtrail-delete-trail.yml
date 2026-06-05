@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Decommissioning of a trail as part of an approved change.
 level: high
+tier: alert

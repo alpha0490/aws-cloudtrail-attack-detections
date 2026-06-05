@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Legitimate sharing of snapshots with known partner accounts (allowlist account IDs).
 level: high
+tier: alert

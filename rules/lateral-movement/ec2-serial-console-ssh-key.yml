@@ -22,3 +22,4 @@ detection:
 falsepositives:
 - Break-glass instance troubleshooting (serial console is often disabled by default).
 level: medium
+tier: hunt

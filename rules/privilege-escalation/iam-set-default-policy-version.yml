@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Legitimate rollbacks/updates of managed policies.
 level: medium
+tier: hunt

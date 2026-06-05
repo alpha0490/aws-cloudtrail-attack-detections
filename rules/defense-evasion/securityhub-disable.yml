@@ -24,3 +24,4 @@ detection:
 falsepositives:
 - Planned Security Hub administration.
 level: medium
+tier: hunt

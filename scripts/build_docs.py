@@ -168,7 +168,7 @@ def load_rules():
             "path": rel, "tactic": tactic, "title": main.get("title", rel),
             "tech_ids": tech_ids, "events_disp": events_disp,
             "indicates": first_sentence(main.get("description", "")),
-            "fields": fields, "note": note,
+            "fields": fields, "note": note, "tier": main.get("tier", "hunt"),
         })
     return rules
 
@@ -185,6 +185,11 @@ def build_cheatsheet(rules):
                "rules by `scripts/build_docs.py` — do not edit by hand.\n")
     out.append("> **Tip:** the highest-signal fields to pivot on for almost any CloudTrail event are "
                "`userIdentity.arn`, `sourceIPAddress`, `userAgent`, `eventName`, and `awsRegion`.\n")
+    n_alert = sum(1 for r in rules if r.get("tier") == "alert")
+    out.append("> **Deploy tiers:** **alert** (%d) = high-signal, page on sight · "
+               "**hunt** (%d) = high-volume / context-dependent — run through the "
+               "[enrichment + 90-day baseline layer](../docs/enrichment-and-baselining.md) "
+               "or use for threat hunting, not direct paging.\n" % (n_alert, len(rules) - n_alert))
     # quick tactic index
     out.append("**Jump to:** " + " · ".join(
         "[%s](#%s)" % (name, name.lower().replace(" ", "-")) for _, name, _ in TACTICS) + "\n")
@@ -197,17 +202,18 @@ def build_cheatsheet(rules):
         rs = sorted(by_tactic.get(folder, []), key=lambda x: x["path"])
         out.append("\n## %s\n" % name)
         out.append("ATT&CK tactic: [%s](%s) — %d detection(s).\n" % (taid, tactic_link(taid), len(rs)))
-        out.append("| Technique / Activity | ATT&CK ID | CloudTrail event(s) | What it indicates | "
+        out.append("| Tier | Technique / Activity | ATT&CK ID | CloudTrail event(s) | What it indicates | "
                    "Key fields to inspect | Detection notes | Sigma rule |")
-        out.append("|---|---|---|---|---|---|---|")
+        out.append("|---|---|---|---|---|---|---|---|")
         for r in rs:
             ids = ", ".join("[%s](%s)" % (i, mitre_link(i)) for i in r["tech_ids"]) or "—"
             fields = ", ".join("`%s`" % f for f in r["fields"])
             fname = os.path.basename(r["path"])
             link = "[`%s`](../%s)" % (fname, r["path"])
             title = r["title"].replace("AWS ", "", 1)
-            out.append("| %s | %s | %s | %s | %s | %s | %s |" % (
-                esc(title), ids, esc(r["events_disp"]), esc(r["indicates"]),
+            tier_disp = "**alert**" if r["tier"] == "alert" else "hunt"
+            out.append("| %s | %s | %s | %s | %s | %s | %s | %s |" % (
+                tier_disp, esc(title), ids, esc(r["events_disp"]), esc(r["indicates"]),
                 esc(fields), esc(r["note"]), link))
     out.append("")
     return "\n".join(out)
@@ -222,6 +228,10 @@ def build_matrix(rules):
                "Generated from the rules by `scripts/build_docs.py` — do not edit by hand.\n")
     out.append("**Coverage:** %d rules across %d tactics and %d ATT&CK techniques/sub-techniques.\n"
                % (total, len([t for t in TACTICS if any(r['tactic'] == t[0] for r in rules)]), len(tech_ids)))
+    n_alert = sum(1 for r in rules if r.get("tier") == "alert")
+    out.append("**Deploy tiers:** %d `alert` (page on sight) · %d `hunt` (correlate / baseline first — "
+               "see [enrichment-and-baselining.md](enrichment-and-baselining.md)).\n"
+               % (n_alert, total - n_alert))
     out.append("Legend: ✅ covered (rule exists) · ☐ TODO (gap, contributions welcome).\n")
 
     by_tactic = {}

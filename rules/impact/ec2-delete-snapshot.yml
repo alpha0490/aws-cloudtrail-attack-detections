@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Snapshot lifecycle/retention cleanup.
 level: medium
+tier: hunt

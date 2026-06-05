@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Decommissioning of unused buckets (should be change-controlled).
 level: high
+tier: alert

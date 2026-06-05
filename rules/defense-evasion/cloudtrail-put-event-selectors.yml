@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Legitimate tuning of which events are captured.
 level: medium
+tier: hunt

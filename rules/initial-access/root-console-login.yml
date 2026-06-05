@@ -22,3 +22,4 @@ detection:
 falsepositives:
 - Pre-approved break-glass or account-level maintenance that genuinely requires root.
 level: high
+tier: alert

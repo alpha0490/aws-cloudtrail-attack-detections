@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Application traffic and scheduled invocations are expected. Scope to sensitive functions or unusual callers.
 level: low
+tier: hunt

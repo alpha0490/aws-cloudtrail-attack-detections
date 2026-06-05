@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Provisioning of new service or human users by identity/platform teams.
 level: medium
+tier: hunt

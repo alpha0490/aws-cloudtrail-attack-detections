@@ -36,3 +36,4 @@ detection:
 falsepositives:
 - Legitimate ML/HPC/big-data workloads using GPU or large instances. Allowlist expected types/accounts.
 level: medium
+tier: hunt

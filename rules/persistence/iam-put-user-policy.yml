@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Legitimate fine-grained permission grants.
 level: medium
+tier: hunt

@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Legitimate analytics/backup exports.
 level: medium
+tier: hunt

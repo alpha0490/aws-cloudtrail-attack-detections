@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Routine role creation by platform/IaC.
 level: low
+tier: hunt

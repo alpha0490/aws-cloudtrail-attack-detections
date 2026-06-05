@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Rare, planned maintenance on a trail (should be change-controlled).
 level: high
+tier: alert

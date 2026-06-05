@@ -22,3 +22,4 @@ detection:
 falsepositives:
 - Routine user and administrator console logins are expected. Baseline per principal and source IP/geo.
 level: low
+tier: hunt

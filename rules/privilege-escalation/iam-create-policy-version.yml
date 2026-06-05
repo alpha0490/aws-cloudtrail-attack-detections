@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Legitimate policy updates.
 level: medium
+tier: hunt

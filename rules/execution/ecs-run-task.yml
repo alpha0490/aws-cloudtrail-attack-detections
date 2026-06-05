@@ -25,3 +25,4 @@ detection:
 falsepositives:
 - Normal application deployments and autoscaling.
 level: low
+tier: hunt

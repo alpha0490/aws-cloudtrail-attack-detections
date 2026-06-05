@@ -24,3 +24,4 @@ detection:
 falsepositives:
 - Backup lifecycle management (should be controlled).
 level: high
+tier: alert

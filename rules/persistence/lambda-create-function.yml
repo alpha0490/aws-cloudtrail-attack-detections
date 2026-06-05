@@ -25,3 +25,4 @@ detection:
 falsepositives:
 - Normal application/IaC deployments of functions.
 level: low
+tier: hunt

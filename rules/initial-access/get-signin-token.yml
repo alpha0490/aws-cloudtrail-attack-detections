@@ -23,3 +23,4 @@ detection:
 falsepositives:
 - Legitimate SSO/federation brokers and identity tooling.
 level: medium
+tier: hunt

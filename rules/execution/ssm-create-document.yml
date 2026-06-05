@@ -23,3 +23,4 @@ detection:
 falsepositives:
 - Infrastructure-as-code and automation teams authoring SSM documents.
 level: low
+tier: hunt

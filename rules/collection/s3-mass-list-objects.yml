@@ -23,3 +23,4 @@ detection:
 falsepositives:
 - Backup, sync, and analytics jobs that list objects.
 level: low
+tier: hunt

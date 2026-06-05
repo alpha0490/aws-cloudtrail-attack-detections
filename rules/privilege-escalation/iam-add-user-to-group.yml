@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Routine group membership management.
 level: medium
+tier: hunt

@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Administrators using EC2 Instance Connect for legitimate access.
 level: medium
+tier: hunt

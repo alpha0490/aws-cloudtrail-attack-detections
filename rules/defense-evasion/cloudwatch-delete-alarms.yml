@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Routine cleanup of unused alarms.
 level: medium
+tier: hunt

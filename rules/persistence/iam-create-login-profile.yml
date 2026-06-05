@@ -23,3 +23,4 @@ detection:
 falsepositives:
 - Legitimate onboarding granting console access to a user.
 level: high
+tier: alert

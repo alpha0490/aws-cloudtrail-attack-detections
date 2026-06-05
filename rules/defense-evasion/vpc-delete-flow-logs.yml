@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Decommissioning of flow logs during network changes.
 level: high
+tier: alert

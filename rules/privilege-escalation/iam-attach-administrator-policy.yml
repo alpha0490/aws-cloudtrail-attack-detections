@@ -25,3 +25,4 @@ detection:
 falsepositives:
 - Deliberate granting of administrator access (should be rare and reviewed).
 level: high
+tier: alert

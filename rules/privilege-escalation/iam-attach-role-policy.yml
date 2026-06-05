@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Routine role permission changes by platform teams.
 level: medium
+tier: hunt

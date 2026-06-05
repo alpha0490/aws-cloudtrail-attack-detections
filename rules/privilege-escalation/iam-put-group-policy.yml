@@ -23,3 +23,4 @@ detection:
 falsepositives:
 - Legitimate group permission management.
 level: medium
+tier: hunt

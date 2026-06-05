@@ -25,3 +25,4 @@ detection:
 falsepositives:
 - Approved changes to AWS Config setup.
 level: high
+tier: alert

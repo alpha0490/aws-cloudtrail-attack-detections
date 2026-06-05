@@ -26,3 +26,4 @@ detection:
 falsepositives:
 - Legitimate data-migration and backup jobs.
 level: medium
+tier: hunt

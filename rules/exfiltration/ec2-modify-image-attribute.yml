@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Deliberate AMI sharing with known accounts (allowlist).
 level: high
+tier: alert

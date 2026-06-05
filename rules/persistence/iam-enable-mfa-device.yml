@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Legitimate MFA enrollment during onboarding.
 level: medium
+tier: hunt

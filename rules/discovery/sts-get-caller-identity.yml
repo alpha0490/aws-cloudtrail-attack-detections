@@ -23,3 +23,4 @@ detection:
 falsepositives:
 - Ubiquitous in SDKs, CLIs, and CI/CD. Use only as enrichment or correlate with other recon.
 level: low
+tier: hunt

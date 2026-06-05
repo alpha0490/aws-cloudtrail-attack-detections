@@ -4,6 +4,8 @@ Coverage of the ATT&CK Cloud (IaaS) matrix by the AWS CloudTrail Sigma rules in 
 
 **Coverage:** 98 rules across 11 tactics and 39 ATT&CK techniques/sub-techniques.
 
+**Deploy tiers:** 28 `alert` (page on sight) · 70 `hunt` (correlate / baseline first — see [enrichment-and-baselining.md](enrichment-and-baselining.md)).
+
 Legend: ✅ covered (rule exists) · ☐ TODO (gap, contributions welcome).
 
 ## Coverage by tactic

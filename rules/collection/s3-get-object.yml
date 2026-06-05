@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Applications and users reading objects routinely. Baseline per principal/bucket.
 level: low
+tier: hunt

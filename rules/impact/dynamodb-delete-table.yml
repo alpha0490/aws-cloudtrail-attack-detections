@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Decommissioning of unused tables.
 level: medium
+tier: hunt

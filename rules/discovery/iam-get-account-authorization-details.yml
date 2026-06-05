@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - IAM auditing/inventory tooling (e.g. access analyzers, posture scanners).
 level: medium
+tier: hunt

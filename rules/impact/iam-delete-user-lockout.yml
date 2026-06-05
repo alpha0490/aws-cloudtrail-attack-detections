@@ -24,3 +24,4 @@ detection:
 falsepositives:
 - Offboarding and key cleanup. Correlate with HR/offboarding processes.
 level: medium
+tier: hunt

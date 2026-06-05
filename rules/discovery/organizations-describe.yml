@@ -26,3 +26,4 @@ detection:
 falsepositives:
 - Governance, billing, and landing-zone tooling.
 level: low
+tier: hunt

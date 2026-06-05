@@ -26,3 +26,4 @@ detection:
 falsepositives:
 - Planned GuardDuty administration in multi-account setups.
 level: high
+tier: alert

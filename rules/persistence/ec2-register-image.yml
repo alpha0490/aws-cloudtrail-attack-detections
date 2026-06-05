@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Image bakery/golden-AMI pipelines.
 level: low
+tier: hunt

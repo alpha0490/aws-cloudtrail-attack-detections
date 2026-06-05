@@ -25,3 +25,4 @@ detection:
 falsepositives:
 - Access reviews and least-privilege tooling.
 level: low
+tier: hunt

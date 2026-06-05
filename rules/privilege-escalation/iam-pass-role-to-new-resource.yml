@@ -25,3 +25,4 @@ detection:
 falsepositives:
 - Normal provisioning that assigns instance/function roles. Correlate the passed role's privileges with the caller's.
 level: medium
+tier: hunt

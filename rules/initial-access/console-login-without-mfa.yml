@@ -24,3 +24,4 @@ falsepositives:
 - Federated/SSO logins where MFA is enforced at the IdP and reported as No.
 - Service or break-glass accounts explicitly exempted from MFA.
 level: medium
+tier: hunt

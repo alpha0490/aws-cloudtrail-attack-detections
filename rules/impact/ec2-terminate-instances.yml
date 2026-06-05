@@ -25,3 +25,4 @@ detection:
 falsepositives:
 - Autoscaling and routine instance lifecycle management.
 level: medium
+tier: hunt

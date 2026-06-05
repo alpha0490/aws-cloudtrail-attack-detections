@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Legitimate bucket policy changes (review the granted principals).
 level: high
+tier: alert

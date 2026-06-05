@@ -36,3 +36,4 @@ tags:
 - attack.credential-access
 - attack.t1110
 level: high
+tier: alert

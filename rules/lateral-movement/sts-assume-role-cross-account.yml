@@ -24,3 +24,4 @@ detection:
 falsepositives:
 - Legitimate cross-account automation and federation. Allowlist known trust pairs.
 level: medium
+tier: hunt

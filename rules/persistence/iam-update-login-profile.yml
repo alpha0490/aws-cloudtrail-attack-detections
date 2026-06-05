@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Help-desk password resets and self-service password changes.
 level: medium
+tier: alert

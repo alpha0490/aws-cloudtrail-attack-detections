@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Routine permission grants by identity/platform teams.
 level: medium
+tier: hunt

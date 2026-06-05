@@ -23,3 +23,4 @@ detection:
 falsepositives:
 - Backup automation and routine volume snapshots.
 level: low
+tier: hunt

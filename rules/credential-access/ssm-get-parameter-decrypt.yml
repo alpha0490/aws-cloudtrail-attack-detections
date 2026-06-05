@@ -25,3 +25,4 @@ detection:
 falsepositives:
 - Applications reading their own SecureString parameters at runtime.
 level: medium
+tier: hunt

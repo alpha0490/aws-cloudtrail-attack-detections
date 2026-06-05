@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Planned organization changes by cloud/platform teams.
 level: medium
+tier: hunt

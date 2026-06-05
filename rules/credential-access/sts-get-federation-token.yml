@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Legitimate federation brokers and identity tooling.
 level: medium
+tier: hunt

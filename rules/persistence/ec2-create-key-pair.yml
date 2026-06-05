@@ -23,3 +23,4 @@ detection:
 falsepositives:
 - Normal instance provisioning workflows.
 level: low
+tier: hunt

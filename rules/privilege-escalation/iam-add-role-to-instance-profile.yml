@@ -22,3 +22,4 @@ detection:
 falsepositives:
 - Standard EC2 provisioning assigning instance roles.
 level: medium
+tier: hunt

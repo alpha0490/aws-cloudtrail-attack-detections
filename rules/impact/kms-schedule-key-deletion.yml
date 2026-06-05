@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Planned key retirement (should be rare and reviewed).
 level: high
+tier: alert

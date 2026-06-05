@@ -21,3 +21,4 @@ detection:
 falsepositives:
 - Deliberate, reviewed versioning configuration changes.
 level: medium
+tier: hunt

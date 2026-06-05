@@ -25,3 +25,4 @@ detection:
 falsepositives:
 - Lifecycle management of log groups.
 level: medium
+tier: hunt

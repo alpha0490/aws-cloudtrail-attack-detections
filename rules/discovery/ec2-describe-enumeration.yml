@@ -27,3 +27,4 @@ detection:
 falsepositives:
 - Monitoring, inventory, and cost tools enumerate EC2 regularly. Apply thresholds.
 level: low
+tier: hunt

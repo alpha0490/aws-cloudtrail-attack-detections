@@ -1,0 +1,25 @@
+title: AWS STS GetCallerIdentity (whoami)
+id: 1385e770-b9c8-46f8-96a1-fbfbb38d04a3
+status: experimental
+description: Detects GetCallerIdentity, the cloud equivalent of 'whoami', frequently the first call an attacker makes with fresh credentials. Extremely common in SDK/automation, so treat as context, not a standalone alert.
+references:
+- https://attack.mitre.org/techniques/T1087/004/
+- https://attack.mitre.org/techniques/T1580/
+- https://docs.aws.amazon.com/STS/latest/APIReference/API_GetCallerIdentity.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.discovery
+- attack.t1087.004
+- attack.t1580
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: GetCallerIdentity
+    eventSource: sts.amazonaws.com
+  condition: selection
+falsepositives:
+- Ubiquitous in SDKs, CLIs, and CI/CD. Use only as enrichment or correlate with other recon.
+level: low

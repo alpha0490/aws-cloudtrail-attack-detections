@@ -1,0 +1,27 @@
+title: AWS IAM Permission/Policy Enumeration
+id: b420e79c-77ff-46f2-a27f-074485d240ef
+status: experimental
+description: Detects enumeration of effective permissions (ListAttachedUserPolicies/ListAttachedRolePolicies/ListGroupsForUser/SimulatePrincipalPolicy), used to map privilege-escalation paths.
+references:
+- https://attack.mitre.org/techniques/T1069/003/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.discovery
+- attack.t1069.003
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - ListAttachedUserPolicies
+    - ListAttachedRolePolicies
+    - ListGroupsForUser
+    - SimulatePrincipalPolicy
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Access reviews and least-privilege tooling.
+level: low

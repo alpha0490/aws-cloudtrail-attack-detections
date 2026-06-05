@@ -1,0 +1,28 @@
+title: AWS IAM Principal Enumeration
+id: a107d380-6e0a-4202-b154-a6ed0c397f7d
+status: experimental
+description: Detects enumeration of IAM principals (ListUsers/ListRoles/ListGroups/ListPolicies/GetAccountSummary). Common in recon after gaining initial access; correlate volume/variety per principal.
+references:
+- https://attack.mitre.org/techniques/T1087/004/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.discovery
+- attack.t1087.004
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - ListUsers
+    - ListRoles
+    - ListGroups
+    - ListPolicies
+    - GetAccountSummary
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Inventory, audit, and IaC tooling enumerating IAM.
+level: low

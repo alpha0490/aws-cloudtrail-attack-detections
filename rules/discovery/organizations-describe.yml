@@ -1,0 +1,28 @@
+title: AWS Organizations Structure Enumeration
+id: 5e8a2f66-9277-4b18-a5a5-49157fc325b9
+status: experimental
+description: Detects enumeration of the AWS Organization (DescribeOrganization/ListAccounts/ListOrganizationalUnitsForParent), revealing the multi-account layout for lateral targeting.
+references:
+- https://attack.mitre.org/techniques/T1526/
+- https://attack.mitre.org/techniques/T1538/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.discovery
+- attack.t1526
+- attack.t1538
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - DescribeOrganization
+    - ListAccounts
+    - ListOrganizationalUnitsForParent
+    eventSource: organizations.amazonaws.com
+  condition: selection
+falsepositives:
+- Governance, billing, and landing-zone tooling.
+level: low

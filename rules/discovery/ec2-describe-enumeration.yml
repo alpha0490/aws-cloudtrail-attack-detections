@@ -1,0 +1,29 @@
+title: AWS EC2 Infrastructure Enumeration
+id: f6fcee71-45ab-4992-9d9c-f0e3f60688bd
+status: experimental
+description: Detects bulk EC2 describe calls (DescribeInstances/DescribeSecurityGroups/DescribeVpcs/DescribeSnapshots/DescribeImages). High volume/variety from one principal indicates infrastructure discovery.
+references:
+- https://attack.mitre.org/techniques/T1580/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.discovery
+- attack.t1580
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - DescribeInstances
+    - DescribeSecurityGroups
+    - DescribeVpcs
+    - DescribeSnapshots
+    - DescribeImages
+    - DescribeAddresses
+    eventSource: ec2.amazonaws.com
+  condition: selection
+falsepositives:
+- Monitoring, inventory, and cost tools enumerate EC2 regularly. Apply thresholds.
+level: low

@@ -1,0 +1,25 @@
+title: AWS Region and Account Enumeration
+id: 44483137-1465-42de-97e4-9c3a9cc2e252
+status: experimental
+description: Detects enumeration of enabled regions/account metadata (DescribeRegions/ListRegions/GetRegions). Attackers map enabled regions to find under-monitored areas.
+references:
+- https://attack.mitre.org/techniques/T1580/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.discovery
+- attack.t1580
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - DescribeRegions
+    - ListRegions
+    - GetRegions
+  condition: selection
+falsepositives:
+- Common in tooling and console navigation.
+level: informational

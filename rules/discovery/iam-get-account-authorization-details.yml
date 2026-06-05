@@ -1,0 +1,23 @@
+title: AWS IAM Authorization Details Enumerated
+id: 9d01103d-5db0-4f4b-a9b5-a36e841ab289
+status: experimental
+description: Detects GetAccountAuthorizationDetails, which dumps all users, groups, roles, and their policies in one call - a classic IAM reconnaissance primitive.
+references:
+- https://attack.mitre.org/techniques/T1087/004/
+- https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetAccountAuthorizationDetails.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.discovery
+- attack.t1087.004
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: GetAccountAuthorizationDetails
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- IAM auditing/inventory tooling (e.g. access analyzers, posture scanners).
+level: medium

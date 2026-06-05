@@ -1,0 +1,38 @@
+---
+title: AWS API Access Denied (base)
+id: 6efb6610-7028-4eb0-938f-5f7db75f48bb
+name: aws_api_access_denied
+status: experimental
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    errorCode|contains: AccessDenied
+  condition: selection
+---
+title: AWS Permission Enumeration via Access Denied Burst
+id: 7258c2b7-2fdd-4dcb-8ed1-6c9721010109
+status: experimental
+description: Detects a single principal generating AccessDenied errors across 3 or more distinct API actions within 30 minutes - characteristic of permission probing/enumeration after compromise.
+references:
+- https://attack.mitre.org/techniques/T1087/004/
+- https://attack.mitre.org/techniques/T1069/003/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+correlation:
+  type: value_count
+  rules:
+  - aws_api_access_denied
+  group-by:
+  - userIdentity.arn
+  timespan: 30m
+  condition:
+    gte: 3
+    field: eventName
+tags:
+- attack.discovery
+- attack.t1087.004
+- attack.t1069.003
+level: medium

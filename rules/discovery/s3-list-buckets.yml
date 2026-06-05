@@ -1,0 +1,25 @@
+title: AWS S3 Bucket Enumeration
+id: 5a56185c-2979-4b88-a777-984b5eba2ea9
+status: experimental
+description: Detects ListBuckets, which enumerates all buckets in the account - a common precursor to data discovery and exfiltration.
+references:
+- https://attack.mitre.org/techniques/T1580/
+- https://attack.mitre.org/techniques/T1530/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.discovery
+- attack.t1580
+- attack.t1530
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: ListBuckets
+    eventSource: s3.amazonaws.com
+  condition: selection
+falsepositives:
+- Backup, inventory, and security tooling list buckets routinely.
+level: low

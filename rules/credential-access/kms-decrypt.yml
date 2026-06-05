@@ -1,0 +1,23 @@
+title: AWS KMS Decrypt Operations
+id: 8019f2db-e528-426d-9721-e2e152f4a081
+status: experimental
+description: Detects KMS Decrypt calls (a data event). Bulk decryption by an unusual principal can indicate access to protected secrets/data. Requires KMS data events to be enabled; apply a threshold in your SIEM.
+references:
+- https://attack.mitre.org/techniques/T1555/006/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.credential-access
+- attack.t1555.006
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: Decrypt
+    eventSource: kms.amazonaws.com
+  condition: selection
+falsepositives:
+- Applications decrypting data as part of normal operation. Baseline per principal/key.
+level: low

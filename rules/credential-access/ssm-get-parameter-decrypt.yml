@@ -1,0 +1,27 @@
+title: AWS SSM Parameter Retrieved With Decryption
+id: b7af49c3-357b-4c3a-8294-7e29c808ed8f
+status: experimental
+description: Detects retrieval of SSM Parameter Store parameters with decryption (GetParameter/GetParameters/GetParametersByPath with withDecryption=true), commonly used to read stored secrets.
+references:
+- https://attack.mitre.org/techniques/T1555/006/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.credential-access
+- attack.t1555.006
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - GetParameter
+    - GetParameters
+    - GetParametersByPath
+    eventSource: ssm.amazonaws.com
+    requestParameters.withDecryption: true
+  condition: selection
+falsepositives:
+- Applications reading their own SecureString parameters at runtime.
+level: medium

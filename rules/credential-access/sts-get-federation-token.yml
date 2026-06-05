@@ -1,0 +1,23 @@
+title: AWS STS GetFederationToken
+id: f1ae001d-cada-4219-953b-e701353973e8
+status: experimental
+description: Detects GetFederationToken, which creates temporary federated credentials. Attackers abuse it to mint scoped tokens for persistence or to share access.
+references:
+- https://attack.mitre.org/techniques/T1528/
+- https://docs.aws.amazon.com/STS/latest/APIReference/API_GetFederationToken.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.credential-access
+- attack.t1528
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: GetFederationToken
+    eventSource: sts.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate federation brokers and identity tooling.
+level: medium

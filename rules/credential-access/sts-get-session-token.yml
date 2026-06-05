@@ -1,0 +1,25 @@
+title: AWS STS GetSessionToken
+id: 403ce847-7f47-4275-a0a2-86b6f011487d
+status: experimental
+description: Detects GetSessionToken calls that mint temporary credentials. Noisy on its own; useful when correlated with unusual principals or downstream abuse.
+references:
+- https://attack.mitre.org/techniques/T1528/
+- https://attack.mitre.org/techniques/T1550/
+- https://docs.aws.amazon.com/STS/latest/APIReference/API_GetSessionToken.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.credential-access
+- attack.t1528
+- attack.t1550
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: GetSessionToken
+    eventSource: sts.amazonaws.com
+  condition: selection
+falsepositives:
+- Normal use of temporary credentials by users/tools, especially with MFA.
+level: low

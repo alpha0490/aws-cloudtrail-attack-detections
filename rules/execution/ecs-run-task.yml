@@ -1,0 +1,27 @@
+title: AWS ECS RunTask / Container Deployment
+id: a27f16bd-a424-414f-9c5b-ac8282b19071
+status: experimental
+description: Detects launching of ECS tasks (RunTask/StartTask). Adversaries deploy containers to execute code or mine cryptocurrency. Baseline expected task definitions and clusters.
+references:
+- https://attack.mitre.org/techniques/T1610/
+- https://attack.mitre.org/techniques/T1648/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.execution
+- attack.t1610
+- attack.t1648
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - RunTask
+    - StartTask
+    eventSource: ecs.amazonaws.com
+  condition: selection
+falsepositives:
+- Normal application deployments and autoscaling.
+level: low

@@ -1,0 +1,25 @@
+title: AWS SSM Session Manager StartSession
+id: 1021a123-e018-495b-b76f-5abeab762fa0
+status: experimental
+description: Detects interactive Session Manager sessions to EC2 instances (StartSession). Provides shell access without SSH/RDP and is a common hands-on-keyboard and lateral-movement technique.
+references:
+- https://attack.mitre.org/techniques/T1651/
+- https://attack.mitre.org/techniques/T1021/007/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.execution
+- attack.t1651
+- attack.t1021.007
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: StartSession
+    eventSource: ssm.amazonaws.com
+  condition: selection
+falsepositives:
+- Administrators legitimately using Session Manager. Baseline per principal/instance.
+level: medium

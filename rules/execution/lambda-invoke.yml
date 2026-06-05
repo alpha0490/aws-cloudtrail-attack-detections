@@ -1,0 +1,23 @@
+title: AWS Lambda Function Invocation via API
+id: 23fd81fd-9a32-4f28-bfc7-795c9e1c8e5c
+status: experimental
+description: Detects invocation of Lambda functions via the API (Invoke). Very common in normal operation; high-signal only for sensitive functions or unusual principals. Requires Lambda data events to be logged in CloudTrail.
+references:
+- https://attack.mitre.org/techniques/T1648/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.execution
+- attack.t1648
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: Invoke
+    eventSource: lambda.amazonaws.com
+  condition: selection
+falsepositives:
+- Application traffic and scheduled invocations are expected. Scope to sensitive functions or unusual callers.
+level: low

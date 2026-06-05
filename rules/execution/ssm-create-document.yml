@@ -1,0 +1,25 @@
+title: AWS SSM Document Created or Updated
+id: d60b1940-7649-4a79-b447-7382e5610391
+status: experimental
+description: Detects creation or modification of SSM documents (CreateDocument/UpdateDocument). Malicious documents can be used to run code across many instances.
+references:
+- https://attack.mitre.org/techniques/T1651/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.execution
+- attack.t1651
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - CreateDocument
+    - UpdateDocument
+    eventSource: ssm.amazonaws.com
+  condition: selection
+falsepositives:
+- Infrastructure-as-code and automation teams authoring SSM documents.
+level: low

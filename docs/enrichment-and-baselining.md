@@ -291,3 +291,55 @@ novelty.
 4. Create the five `aws_seen_user_*` tables (TTL 90d); seed each builder once over `-90d`; schedule daily (§3b).
 5. Pick a mode per rule (novelty-gated vs always-alert) and append the §3c tail to your scheduled detections.
 6. Run a warm-up window; tune `novelty_score` thresholds, the human-role list, and principal allowlists; then enable paging.
+
+---
+
+## 8. Validating in your tenant
+
+These queries are **reference templates** — syntax-reviewed but, by their nature (they depend on your
+data, lookup paths, and TTLs), they must be confirmed against your own CloudTrail. Run them in **Log
+Search** (the UI time picker handles ranges cleanly) and verify each building block **before** wiring
+the full enrichment tail. Do this in order; each step proves one assumption.
+
+```
+# 1. CloudTrail data exists and the field paths parse (you should see real eventNames)
+_sourceCategory=*cloudtrail*
+| json field=_raw "eventName","eventSource","userIdentity.arn","awsRegion","sourceIPAddress" \
+       as eventName, eventSource, arn, region, src_ip nodrop
+| count by eventName | sort by _count | limit 20
+
+# 2. GeoIP enrichment resolves (guard non-IP service sources first)
+... (above)
+| where isValidIP(src_ip)
+| lookup country_code as country from geo://location on ip = src_ip
+| count by country | sort by _count
+
+# 3. The §3a principal normalization parses (inspect assumed-role session names)
+_sourceCategory=*cloudtrail*
+| json field=_raw "userIdentity.type","userIdentity.arn","userIdentity.sessionContext.sessionIssuer.arn" \
+       as id_type, raw_arn, issuer_arn nodrop
+| where id_type = "AssumedRole"
+| parse regex field=raw_arn "assumed-role/(?<role_name>[^/]+)/(?<session_name>.+)$" nodrop
+| count by role_name | sort by _count | limit 20    # confirms which roles are human (SSO) vs machine
+
+# 4. A Level-1 rule predicate returns what you expect
+_sourceCategory=*cloudtrail*
+| json field=_raw "eventName","eventSource","responseElements.ConsoleLogin","additionalEventData.MFAUsed" \
+       as eventName, eventSource, login_result, mfa nodrop
+| where eventSource="signin.amazonaws.com" and eventName="ConsoleLogin" and login_result="Success" and mfa="No"
+| count
+```
+
+Then, **after** you've created the lookup tables (§3b and `lookups/`), confirm the joins resolve:
+
+```
+# 5. lookups attach (non-null where they should)
+... <parse src_ip, principal> ...
+| lookup owner as trusted from <LOOKUP_PATH>/aws_allowlist_ips on ip_or_cidr = src_ip
+| lookup last_seen as seen_ip from <LOOKUP_PATH>/aws_seen_user_ip on principal = principal, ip = src_ip
+| count by trusted, seen_ip
+```
+
+Only once steps 1–5 behave should you deploy the full §3c tail in a Monitor. If a step returns
+nothing, fix that layer first — most "it doesn't work" reports trace back to step 1 (field paths /
+source category) or step 5 (lookup table path or key-column names).

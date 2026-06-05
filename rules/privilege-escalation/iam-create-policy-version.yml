@@ -1,0 +1,23 @@
+title: AWS IAM New Managed Policy Version Created
+id: 207be640-3c72-4617-abad-5ba1cffb3fbf
+status: experimental
+description: Detects creation of a new version of a customer-managed policy (CreatePolicyVersion). Combined with SetDefaultPolicyVersion this can quietly escalate the permissions granted by an existing policy.
+references:
+- https://attack.mitre.org/techniques/T1098/003/
+- https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicyVersion.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.privilege-escalation
+- attack.t1098.003
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: CreatePolicyVersion
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate policy updates.
+level: medium

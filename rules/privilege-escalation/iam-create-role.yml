@@ -1,0 +1,23 @@
+title: AWS IAM Role Created
+id: 0b0775ed-bbfc-4bac-958f-f706df024efc
+status: experimental
+description: Detects creation of a new IAM role (CreateRole). Attackers create roles (often with permissive trust) as a persistence and escalation foothold.
+references:
+- https://attack.mitre.org/techniques/T1098/003/
+- https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.privilege-escalation
+- attack.t1098.003
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: CreateRole
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Routine role creation by platform/IaC.
+level: low

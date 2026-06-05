@@ -1,0 +1,27 @@
+title: AWS IAM Administrator/Wildcard Policy Attached
+id: 76a8a573-05c1-4e77-9b98-b797f149a7c3
+status: experimental
+description: Detects attachment of the AWS managed AdministratorAccess policy to a user, role, or group. Matches the well-known admin policy ARN; custom wildcard (Action:* Resource:*) policies should be detected separately by inspecting the policy document.
+references:
+- https://attack.mitre.org/techniques/T1098/003/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.privilege-escalation
+- attack.t1098.003
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - AttachUserPolicy
+    - AttachRolePolicy
+    - AttachGroupPolicy
+    eventSource: iam.amazonaws.com
+    requestParameters.policyArn|contains: AdministratorAccess
+  condition: selection
+falsepositives:
+- Deliberate granting of administrator access (should be rare and reviewed).
+level: high

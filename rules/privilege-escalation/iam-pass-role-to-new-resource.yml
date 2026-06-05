@@ -1,0 +1,27 @@
+title: AWS iam:PassRole to New Compute Resource
+id: ed11c0ce-8011-4c0b-b43b-fca18802f733
+status: experimental
+description: 'Detects creation of compute resources that receive an IAM role (RunInstances/CreateFunction/CreateInstanceProfile etc.). NOTE: there is NO standalone ''PassRole'' CloudTrail eventName - iam:PassRole is an authorization check embedded in the consuming call. Inspect requestParameters for the role/instance profile being passed; high-signal when a low-privileged principal passes a high-privileged role.'
+references:
+- https://attack.mitre.org/techniques/T1098/
+- https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.privilege-escalation
+- attack.t1098
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - RunInstances
+    - CreateFunction20150331
+    - CreateFunction
+  filter:
+    requestParameters.iamInstanceProfile|exists: true
+  condition: selection and filter
+falsepositives:
+- Normal provisioning that assigns instance/function roles. Correlate the passed role's privileges with the caller's.
+level: medium

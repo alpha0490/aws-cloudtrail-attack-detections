@@ -1,0 +1,25 @@
+title: AWS IAM Role Trust Policy Modified
+id: aa023811-d9ec-46d2-a9ad-66c513b8ba44
+status: experimental
+description: Detects modification of a role's trust policy (UpdateAssumeRolePolicy). Attackers alter trust relationships to allow themselves (or an external account) to assume a privileged role.
+references:
+- https://attack.mitre.org/techniques/T1098/
+- https://attack.mitre.org/techniques/T1548/
+- https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAssumeRolePolicy.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.privilege-escalation
+- attack.t1098
+- attack.t1548
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: UpdateAssumeRolePolicy
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate changes to role trust by platform/identity teams. Investigate when the new principal is an external account or the change comes from an unexpected source IP.
+level: high

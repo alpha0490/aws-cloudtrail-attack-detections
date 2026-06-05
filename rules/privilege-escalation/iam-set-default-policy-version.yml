@@ -1,0 +1,23 @@
+title: AWS IAM Default Policy Version Changed
+id: a1f23f06-ac42-4848-8946-511e8c6d12c2
+status: experimental
+description: Detects changing the default version of a managed policy (SetDefaultPolicyVersion). Attackers can switch the active policy version to one granting more permissions.
+references:
+- https://attack.mitre.org/techniques/T1098/003/
+- https://docs.aws.amazon.com/IAM/latest/APIReference/API_SetDefaultPolicyVersion.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.privilege-escalation
+- attack.t1098.003
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: SetDefaultPolicyVersion
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate rollbacks/updates of managed policies.
+level: medium

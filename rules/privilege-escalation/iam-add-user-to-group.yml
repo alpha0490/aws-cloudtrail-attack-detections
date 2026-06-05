@@ -1,0 +1,23 @@
+title: AWS IAM User Added to Group
+id: 5d0400e3-900d-4b87-b959-ea2d00af2c17
+status: experimental
+description: Detects adding an IAM user to a group (AddUserToGroup). Adding a controlled user to a privileged group is a direct escalation path.
+references:
+- https://attack.mitre.org/techniques/T1098/
+- https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddUserToGroup.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.privilege-escalation
+- attack.t1098
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: AddUserToGroup
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Routine group membership management.
+level: medium

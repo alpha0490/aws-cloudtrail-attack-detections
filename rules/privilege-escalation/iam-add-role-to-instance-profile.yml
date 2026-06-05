@@ -1,0 +1,24 @@
+title: AWS IAM Role Added to Instance Profile
+id: 526d39b0-18b8-4a77-bc25-00f08db1cc82
+status: experimental
+description: Detects associating an IAM role with an instance profile or attaching that profile to an instance (AddRoleToInstanceProfile/AssociateIamInstanceProfile). Used to obtain a privileged role's credentials via the instance metadata service.
+references:
+- https://attack.mitre.org/techniques/T1098/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.privilege-escalation
+- attack.t1098
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - AddRoleToInstanceProfile
+    - AssociateIamInstanceProfile
+  condition: selection
+falsepositives:
+- Standard EC2 provisioning assigning instance roles.
+level: medium

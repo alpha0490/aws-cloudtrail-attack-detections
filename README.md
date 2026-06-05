@@ -42,6 +42,7 @@ Detections key off CloudTrail `eventName` / `eventSource` and relevant
 ├── cheatsheet/README.md       # IR cheatsheet, tables by ATT&CK tactic
 ├── docs/
 │   ├── mitre-matrix.md         # ATT&CK Cloud (IaaS) coverage matrix + TODO gaps
+│   ├── sumologic-quickstart.md # beginner's guide: build these as Sumo alerts, step by step
 │   └── enrichment-and-baselining.md  # IP allow/threat lists + 90d behavioral baseline (Sumo)
 ├── lookups/                    # IP allowlist + CrowdStrike threatlist (CSV) for the enrichment layer
 ├── rules/                     # Sigma rules, one folder per tactic
@@ -99,6 +100,10 @@ Sumo Logic ingests CloudTrail with the standard field names used here, so the fi
 translate directly. Convert with the Sumo backend if you have it installed
 (`sigma plugin list`), or convert `--without-pipeline` and paste the resulting predicate into a
 Sumo search scoped to your CloudTrail source category (e.g. `_sourceCategory=*cloudtrail*`).
+
+**New to Sumo Logic?** The [Sumo Logic quickstart](docs/sumologic-quickstart.md) walks a beginner
+from zero to a working alert in ~10 minutes (translate a Sigma rule → Monitor), then layers on the
+lookups and baseline.
 
 ## Enrichment & behavioral baselining (Sumo Logic)
 

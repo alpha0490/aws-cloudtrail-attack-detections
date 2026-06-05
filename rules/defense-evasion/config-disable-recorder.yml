@@ -1,0 +1,27 @@
+title: AWS Config Recording Disabled
+id: aebd803a-4ea0-4eea-8204-2f8c590035cb
+status: experimental
+description: Detects disabling or deletion of AWS Config recording or delivery (StopConfigurationRecorder, DeleteConfigurationRecorder, DeleteDeliveryChannel, DeleteConfigRule), reducing configuration audit visibility.
+references:
+- https://attack.mitre.org/techniques/T1562/008/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562.008
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - StopConfigurationRecorder
+    - DeleteConfigurationRecorder
+    - DeleteDeliveryChannel
+    - DeleteConfigRule
+    eventSource: config.amazonaws.com
+  condition: selection
+falsepositives:
+- Approved changes to AWS Config setup.
+level: high

@@ -1,0 +1,29 @@
+title: AWS S3 Public Access Block Removed
+id: 6c92f714-af26-43ec-ae6a-afcfd1375795
+status: experimental
+description: Detects removal or weakening of S3 Block Public Access (DeleteAccountPublicAccessBlock, DeletePublicAccessBlock, PutAccountPublicAccessBlock/PutPublicAccessBlock disabling protections). This re-enables the possibility of public buckets and often precedes exfiltration.
+references:
+- https://attack.mitre.org/techniques/T1562/
+- https://attack.mitre.org/techniques/T1578/005/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562
+- attack.t1578.005
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - DeleteAccountPublicAccessBlock
+    - DeletePublicAccessBlock
+    - PutAccountPublicAccessBlock
+    - PutPublicAccessBlock
+    eventSource: s3.amazonaws.com
+  condition: selection
+falsepositives:
+- Deliberate, reviewed changes to public-access settings (rare).
+level: high

@@ -1,0 +1,23 @@
+title: AWS CloudTrail Trail Reconfigured
+id: d39e5e14-03d2-450e-bdc1-fecfeeaf7681
+status: experimental
+description: Detects modification of a CloudTrail trail (UpdateTrail), e.g. disabling multi-region logging, global service events, or log file validation to reduce visibility.
+references:
+- https://attack.mitre.org/techniques/T1562/008/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562.008
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: UpdateTrail
+    eventSource: cloudtrail.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate trail configuration changes (review the new settings).
+level: high

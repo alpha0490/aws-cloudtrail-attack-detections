@@ -1,0 +1,23 @@
+title: AWS CloudTrail Logging Stopped
+id: 5692f8d1-16fd-4ca3-9b75-dc945d0a8af7
+status: experimental
+description: Detects StopLogging on a CloudTrail trail, which halts delivery of management/data events - a direct attempt to blind defenders.
+references:
+- https://attack.mitre.org/techniques/T1562/008/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562.008
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: StopLogging
+    eventSource: cloudtrail.amazonaws.com
+  condition: selection
+falsepositives:
+- Rare, planned maintenance on a trail (should be change-controlled).
+level: high

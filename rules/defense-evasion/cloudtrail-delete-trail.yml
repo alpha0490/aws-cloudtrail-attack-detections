@@ -1,0 +1,23 @@
+title: AWS CloudTrail Trail Deleted
+id: a4a496de-0ddf-4f23-8b18-4e2c8445d824
+status: experimental
+description: Detects deletion of a CloudTrail trail (DeleteTrail), removing the audit trail entirely.
+references:
+- https://attack.mitre.org/techniques/T1562/008/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562.008
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: DeleteTrail
+    eventSource: cloudtrail.amazonaws.com
+  condition: selection
+falsepositives:
+- Decommissioning of a trail as part of an approved change.
+level: high

@@ -1,0 +1,23 @@
+title: AWS CloudWatch Alarms Deleted
+id: 3696d7a5-07fe-45c7-8eb3-9297a20ed39a
+status: experimental
+description: Detects deletion of CloudWatch alarms (DeleteAlarms), which can suppress alerting on malicious activity.
+references:
+- https://attack.mitre.org/techniques/T1562/001/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562.001
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: DeleteAlarms
+    eventSource: monitoring.amazonaws.com
+  condition: selection
+falsepositives:
+- Routine cleanup of unused alarms.
+level: medium

@@ -1,0 +1,26 @@
+title: AWS Security Hub Disabled or Weakened
+id: 64896a12-adf0-4140-aba2-26513dc5c274
+status: experimental
+description: Detects disabling Security Hub or its standards/findings (DisableSecurityHub, BatchDisableStandards, DeleteInsight, UpdateStandardsControl to disable controls).
+references:
+- https://attack.mitre.org/techniques/T1562/008/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562.008
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - DisableSecurityHub
+    - BatchDisableStandards
+    - DeleteInsight
+    eventSource: securityhub.amazonaws.com
+  condition: selection
+falsepositives:
+- Planned Security Hub administration.
+level: medium

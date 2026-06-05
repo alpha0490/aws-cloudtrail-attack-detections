@@ -1,0 +1,28 @@
+title: AWS GuardDuty Disabled or Tampered
+id: 60fd78c5-db96-4d27-b04b-528f32350ac1
+status: experimental
+description: Detects actions that disable or weaken GuardDuty (DeleteDetector, StopMonitoringMembers, DeleteMembers, DisassociateFromMasterAccount, UpdateDetector, CreateFilter to suppress findings).
+references:
+- https://attack.mitre.org/techniques/T1562/008/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562.008
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - DeleteDetector
+    - StopMonitoringMembers
+    - DeleteMembers
+    - DisassociateFromMasterAccount
+    - UpdateDetector
+    eventSource: guardduty.amazonaws.com
+  condition: selection
+falsepositives:
+- Planned GuardDuty administration in multi-account setups.
+level: high

@@ -1,0 +1,26 @@
+title: AWS WAF Rule or WebACL Deleted
+id: 27b06209-63ed-4c57-b285-d5d47fe2692b
+status: experimental
+description: Detects deletion of AWS WAF protections (DeleteWebACL/DeleteRuleGroup/DeleteIPSet), removing application-layer defenses.
+references:
+- https://attack.mitre.org/techniques/T1562/001/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562.001
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - DeleteWebACL
+    - DeleteRuleGroup
+    - DeleteIPSet
+    eventSource|contains: waf
+  condition: selection
+falsepositives:
+- Legitimate WAF reconfiguration.
+level: medium

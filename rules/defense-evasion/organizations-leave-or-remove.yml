@@ -1,0 +1,27 @@
+title: AWS Account Removed From Organization
+id: aed5707a-60b8-42b2-b2e2-467aacc037e8
+status: experimental
+description: Detects an account leaving or being removed from an AWS Organization (LeaveOrganization/RemoveAccountFromOrganization), which can detach it from centralized SCP guardrails and logging.
+references:
+- https://attack.mitre.org/techniques/T1562/
+- https://attack.mitre.org/techniques/T1578/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562
+- attack.t1578
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - LeaveOrganization
+    - RemoveAccountFromOrganization
+    eventSource: organizations.amazonaws.com
+  condition: selection
+falsepositives:
+- Planned organizational restructuring.
+level: high

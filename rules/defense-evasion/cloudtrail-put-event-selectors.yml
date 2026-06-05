@@ -1,0 +1,23 @@
+title: AWS CloudTrail Event Selectors Modified
+id: 636b1883-07ac-421c-aba4-c67e4cd34c85
+status: experimental
+description: Detects changes to CloudTrail event selectors (PutEventSelectors), which can be used to stop recording specific event categories (e.g. management or S3/Lambda data events).
+references:
+- https://attack.mitre.org/techniques/T1562/008/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562.008
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: PutEventSelectors
+    eventSource: cloudtrail.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate tuning of which events are captured.
+level: medium

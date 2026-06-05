@@ -1,0 +1,23 @@
+title: AWS VPC Flow Logs Deleted
+id: 0068f125-7d62-44bd-8ebe-c6454463744b
+status: experimental
+description: Detects deletion of VPC flow logs (DeleteFlowLogs), removing network-level visibility.
+references:
+- https://attack.mitre.org/techniques/T1562/008/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562.008
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: DeleteFlowLogs
+    eventSource: ec2.amazonaws.com
+  condition: selection
+falsepositives:
+- Decommissioning of flow logs during network changes.
+level: high

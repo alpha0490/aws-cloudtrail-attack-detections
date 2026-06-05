@@ -43,7 +43,8 @@ Detections key off CloudTrail `eventName` / `eventSource` and relevant
 ├── docs/
 │   ├── mitre-matrix.md         # ATT&CK Cloud (IaaS) coverage matrix + TODO gaps
 │   ├── sumologic-quickstart.md # beginner's guide: build these as Sumo alerts, step by step
-│   └── enrichment-and-baselining.md  # IP allow/threat lists + 90d behavioral baseline (Sumo)
+│   ├── enrichment-and-baselining.md  # IP allow/threat lists + 90d behavioral baseline (Sumo)
+│   └── validation-with-stratus.md    # validate detections against Stratus Red Team attacks
 ├── lookups/                    # IP allowlist + CrowdStrike threatlist (CSV) for the enrichment layer
 ├── rules/                     # Sigma rules, one folder per tactic
 │   ├── initial-access/  execution/  persistence/  privilege-escalation/
@@ -63,6 +64,29 @@ Detections key off CloudTrail `eventName` / `eventSource` and relevant
 Elastic, Microsoft Sentinel, etc.) via [`sigma-cli`](https://github.com/SigmaHQ/sigma-cli) /
 [pySigma](https://github.com/SigmaHQ/pySigma). Write a detection once; deploy it anywhere. It's
 also a convenient, structured substrate for humans or AI to generate new custom detections.
+
+## Prior art & how this is different
+
+This space has excellent, more mature projects — you should know them, and we build on their
+shoulders rather than pretend to replace them:
+
+| Project | What it is | Relationship here |
+|---|---|---|
+| [SigmaHQ `rules/cloud/aws/cloudtrail`](https://github.com/SigmaHQ/sigma) | The canonical, community-vetted Sigma rule set, incl. AWS CloudTrail | Same format. Where a rule overlaps, treat SigmaHQ as upstream; this repo aims to be a **tactic-organized, IR-oriented** companion, not a competitor. Contributing strong rules upstream is encouraged. |
+| [Elastic detection-rules](https://github.com/elastic/detection-rules) | Elastic's production rules + a great testing model | Inspiration for the **test harness** here; Elastic's native `new_terms` rule type is what the baseline doc points to for Elastic users. |
+| [Splunk Security Content (ESCU)](https://github.com/splunk/security_content) | Splunk's analytic stories for AWS, etc. | Splunk-specific; this repo stays vendor-neutral and compiles *to* Splunk. |
+| [Stratus Red Team](https://stratus-red-team.cloud/) (Datadog) | Cloud **attack emulation** | Complements detections — detonate a technique, confirm the rule fires. See [`docs/validation-with-stratus.md`](docs/validation-with-stratus.md). |
+| [panther-analysis](https://github.com/panther-labs/panther-analysis), [Falco](https://falco.org/) | Python-based cloud rules / runtime detection | Different engines/scopes (runtime, Python). Out of scope here. |
+
+**What this repo adds that the above don't bundle together:**
+1. A **tactic-first IR cheatsheet** mapping CloudTrail events → meaning → fields to inspect (responder workflow, not just rules).
+2. An explicit **deploy-tier** split (`alert` vs `hunt`) so it's not 98 equal-looking rules.
+3. A documented **Sumo Logic enrichment + 90-day baseline** layer (IP allow/threat-list, first-seen novelty, assumed-role normalization) that wraps the stateless rules.
+4. **Honesty about AWS sharp edges** (e.g. `PassRole` isn't a CloudTrail event; data-events caveats) rather than silent best-effort.
+5. A structure intended to be **fed to an AI** to generate environment-specific detections.
+
+If you only deploy one thing, deploy SigmaHQ's vetted rules; use this for the IR workflow, the
+tiering/enrichment model, and as a learning + AI-assist substrate.
 
 ## Converting rules to your SIEM
 
@@ -135,6 +159,10 @@ All rules pass `sigma check` with **0 errors and 0 issues**, and the logic tests
 rule matches a true-positive CloudTrail event and ignores a benign one (see [`tests/`](tests/)). CI
 runs both on every push/PR — see
 [`.github/workflows/sigma-validate.yml`](.github/workflows/sigma-validate.yml).
+
+For end-to-end validation against **real emulated attacks**, see
+[validation with Stratus Red Team](docs/validation-with-stratus.md) — detonate a technique, confirm
+the rule fires on the CloudTrail event it produces.
 
 > **Deploy tiers:** each rule carries a `tier` — `alert` (high-signal, page on sight) or `hunt`
 > (high-volume/contextual, deploy through the enrichment + baseline layer or for threat hunting).

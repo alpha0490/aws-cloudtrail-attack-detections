@@ -25,10 +25,11 @@ combining three signals:
                                              ▼
             ┌─────────────────────────────────────────────────────────────┐
             │  ENRICH                                                       │
+            │   • principal = normalized identity (§3a)                    │
             │   • GeoIP  src_ip → country         (geo://location)         │
             │   • is_threat  = src_ip ∈ threatlist (aws_threatlist_ips)    │
             │   • is_trusted = src_ip ∈ allowlist  (aws_allowlist_ips)     │
-            │   • baseline   = is (arn,dim) seen in 90d? × 5 dims          │
+            │   • baseline   = is (principal,dim) seen in 90d? × 5 dims    │
             └───────────────────────────────┬─────────────────────────────┘
                                              ▼
             ┌─────────────────────────────────────────────────────────────┐
@@ -40,7 +41,8 @@ combining three signals:
             └─────────────────────────────────────────────────────────────┘
 ```
 
-The 5 baseline dimensions, all keyed per `userIdentity.arn`:
+The 5 baseline dimensions, all keyed per **`principal`** (the normalized identity from §3a, *not* the
+raw `userIdentity.arn`):
 
 | Dimension | Field | "New" means… | ATT&CK angle |
 |---|---|---|---|
@@ -80,67 +82,107 @@ something this principal has never done, we still want to know.
 > **Correlated-subquery caveat (read this).** A natural first instinct is a per-finding subquery:
 > *"for this row's user, fetch their last-90d IPs and check membership."* **Sumo's `[subquery: …]`
 > is NOT correlated** — it runs once and injects a *fixed* value list into the outer query; it
-> cannot reference the current row's `arn`. So a subquery can only express **global** novelty
+> cannot reference the current row's identity. So a subquery can only express **global** novelty
 > ("this IP was never seen *anywhere* in 90d"), not **per-principal** novelty. For the per-user
-> baseline you asked for, use **precomputed lookup tables keyed by `(arn, dim)`** (below). The
-> subquery form is shown afterwards for the narrower global-novelty use case.
+> baseline you want, use **precomputed lookup tables keyed by `(principal, dim)`** (§3b). The
+> subquery form is shown in §5 for the narrower global-novelty use case.
 
-### 3a. Baseline lookup tables (per-principal — use this)
+### 3a. Normalize the principal (do this first)
+
+The baseline must key on a **stable identity**. But for **AssumedRole** sessions, `userIdentity.arn`
+ends in an *ephemeral session name* that changes every session:
+
+```
+arn:aws:sts::123456789012:assumed-role/<RoleName>/<SessionName>
+                                                   ^^^^^^^^^^^^^ EC2=instance-id, SSO=email, code=UUID
+```
+
+If you baseline on that, every session looks like a brand-new principal → the baseline never
+accumulates → novelty false-positive storms (autoscaling alone is endless). Normalize by deriving a
+stable `principal`, classifying by the **role** (stable) rather than guessing the session string:
+
+```
+// ── normalize principal identity (stable across assumed-role sessions) ──
+| json field=_raw "userIdentity.type", "userIdentity.arn", \
+       "userIdentity.sessionContext.sessionIssuer.arn" as id_type, raw_arn, issuer_arn nodrop
+// session name = trailing segment of an assumed-role ARN
+| parse regex field=raw_arn "assumed-role/(?<role_name>[^/]+)/(?<session_name>.+)$" nodrop
+// is this a human-assumable role? (tune this — glob match, or a lookup vs an aws_human_roles table)
+| if(role_name matches "AWSReservedSSO_*", true, false) as is_human_role
+// derive the stable principal key
+| if(id_type = "AssumedRole",
+     if(is_human_role, concat(issuer_arn, "/", session_name), issuer_arn),
+     raw_arn) as principal
+```
+
+- **IAM user / root** → `principal` = `userIdentity.arn` (already stable).
+- **AssumedRole on a human role** (SSO permission set, break-glass) → `role + session_name` → keeps
+  **per-person** attribution (the session name *is* the human, e.g. `alice@corp.com`).
+- **AssumedRole on a machine role** (EC2/Lambda/CI) → just the **role** → collapses all sessions to
+  one identity, killing the autoscaling noise.
+
+> **Tuning the human-role test:** for one pattern, the inline `matches "AWSReservedSSO_*"` is enough.
+> For several, replace it with a lookup against a small `aws_human_roles` table
+> (`role_name → is_human`) you maintain. Unknown roles default to **role-level** (low noise).
+
+### 3b. Baseline lookup tables (per-principal — use this)
 
 Create five Sumo **Lookup Tables**, each maintained by a scheduled search. Schema:
 
 | Table | Key columns | Value |
 |---|---|---|
-| `aws_seen_user_ip` | `arn`, `ip` | `last_seen` |
-| `aws_seen_user_action` | `arn`, `action` | `last_seen` |
-| `aws_seen_user_country` | `arn`, `country` | `last_seen` |
-| `aws_seen_user_region` | `arn`, `region` | `last_seen` |
-| `aws_seen_user_agent` | `arn`, `ua` | `last_seen` |
+| `aws_seen_user_ip` | `principal`, `ip` | `last_seen` |
+| `aws_seen_user_action` | `principal`, `action` | `last_seen` |
+| `aws_seen_user_country` | `principal`, `country` | `last_seen` |
+| `aws_seen_user_region` | `principal`, `region` | `last_seen` |
+| `aws_seen_user_agent` | `principal`, `ua` | `last_seen` |
 
 Set each table's **TTL to 90 days** so tuples that haven't recurred age out automatically — that
 *is* the rolling 90-day window. A daily scheduled search merges fresh sightings (updating
 `last_seen`). **Baseline-builder** for the IP dimension (replicate for the other four, swapping the
-grouped field):
+grouped field). Note it begins with the §3a normalization block:
 
 ```
 // Scheduled search: run daily over the last 24h; action = "Save to Lookup Table"
 //   target = aws_seen_user_ip, merge = true
 _sourceCategory=*cloudtrail*
-| json field=_raw "sourceIPAddress", "userIdentity.arn" as ip, arn nodrop
-| where !isNull(arn) and !isBlank(ip)
-| count by arn, ip          // collapse to distinct (arn, ip) for the window
+<§3a normalization block → produces `principal`>
+| json field=_raw "sourceIPAddress" as ip nodrop
+| where !isNull(principal) and !isBlank(ip)
+| count by principal, ip          // collapse to distinct (principal, ip) for the window
 | now() as last_seen
-| fields arn, ip, last_seen
+| fields principal, ip, last_seen
 ```
 
 For the other dimensions, change the parsed/grouped field:
-- **action:** `... "eventName" as action ... | count by arn, action`
-- **country:** add `| lookup country_code as country from geo://location on ip = ip` then `count by arn, country`
-- **region:** `... "awsRegion" as region ... | count by arn, region`
-- **user agent:** `... "userAgent" as ua ... | count by arn, ua`
+- **action:** `... "eventName" as action ... | count by principal, action`
+- **country:** add `| lookup country_code as country from geo://location on ip = ip` then `count by principal, country`
+- **region:** `... "awsRegion" as region ... | count by principal, region`
+- **user agent:** `... "userAgent" as ua ... | count by principal, ua`
 
 **Seed it once** before relying on suppression: run each builder manually over `earliest=-90d` so the
 tables start full (otherwise everything looks "new" on day one — see Caveats).
 
-### 3b. The reusable enrichment tail
+### 3c. The reusable enrichment tail
 
 Append this after **any** converted Sigma rule's predicate. (Replace `<LOOKUP_PATH>` with your Sumo
 lookup folder, e.g. `/Library/Users/you@org.com`.)
 
 ```
-// ── parse the fields the layer needs ───────────────────────────────
-| json field=_raw "userIdentity.arn", "sourceIPAddress", "awsRegion", "userAgent" \
-       as arn, src_ip, region, ua nodrop
+// ── normalize identity (§3a) → principal ───────────────────────────
+<§3a normalization block → produces `principal`>
+// ── parse the other fields the layer needs ─────────────────────────
+| json field=_raw "sourceIPAddress", "awsRegion", "userAgent" as src_ip, region, ua nodrop
 // ── enrich: geo, threat, trust ─────────────────────────────────────
 | lookup country_code as country        from geo://location               on ip = src_ip
 | lookup indicator_id, malicious_confidence from <LOOKUP_PATH>/aws_threatlist_ips on ip = src_ip
 | lookup owner as trusted_owner         from <LOOKUP_PATH>/aws_allowlist_ips on ip_or_cidr = src_ip
 // ── enrich: per-principal baseline (5 dims) ────────────────────────
-| lookup last_seen as seen_ip      from <LOOKUP_PATH>/aws_seen_user_ip      on arn = arn, ip = src_ip
-| lookup last_seen as seen_action  from <LOOKUP_PATH>/aws_seen_user_action  on arn = arn, action = eventName
-| lookup last_seen as seen_country from <LOOKUP_PATH>/aws_seen_user_country on arn = arn, country = country
-| lookup last_seen as seen_region  from <LOOKUP_PATH>/aws_seen_user_region  on arn = arn, region = region
-| lookup last_seen as seen_agent   from <LOOKUP_PATH>/aws_seen_user_agent   on arn = arn, ua = ua
+| lookup last_seen as seen_ip      from <LOOKUP_PATH>/aws_seen_user_ip      on principal = principal, ip = src_ip
+| lookup last_seen as seen_action  from <LOOKUP_PATH>/aws_seen_user_action  on principal = principal, action = eventName
+| lookup last_seen as seen_country from <LOOKUP_PATH>/aws_seen_user_country on principal = principal, country = country
+| lookup last_seen as seen_region  from <LOOKUP_PATH>/aws_seen_user_region  on principal = principal, region = region
+| lookup last_seen as seen_agent   from <LOOKUP_PATH>/aws_seen_user_agent   on principal = principal, ua = ua
 // ── derive flags ───────────────────────────────────────────────────
 | if(isNull(seen_ip),      1, 0) as new_ip
 | if(isNull(seen_action),  1, 0) as new_action
@@ -156,7 +198,7 @@ lookup folder, e.g. `/Library/Users/you@org.com`.)
 ```
 
 > Note: `eventName` must be present from the rule predicate; if your converted rule dropped it,
-> add `"eventName" as eventName` to the `json` line.
+> add `"eventName" as eventName` to a `json` line.
 
 ---
 
@@ -168,16 +210,16 @@ lookup folder, e.g. `/Library/Users/you@org.com`.)
 _sourceCategory=*cloudtrail*
 | json field=_raw "eventName","eventSource","responseElements.ConsoleLogin" as eventName, eventSource, login_result nodrop
 | where eventSource="signin.amazonaws.com" and eventName="ConsoleLogin" and login_result="Success"
-<paste the enrichment tail from §3b>
+<paste the enrichment tail from §3c>
 // DECISION (novelty-gated): threat OR novel; else drop if trusted; else keep at rule level
 | where is_threat=1 OR novelty_score>0 OR is_trusted=0
 | if(is_threat=1,"critical", if(novelty_score>0,"high","low")) as severity
-| fields severity, arn, src_ip, country, region, ua, novel_dims, malicious_confidence, eventName
+| fields severity, principal, src_ip, country, region, ua, novel_dims, malicious_confidence, eventName
 ```
 
 - Threat IP → `critical`. Login from a **new IP/country/region/agent** → `high`, *even if the IP is
-  allowlisted*. Allowlisted + everything familiar → dropped (`is_trusted=0` is false, novelty 0,
-  not threat). Non-trusted + familiar → kept at `low` (the rule's native level).
+  allowlisted*. Allowlisted + everything familiar → dropped. Non-trusted + familiar → kept at `low`
+  (the rule's native level).
 
 ### 4b. Always-alert + enrich — `StopLogging` (rules/defense-evasion/cloudtrail-stop-logging.yml)
 
@@ -185,10 +227,10 @@ _sourceCategory=*cloudtrail*
 _sourceCategory=*cloudtrail*
 | json field=_raw "eventName","eventSource" as eventName, eventSource nodrop
 | where eventSource="cloudtrail.amazonaws.com" and eventName="StopLogging"
-<paste the enrichment tail from §3b>
+<paste the enrichment tail from §3c>
 // DECISION (always alert; allowlist does NOT suppress; threat/novelty escalate)
-| if(is_threat=1, "critical", if(novelty_score>0, "high", "high")) as severity
-| fields severity, arn, src_ip, country, region, ua, novel_dims, is_trusted, malicious_confidence
+| if(is_threat=1, "critical", "high") as severity
+| fields severity, principal, src_ip, country, region, ua, novel_dims, is_trusted, malicious_confidence
 ```
 
 - Disabling CloudTrail is always alert-worthy, so there's no suppression branch — but a threat-IP or
@@ -212,13 +254,16 @@ Useful as an extra signal — "this source IP has never been seen *anywhere* in 
 ```
 
 Subqueries are capped (Sumo returns a limited number of rows, historically ~10k) and re-scan 90d on
-every run — so treat this as a coarse global filter, and rely on the §3a tables for per-principal
+every run — so treat this as a coarse global filter, and rely on the §3b tables for per-principal
 novelty.
 
 ---
 
 ## 6. Caveats (honest limitations)
 
+- **Identity normalization** is handled in §3a; tune the human-role test (`AWSReservedSSO_*` by
+  default, or an `aws_human_roles` lookup). Get this wrong and you either lose per-human attribution
+  (machine-classified human roles) or get session noise (human-classified machine roles).
 - **CIDR allowlist:** Sumo `lookup` matches **exact keys**, so a `203.0.113.0/24` row will **not**
   match `203.0.113.10`. Options: (a) store exact IPs; (b) keep CIDRs in a separate small list and
   test with `maskFromCIDR`, e.g.
@@ -228,15 +273,13 @@ novelty.
   `cloudtrail.amazonaws.com` or `AWS Internal`. `geo://location` won't resolve these — guard with
   `| where isValidIP(src_ip)` before geo, and decide whether service-sourced events should bypass
   the layer entirely.
-- **Cold start:** until the baseline tables hold ~90d, *everything* looks new. Seed them (§3a) and
+- **Cold start:** until the baseline tables hold ~90d, *everything* looks new. Seed them (§3b) and
   run a **warm-up** where novelty is logged but not paged. Expect novelty FPs for new hires, new
-  services, new regions, and SDK upgrades — allowlist service/automation principals by `arn`.
+  services, new regions, and SDK upgrades — allowlist service/automation principals.
 - **Cost:** the lookup-table approach is cheap at query time (5 indexed lookups). The §5 subquery
   re-scans 90d each run — avoid it on high-frequency schedules.
 - **Data events:** baseline dims for data-event rules (S3 `GetObject`, KMS `Decrypt`) only populate
   if those CloudTrail **data events** are enabled (see the repo README).
-- **Identity shape:** for assumed roles, `userIdentity.arn` includes the session name; normalize
-  (strip the session suffix) if you want to baseline the *role* rather than each session.
 
 ---
 
@@ -244,7 +287,7 @@ novelty.
 
 1. Create lookup tables `aws_allowlist_ips`, `aws_threatlist_ips`; seed from [`../lookups/`](../lookups/).
 2. Wire your CrowdStrike pipeline to merge into `aws_threatlist_ips` (set a TTL).
-3. Create the five `aws_seen_user_*` tables (TTL 90d); seed each builder once over `-90d`; schedule daily.
-4. Pick a mode per rule (novelty-gated vs always-alert) and append the §3b tail to your scheduled
-   detections.
-5. Run a warm-up window; tune `novelty_score` thresholds and principal allowlists; then enable paging.
+3. Decide your human-role test (§3a): keep the `AWSReservedSSO_*` default or build an `aws_human_roles` lookup.
+4. Create the five `aws_seen_user_*` tables (TTL 90d); seed each builder once over `-90d`; schedule daily (§3b).
+5. Pick a mode per rule (novelty-gated vs always-alert) and append the §3c tail to your scheduled detections.
+6. Run a warm-up window; tune `novelty_score` thresholds, the human-role list, and principal allowlists; then enable paging.

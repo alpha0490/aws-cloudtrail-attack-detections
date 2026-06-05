@@ -50,8 +50,9 @@ Create two **Lookup Tables** (Manage Data → Logs → Lookup Tables) and seed t
 
 The behavioral-baseline tables (`aws_seen_user_ip`, `aws_seen_user_action`,
 `aws_seen_user_country`, `aws_seen_user_region`, `aws_seen_user_agent`) are **machine-maintained**
-by the scheduled "baseline-builder" searches in the docs — do not hand-populate them. Their
-schemas are documented alongside those builders.
+by the scheduled "baseline-builder" searches in the docs — do not hand-populate them. They are keyed
+on a **normalized `principal`** (assumed-role sessions collapse to a stable identity — see docs §3a),
+not the raw `userIdentity.arn`. Their schemas are documented alongside those builders.
 
 See [`../docs/enrichment-and-baselining.md`](../docs/enrichment-and-baselining.md) for the full
 query templates.

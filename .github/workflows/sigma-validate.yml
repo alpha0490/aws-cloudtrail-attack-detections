@@ -5,11 +5,13 @@ on:
     paths:
       - "rules/**"
       - "scripts/**"
+      - "tests/**"
       - ".github/workflows/sigma-validate.yml"
   pull_request:
     paths:
       - "rules/**"
       - "scripts/**"
+      - "tests/**"
   workflow_dispatch:
 
 jobs:
@@ -28,6 +30,9 @@ jobs:
 
       - name: Validate all rules (sigma check)
         run: sigma check rules/
+
+      - name: Run rule logic tests (true-positive / benign events)
+        run: python3 tests/run_tests.py
 
       - name: Verify docs are in sync with rules
         run: |

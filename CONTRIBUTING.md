@@ -30,6 +30,7 @@ Every rule MUST include these keys and pass `sigma check`:
 | `detection` | Key off `eventName` / `eventSource` and relevant `requestParameters.*` / `responseElements.*` / `userIdentity.*`. |
 | `falsepositives` | At least one realistic FP. |
 | `level` | `informational` / `low` / `medium` / `high` / `critical`. |
+| `tier` | Deploy tier: `alert` (page on sight) or `hunt` (high-volume/contextual — deploy via the enrichment+baseline layer). Default: `alert` iff `level` is `high`/`critical`. |
 
 ### Example skeleton
 
@@ -57,6 +58,7 @@ detection:
 falsepositives:
   - Rare, change-controlled trail maintenance.
 level: high
+tier: alert
 ```
 
 ### Thresholds & correlation
@@ -70,11 +72,14 @@ with a `name:` and the `correlation:` document in the **same file** (see
 
 ```bash
 pip install sigma-cli pyyaml
-sigma check rules/                 # must report 0 errors and 0 issues
-python3 scripts/build_docs.py      # regenerate cheatsheet + matrix from the rules
+sigma check rules/                 # 1. schema: must report 0 errors and 0 issues
+python3 tests/run_tests.py         # 2. logic: true-positive/benign event tests must pass
+python3 scripts/build_docs.py      # 3. regenerate cheatsheet + matrix from the rules
 ```
 
-- Confirm `sigma check` is clean.
+- Confirm `sigma check` is clean **and** `tests/run_tests.py` is green.
+- Add a logic test for your rule in [`tests/test_cases.yaml`](tests/test_cases.yaml) — a positive
+  event that must match and a benign one that must not. See [`tests/README.md`](tests/README.md).
 - Run `build_docs.py` and commit the regenerated `cheatsheet/README.md` and
   `docs/mitre-matrix.md` (they are generated — don't hand-edit them).
 - If you covered a technique listed under **Known gaps / TODO** in the matrix, it will move to

@@ -1,0 +1,244 @@
+# Logic test cases: each rule is checked against a true-positive event (must match)
+# and a benign event (must NOT match). Events mirror real AWS CloudTrail record structure.
+# Run with: python3 tests/run_tests.py   (or pytest tests/run_tests.py)
+
+- rule: rules/initial-access/root-console-login.yml
+  positive:
+    note: Root user signs in to the console
+    event:
+      eventTime: "2026-06-05T12:00:00Z"
+      eventSource: signin.amazonaws.com
+      eventName: ConsoleLogin
+      awsRegion: us-east-1
+      sourceIPAddress: 203.0.113.5
+      userIdentity: { type: Root, arn: "arn:aws:iam::123456789012:root" }
+      responseElements: { ConsoleLogin: Success }
+  negative:
+    note: A normal IAM user signs in (not root)
+    event:
+      eventSource: signin.amazonaws.com
+      eventName: ConsoleLogin
+      userIdentity: { type: IAMUser, arn: "arn:aws:iam::123456789012:user/alice" }
+      responseElements: { ConsoleLogin: Success }
+
+- rule: rules/initial-access/console-login-without-mfa.yml
+  positive:
+    note: Successful console login with MFA not used
+    event:
+      eventSource: signin.amazonaws.com
+      eventName: ConsoleLogin
+      userIdentity: { type: IAMUser, arn: "arn:aws:iam::123456789012:user/alice" }
+      responseElements: { ConsoleLogin: Success }
+      additionalEventData: { MFAUsed: "No" }
+  negative:
+    note: Successful console login WITH MFA
+    event:
+      eventSource: signin.amazonaws.com
+      eventName: ConsoleLogin
+      responseElements: { ConsoleLogin: Success }
+      additionalEventData: { MFAUsed: "Yes" }
+
+- rule: rules/initial-access/root-account-api-usage.yml
+  positive:
+    note: Root performs a non-login API call (selection and not filter)
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: RunInstances
+      userIdentity: { type: Root, arn: "arn:aws:iam::123456789012:root" }
+  negative:
+    note: Root ConsoleLogin is excluded by the filter
+    event:
+      eventSource: signin.amazonaws.com
+      eventName: ConsoleLogin
+      userIdentity: { type: Root, arn: "arn:aws:iam::123456789012:root" }
+
+- rule: rules/persistence/iam-create-access-key.yml
+  positive:
+    note: Access key created
+    event:
+      eventSource: iam.amazonaws.com
+      eventName: CreateAccessKey
+      requestParameters: { userName: bob }
+  negative:
+    note: Access key deleted (different action)
+    event:
+      eventSource: iam.amazonaws.com
+      eventName: DeleteAccessKey
+
+- rule: rules/persistence/iam-create-user.yml
+  positive:
+    note: IAM user created
+    event:
+      eventSource: iam.amazonaws.com
+      eventName: CreateUser
+      requestParameters: { userName: svc-backdoor }
+  negative:
+    note: Read-only GetUser (different action)
+    event:
+      eventSource: iam.amazonaws.com
+      eventName: GetUser
+
+- rule: rules/privilege-escalation/iam-attach-administrator-policy.yml
+  positive:
+    note: AdministratorAccess attached to a user (list eventName + contains)
+    event:
+      eventSource: iam.amazonaws.com
+      eventName: AttachUserPolicy
+      requestParameters:
+        userName: bob
+        policyArn: "arn:aws:iam::aws:policy/AdministratorAccess"
+  negative:
+    note: A non-admin managed policy attached
+    event:
+      eventSource: iam.amazonaws.com
+      eventName: AttachUserPolicy
+      requestParameters:
+        userName: bob
+        policyArn: "arn:aws:iam::aws:policy/ReadOnlyAccess"
+
+- rule: rules/privilege-escalation/iam-update-assume-role-policy.yml
+  positive:
+    note: Role trust policy modified
+    event:
+      eventSource: iam.amazonaws.com
+      eventName: UpdateAssumeRolePolicy
+      requestParameters: { roleName: app-role }
+  negative:
+    note: Read-only GetRole
+    event:
+      eventSource: iam.amazonaws.com
+      eventName: GetRole
+
+- rule: rules/defense-evasion/cloudtrail-stop-logging.yml
+  positive:
+    note: CloudTrail logging stopped
+    event:
+      eventSource: cloudtrail.amazonaws.com
+      eventName: StopLogging
+      requestParameters: { name: org-trail }
+  negative:
+    note: Logging started (opposite action)
+    event:
+      eventSource: cloudtrail.amazonaws.com
+      eventName: StartLogging
+
+- rule: rules/defense-evasion/guardduty-disable.yml
+  positive:
+    note: GuardDuty detector deleted (one of a value list)
+    event:
+      eventSource: guardduty.amazonaws.com
+      eventName: DeleteDetector
+      requestParameters: { detectorId: abc123 }
+  negative:
+    note: GuardDuty detector created (not in the list)
+    event:
+      eventSource: guardduty.amazonaws.com
+      eventName: CreateDetector
+
+- rule: rules/defense-evasion/vpc-delete-flow-logs.yml
+  positive:
+    note: VPC flow logs deleted
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: DeleteFlowLogs
+  negative:
+    note: Flow logs created (opposite action)
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: CreateFlowLogs
+
+- rule: rules/credential-access/ec2-get-password-data.yml
+  positive:
+    note: Windows admin password retrieved
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: GetPasswordData
+      requestParameters: { instanceId: i-0abc123def456 }
+  negative:
+    note: DescribeInstances (benign enumeration, different action)
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: DescribeInstances
+
+- rule: rules/credential-access/ssm-get-parameter-decrypt.yml
+  positive:
+    note: SSM parameter read WITH decryption (boolean true)
+    event:
+      eventSource: ssm.amazonaws.com
+      eventName: GetParameter
+      requestParameters: { name: /prod/db/password, withDecryption: true }
+  negative:
+    note: SSM parameter read without decryption
+    event:
+      eventSource: ssm.amazonaws.com
+      eventName: GetParameter
+      requestParameters: { name: /prod/config/timeout, withDecryption: false }
+
+- rule: rules/exfiltration/ec2-modify-snapshot-attribute.yml
+  positive:
+    note: EBS snapshot attribute modified (sharing)
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: ModifySnapshotAttribute
+      requestParameters: { snapshotId: snap-0abc123 }
+  negative:
+    note: Snapshot attribute reset (different action)
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: ResetSnapshotAttribute
+
+- rule: rules/exfiltration/s3-put-bucket-policy.yml
+  positive:
+    note: S3 bucket policy modified
+    event:
+      eventSource: s3.amazonaws.com
+      eventName: PutBucketPolicy
+      requestParameters: { bucketName: customer-data }
+  negative:
+    note: Bucket policy read (different action)
+    event:
+      eventSource: s3.amazonaws.com
+      eventName: GetBucketPolicy
+
+- rule: rules/impact/kms-schedule-key-deletion.yml
+  positive:
+    note: KMS key deletion scheduled
+    event:
+      eventSource: kms.amazonaws.com
+      eventName: ScheduleKeyDeletion
+      requestParameters: { keyId: "1234abcd-12ab-34cd-56ef-1234567890ab" }
+  negative:
+    note: Key deletion cancelled (opposite action)
+    event:
+      eventSource: kms.amazonaws.com
+      eventName: CancelKeyDeletion
+
+- rule: rules/impact/ec2-run-instances-resource-hijacking.yml
+  positive:
+    note: GPU instance launched (instanceType startswith a flagged family)
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: RunInstances
+      requestParameters: { instanceType: p3.2xlarge }
+  negative:
+    note: Small general-purpose instance launched
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: RunInstances
+      requestParameters: { instanceType: t3.micro }
+
+- rule: rules/privilege-escalation/iam-pass-role-to-new-resource.yml
+  positive:
+    note: RunInstances passing an instance profile (selection AND filter|exists)
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: RunInstances
+      requestParameters:
+        instanceType: m5.large
+        iamInstanceProfile: { arn: "arn:aws:iam::123456789012:instance-profile/app" }
+  negative:
+    note: RunInstances with NO instance profile passed
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: RunInstances
+      requestParameters: { instanceType: m5.large, imageId: ami-0abc123 }

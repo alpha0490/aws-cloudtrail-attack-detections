@@ -50,7 +50,8 @@ Detections key off CloudTrail `eventName` / `eventSource` and relevant
 │   ├── defense-evasion/ credential-access/ discovery/ lateral-movement/
 │   └── collection/  exfiltration/  impact/
 ├── scripts/build_docs.py      # regenerates cheatsheet + matrix from the rules
-├── .github/workflows/         # CI: validates every rule with `sigma check`
+├── tests/                     # logic tests: true-positive / benign CloudTrail events per rule
+├── .github/workflows/         # CI: sigma check + logic tests + docs-in-sync
 ├── CONTRIBUTING.md
 └── LICENSE                    # Apache-2.0
 ```
@@ -122,13 +123,22 @@ CloudTrail fields.
 
 ## Validating rules
 
+Two layers, because they catch different things — schema isn't logic:
+
 ```bash
-pip install sigma-cli
-sigma check rules/                # lints every rule (schema, tags, UUIDs, conditions)
+pip install sigma-cli pyyaml
+sigma check rules/                # 1. SCHEMA: every rule well-formed (tags, UUIDs, conditions)
+python3 tests/run_tests.py        # 2. LOGIC: each rule fires on a real attack event, not on a benign one
 ```
 
-All rules in this repo pass `sigma check` with **0 errors and 0 issues**. CI runs this on every
-push/PR — see [`.github/workflows/sigma-validate.yml`](.github/workflows/sigma-validate.yml).
+All rules pass `sigma check` with **0 errors and 0 issues**, and the logic tests assert each covered
+rule matches a true-positive CloudTrail event and ignores a benign one (see [`tests/`](tests/)). CI
+runs both on every push/PR — see
+[`.github/workflows/sigma-validate.yml`](.github/workflows/sigma-validate.yml).
+
+> **Deploy tiers:** each rule carries a `tier` — `alert` (high-signal, page on sight) or `hunt`
+> (high-volume/contextual, deploy through the enrichment + baseline layer or for threat hunting).
+> The split is shown in the [cheatsheet](cheatsheet/README.md) and [coverage matrix](docs/mitre-matrix.md).
 
 ## Important CloudTrail caveats
 

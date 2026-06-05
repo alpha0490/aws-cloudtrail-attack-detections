@@ -1,0 +1,23 @@
+title: AWS DynamoDB Table Exported
+id: a36fbfd8-41e0-42fb-9b1f-e0df7c310355
+status: experimental
+description: Detects export of a DynamoDB table to S3 (ExportTableToPointInTime), a bulk data-collection technique.
+references:
+- https://attack.mitre.org/techniques/T1530/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.collection
+- attack.t1530
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: ExportTableToPointInTime
+    eventSource: dynamodb.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate analytics/backup exports.
+level: medium

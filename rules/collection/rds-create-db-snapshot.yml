@@ -1,0 +1,25 @@
+title: AWS RDS Snapshot Created
+id: 74fac38e-09e5-4332-9a54-07c203a4596b
+status: experimental
+description: Detects creation of RDS DB/cluster snapshots (CreateDBSnapshot/CreateDBClusterSnapshot). Attackers snapshot databases to collect data they can later share/restore elsewhere.
+references:
+- https://attack.mitre.org/techniques/T1530/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.collection
+- attack.t1530
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - CreateDBSnapshot
+    - CreateDBClusterSnapshot
+    eventSource: rds.amazonaws.com
+  condition: selection
+falsepositives:
+- Backup automation and DBA workflows.
+level: low

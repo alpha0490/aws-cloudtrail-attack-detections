@@ -1,0 +1,25 @@
+title: AWS EBS Snapshot Created
+id: 237a8057-26d0-4afa-ad32-9fed449a9cba
+status: experimental
+description: 'Detects creation of EBS snapshots (CreateSnapshot/CreateSnapshots). Snapshotting volumes is a common way to collect disk contents prior to sharing/exfiltration. (Note: the correct API name is CreateSnapshot, not ''CreateSnapShot''.)'
+references:
+- https://attack.mitre.org/techniques/T1530/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.collection
+- attack.t1530
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - CreateSnapshot
+    - CreateSnapshots
+    eventSource: ec2.amazonaws.com
+  condition: selection
+falsepositives:
+- Backup automation and routine volume snapshots.
+level: low

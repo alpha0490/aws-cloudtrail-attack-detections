@@ -1,0 +1,25 @@
+title: AWS S3 Mass Object Listing
+id: f58d2cd4-a673-465b-a323-d56079ec480c
+status: experimental
+description: Detects S3 ListObjects/ListObjectsV2 enumeration of bucket contents, a precursor to bulk download. Requires data events for object-level visibility; correlate volume per principal.
+references:
+- https://attack.mitre.org/techniques/T1530/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.collection
+- attack.t1530
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - ListObjects
+    - ListObjectsV2
+    eventSource: s3.amazonaws.com
+  condition: selection
+falsepositives:
+- Backup, sync, and analytics jobs that list objects.
+level: low

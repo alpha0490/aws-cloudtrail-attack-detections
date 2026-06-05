@@ -1,0 +1,38 @@
+---
+title: AWS Console Login Failure (base)
+id: d8c4f18d-83bb-420c-881e-27b457e379c4
+name: aws_console_login_failure
+status: experimental
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: ConsoleLogin
+    eventSource: signin.amazonaws.com
+    responseElements.ConsoleLogin: Failure
+  condition: selection
+---
+title: AWS Console Login Brute Force From Single Source IP
+id: 4eb9f976-c6f7-41c1-b740-f5a2298aca2a
+status: experimental
+description: Detects 5 or more failed console logins from a single source IP within 10 minutes, indicating brute-force/credential-stuffing against the AWS console.
+references:
+- https://attack.mitre.org/techniques/T1110/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+correlation:
+  type: event_count
+  rules:
+  - aws_console_login_failure
+  group-by:
+  - sourceIPAddress
+  timespan: 10m
+  condition:
+    gte: 5
+tags:
+- attack.initial-access
+- attack.credential-access
+- attack.t1110
+level: high

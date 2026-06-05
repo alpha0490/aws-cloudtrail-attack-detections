@@ -1,0 +1,24 @@
+title: AWS Root Account Console Login
+id: 9c67607f-4a7d-4a94-8349-fd1961d168db
+status: experimental
+description: Detects an interactive console sign-in by the AWS account root user. Root login should be extremely rare and reserved for tasks that require it; unexpected root logins are a strong indicator of compromise.
+references:
+- https://attack.mitre.org/techniques/T1078/004/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.initial-access
+- attack.t1078.004
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: ConsoleLogin
+    eventSource: signin.amazonaws.com
+    userIdentity.type: Root
+  condition: selection
+falsepositives:
+- Pre-approved break-glass or account-level maintenance that genuinely requires root.
+level: high

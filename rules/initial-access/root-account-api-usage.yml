@@ -1,0 +1,24 @@
+title: AWS Root Account API Usage
+id: f396cc35-c4db-43c2-9902-c4d1ea0880cb
+status: experimental
+description: Detects any API activity performed by the account root user (outside of console sign-in). Best practice is to never use root for day-to-day API actions, so this is high-signal.
+references:
+- https://attack.mitre.org/techniques/T1078/004/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.initial-access
+- attack.t1078.004
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    userIdentity.type: Root
+  filter:
+    eventName: ConsoleLogin
+  condition: selection and not filter
+falsepositives:
+- Rare account/billing operations that can only be performed by root.
+level: high

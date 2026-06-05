@@ -1,0 +1,26 @@
+title: AWS Console Login Without MFA
+id: 97cd3c6e-7783-4150-ad06-537ce4ac199c
+status: experimental
+description: Detects a successful console sign-in where MFA was not used (additionalEventData.MFAUsed=No). For IAM users this is a control gap; for SSO/federated logins MFA may be enforced upstream and reported as No.
+references:
+- https://attack.mitre.org/techniques/T1078/004/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.initial-access
+- attack.t1078.004
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: ConsoleLogin
+    eventSource: signin.amazonaws.com
+    responseElements.ConsoleLogin: Success
+    additionalEventData.MFAUsed: 'No'
+  condition: selection
+falsepositives:
+- Federated/SSO logins where MFA is enforced at the IdP and reported as No.
+- Service or break-glass accounts explicitly exempted from MFA.
+level: medium

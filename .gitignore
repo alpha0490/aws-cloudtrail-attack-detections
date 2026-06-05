@@ -1,0 +1,19 @@
+# Python / tooling
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+
+# OS / editor / tooling
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.claude/
+
+# Local reference material (never commit source alert exports / customer data)
+InfoSec.json
+*sumologic*.json
+*.local

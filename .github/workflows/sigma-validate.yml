@@ -1,0 +1,40 @@
+name: Validate Sigma rules
+
+on:
+  push:
+    paths:
+      - "rules/**"
+      - "scripts/**"
+      - ".github/workflows/sigma-validate.yml"
+  pull_request:
+    paths:
+      - "rules/**"
+      - "scripts/**"
+  workflow_dispatch:
+
+jobs:
+  sigma-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install sigma-cli
+        run: pip install sigma-cli pyyaml
+
+      - name: Validate all rules (sigma check)
+        run: sigma check rules/
+
+      - name: Verify docs are in sync with rules
+        run: |
+          python3 scripts/build_docs.py
+          if ! git diff --quiet -- cheatsheet/README.md docs/mitre-matrix.md; then
+            echo "::error::cheatsheet/README.md or docs/mitre-matrix.md are out of date."
+            echo "Run 'python3 scripts/build_docs.py' and commit the result."
+            git --no-pager diff -- cheatsheet/README.md docs/mitre-matrix.md
+            exit 1
+          fi

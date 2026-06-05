@@ -1,0 +1,24 @@
+title: AWS IAM Access Key Created
+id: 40b50b5a-912a-49c3-8947-a6d63814996b
+status: experimental
+description: Detects creation of an IAM access key (CreateAccessKey). High-signal when the key is created for a DIFFERENT user than the caller (requestParameters.userName != userIdentity.userName) - base Sigma cannot compare two event fields, so verify this in your SIEM/backend or with a correlation list.
+references:
+- https://attack.mitre.org/techniques/T1098/001/
+- https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateAccessKey.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1098.001
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: CreateAccessKey
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Users legitimately rotating their own access keys.
+- Automated key-rotation tooling.
+level: medium

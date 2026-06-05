@@ -1,0 +1,23 @@
+title: AWS IAM Managed Policy Attached to User
+id: d95aae10-bbad-483d-88ba-4548f8fc1e2a
+status: experimental
+description: Detects attachment of a managed policy to an IAM user (AttachUserPolicy). Used to grant additional permissions for persistence or privilege escalation.
+references:
+- https://attack.mitre.org/techniques/T1098/003/
+- https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachUserPolicy.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1098.003
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: AttachUserPolicy
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Routine permission grants by identity/platform teams.
+level: medium

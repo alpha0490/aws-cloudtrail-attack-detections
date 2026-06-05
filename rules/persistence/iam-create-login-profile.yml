@@ -1,0 +1,25 @@
+title: AWS IAM Login Profile Created
+id: e4920153-7e5d-4a27-880a-e961c3621ec2
+status: experimental
+description: Detects creation of a console login profile/password for an IAM user (CreateLoginProfile). Granting console access to a previously API-only user is a common persistence/backdoor technique.
+references:
+- https://attack.mitre.org/techniques/T1098/
+- https://attack.mitre.org/techniques/T1136/003/
+- https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateLoginProfile.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1098
+- attack.t1136.003
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: CreateLoginProfile
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate onboarding granting console access to a user.
+level: high

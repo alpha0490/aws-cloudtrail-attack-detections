@@ -1,0 +1,23 @@
+title: AWS IAM User Created
+id: 68b314ee-3af5-49a1-89f3-8ead6c6cc4fa
+status: experimental
+description: Detects creation of a new IAM user (CreateUser). Adversaries create users to maintain persistent access independent of compromised credentials.
+references:
+- https://attack.mitre.org/techniques/T1136/003/
+- https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateUser.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1136.003
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: CreateUser
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Provisioning of new service or human users by identity/platform teams.
+level: medium

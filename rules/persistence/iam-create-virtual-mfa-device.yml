@@ -1,0 +1,23 @@
+title: AWS Virtual MFA Device Created
+id: 8c1a1724-2453-41a7-beb0-cbd39f03ea0f
+status: experimental
+description: Detects creation of a virtual MFA device (CreateVirtualMFADevice). On its own benign, but combined with EnableMFADevice against another user it indicates an attacker enrolling their own MFA to maintain access.
+references:
+- https://attack.mitre.org/techniques/T1556/006/
+- https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateVirtualMFADevice.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1556.006
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: CreateVirtualMFADevice
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Normal MFA enrollment by users.
+level: low

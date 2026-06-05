@@ -1,0 +1,23 @@
+title: AWS IAM Inline Policy Added to User
+id: 2ef4c9df-6ac8-4415-a489-51f61e30acb3
+status: experimental
+description: Detects addition of an inline policy to an IAM user (PutUserPolicy). Inline policies are easy to overlook in reviews, making them attractive for stealthy persistence.
+references:
+- https://attack.mitre.org/techniques/T1098/003/
+- https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPolicy.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1098.003
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: PutUserPolicy
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate fine-grained permission grants.
+level: medium

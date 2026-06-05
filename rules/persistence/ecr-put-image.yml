@@ -1,0 +1,23 @@
+title: AWS ECR Container Image Pushed
+id: 78ff0989-ed04-45c5-adea-c46892709aa7
+status: experimental
+description: Detects pushing an image to ECR (PutImage). Adversaries implant backdoored images so that future deployments run their code.
+references:
+- https://attack.mitre.org/techniques/T1525/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1525
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: PutImage
+    eventSource: ecr.amazonaws.com
+  condition: selection
+falsepositives:
+- CI/CD pipelines pushing images. Scope to sensitive repositories or unusual principals.
+level: low

@@ -1,0 +1,23 @@
+title: AWS IAM Login Profile Updated (Password Reset)
+id: 61f2409a-7805-4415-9557-70f9f6ab0d93
+status: experimental
+description: Detects modification of an IAM user's console password (UpdateLoginProfile). Attackers reset passwords to hijack accounts; high-signal when performed against another user.
+references:
+- https://attack.mitre.org/techniques/T1098/
+- https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateLoginProfile.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1098
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: UpdateLoginProfile
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Help-desk password resets and self-service password changes.
+level: medium

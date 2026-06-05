@@ -1,0 +1,23 @@
+title: AWS EC2 AMI Registered
+id: 53c2191c-94a2-4a84-b3c8-0adfd68b35cd
+status: experimental
+description: Detects registration of a new AMI (RegisterImage). A backdoored AMI used as a launch template provides durable persistence across new instances.
+references:
+- https://attack.mitre.org/techniques/T1525/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1525
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: RegisterImage
+    eventSource: ec2.amazonaws.com
+  condition: selection
+falsepositives:
+- Image bakery/golden-AMI pipelines.
+level: low

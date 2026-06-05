@@ -1,0 +1,25 @@
+title: AWS EC2 Key Pair Created or Imported
+id: 2a9b089f-765e-42b3-a293-847b8662dd4d
+status: experimental
+description: Detects creation or import of EC2 key pairs (CreateKeyPair/ImportKeyPair). Attackers add their own key material to retain SSH access to instances.
+references:
+- https://attack.mitre.org/techniques/T1098/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1098
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - CreateKeyPair
+    - ImportKeyPair
+    eventSource: ec2.amazonaws.com
+  condition: selection
+falsepositives:
+- Normal instance provisioning workflows.
+level: low

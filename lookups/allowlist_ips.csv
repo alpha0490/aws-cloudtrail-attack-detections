@@ -1,0 +1,5 @@
+ip_or_cidr,owner,description,added,expires
+203.0.113.10,corp-vpn,HQ VPN egress NAT (single IP),2026-01-15,
+203.0.113.0/24,corp-vpn,HQ VPN egress range (CIDR; see CIDR note in docs),2026-01-15,
+198.51.100.25,ci-cd,CI/CD self-hosted runner egress,2026-02-01,2026-12-31
+192.0.2.50,bastion,Production bastion Elastic IP,2026-03-10,

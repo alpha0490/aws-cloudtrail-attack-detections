@@ -1,0 +1,4 @@
+ip,source,indicator_id,malicious_confidence,last_seen,labels,kill_chain
+203.0.113.200,crowdstrike,ind_a1b2c3d4,high,2026-06-04T12:30:00Z,actor/PANDA;malware/COBALTSTRIKE,command-and-control
+198.51.100.66,crowdstrike,ind_e5f6a7b8,medium,2026-06-03T08:10:00Z,tactic/credential-access,reconnaissance
+192.0.2.99,crowdstrike,ind_c9d0e1f2,high,2026-06-05T01:05:00Z,malware/IMPACKET,lateral-movement

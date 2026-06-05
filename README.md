@@ -40,7 +40,10 @@ Detections key off CloudTrail `eventName` / `eventSource` and relevant
 ```
 .
 ├── cheatsheet/README.md       # IR cheatsheet, tables by ATT&CK tactic
-├── docs/mitre-matrix.md       # ATT&CK Cloud (IaaS) coverage matrix + TODO gaps
+├── docs/
+│   ├── mitre-matrix.md         # ATT&CK Cloud (IaaS) coverage matrix + TODO gaps
+│   └── enrichment-and-baselining.md  # IP allow/threat lists + 90d behavioral baseline (Sumo)
+├── lookups/                    # IP allowlist + CrowdStrike threatlist (CSV) for the enrichment layer
 ├── rules/                     # Sigma rules, one folder per tactic
 │   ├── initial-access/  execution/  persistence/  privilege-escalation/
 │   ├── defense-evasion/ credential-access/ discovery/ lateral-movement/
@@ -96,6 +99,21 @@ Sumo Logic ingests CloudTrail with the standard field names used here, so the fi
 translate directly. Convert with the Sumo backend if you have it installed
 (`sigma plugin list`), or convert `--without-pipeline` and paste the resulting predicate into a
 Sumo search scoped to your CloudTrail source category (e.g. `_sourceCategory=*cloudtrail*`).
+
+## Enrichment & behavioral baselining (Sumo Logic)
+
+Base Sigma is stateless — it can't do live IP lookups or compare an event against weeks of history.
+For teams that want **IP allow/threat-listing** and **"first-seen in 90 days" behavioral baselining**
+on top of these rules, [`docs/enrichment-and-baselining.md`](docs/enrichment-and-baselining.md)
+describes a Sumo Logic decision layer that wraps each rule match:
+
+- **CrowdStrike threatlist** hit on `sourceIPAddress` → always alert (critical).
+- **New** `(principal × IP / action / country / region / user-agent)` in the last 90d → alert (high),
+  *even from an allowlisted IP*.
+- **Allowlisted** IP with all-familiar behavior → suppress (trusted, accepted risk).
+
+Reference lists live in [`lookups/`](lookups/). No rule changes are required — the layer reads raw
+CloudTrail fields.
 
 ## Validating rules
 

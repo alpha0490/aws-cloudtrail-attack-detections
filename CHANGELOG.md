@@ -20,6 +20,12 @@ All notable changes to this project are documented here. Format follows
 ### Changed
 - **Coverage scorecard is now 25/25 (100%)** — both prior gaps (Roles Anywhere trust anchor, SG
   open-to-world ingress) are closed and logic-tested; the Lambda backdoor maps to a dedicated rule.
+- **Detection model: signature vs. behavioral.** The 24 high-volume rules (`lambda-invoke`,
+  `AssumeRole`, enumeration, `GetObject`…) are no longer shipped as bare queries — a bare
+  `eventName=Invoke` is noise. They now deploy as **first-seen anomalies** keyed on
+  `(principal, resource)` over 90 days (native Elastic `new_terms` in `dist/behavioral/`; Sumo baseline;
+  Splunk/CrowdStrike patterns). Added `docs/detection-model.md`, `behavioral-keys.yml`, a fidelity audit,
+  and a **CI gate** that blocks any bare high-volume `alert` rule. No rules deleted.
 
 ## [0.1.0] - 2026-06-05
 First public release.

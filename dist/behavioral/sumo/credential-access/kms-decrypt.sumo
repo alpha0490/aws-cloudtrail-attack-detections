@@ -1,0 +1,21 @@
+// AWS CloudTrail behavioral first-seen — kms-decrypt
+// first time this principal is seen with sourceIPAddress in 90 days
+// Run over a 90-DAY range; each row is a (principal, src_ip) pair first seen in the last 24h.
+_sourceCategory=*cloudtrail* ("Decrypt")
+| json field=_raw "eventName", "eventSource", "errorCode",
+        "userIdentity.type", "userIdentity.arn",
+        "userIdentity.sessionContext.sessionIssuer.arn",
+        "sourceIPAddress", "awsRegion"
+     as eventName, eventSource, errorCode, id_type, raw_arn, issuer_arn,
+        src_ip, region nodrop
+| where eventSource = "kms.amazonaws.com" and (eventName = "Decrypt") and isBlank(errorCode)
+| parse regex field=raw_arn "assumed-role/(?<role>[^/]+)/(?<session>.+)$" nodrop
+| if(id_type = "AssumedRole" and !isBlank(issuer_arn), issuer_arn, raw_arn) as principal
+| min(_messagetime) as first_seen_ms, max(_messagetime) as last_seen_ms, count as events,
+      count_distinct(src_ip) as distinct_source_ips, count_distinct(region) as distinct_regions
+   by principal, src_ip
+| where first_seen_ms > (now() - 86400000)
+| formatDate(toLong(first_seen_ms), "yyyy-MM-dd HH:mm:ss", "UTC") as first_seen
+| formatDate(toLong(last_seen_ms),  "yyyy-MM-dd HH:mm:ss", "UTC") as last_seen
+| sort by first_seen_ms asc
+| fields principal, src_ip, first_seen, last_seen, events, distinct_source_ips, distinct_regions

@@ -148,7 +148,8 @@
         "userIdentity.arn",
         "requestParameters.bucketName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/collection/s3-get-object.json"
+      "newterms": "dist/behavioral/elastic-newterms/collection/s3-get-object.json",
+      "sumo": "dist/behavioral/sumo/collection/s3-get-object.sumo"
     },
     {
       "file": "rules/collection/s3-mass-list-objects.yml",
@@ -174,7 +175,8 @@
         "userIdentity.arn",
         "requestParameters.bucketName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/collection/s3-mass-list-objects.json"
+      "newterms": "dist/behavioral/elastic-newterms/collection/s3-mass-list-objects.json",
+      "sumo": "dist/behavioral/sumo/collection/s3-mass-list-objects.sumo"
     },
     {
       "file": "rules/credential-access/ec2-get-password-data.yml",
@@ -225,7 +227,8 @@
         "userIdentity.arn",
         "requestParameters.keyId"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/credential-access/kms-create-grant.json"
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/kms-create-grant.json",
+      "sumo": "dist/behavioral/sumo/credential-access/kms-create-grant.sumo"
     },
     {
       "file": "rules/credential-access/kms-decrypt.yml",
@@ -250,7 +253,8 @@
         "userIdentity.arn",
         "sourceIPAddress"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/credential-access/kms-decrypt.json"
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/kms-decrypt.json",
+      "sumo": "dist/behavioral/sumo/credential-access/kms-decrypt.sumo"
     },
     {
       "file": "rules/credential-access/rds-download-db-log.yml",
@@ -276,7 +280,8 @@
         "userIdentity.arn",
         "eventName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/credential-access/rds-download-db-log.json"
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/rds-download-db-log.json",
+      "sumo": "dist/behavioral/sumo/credential-access/rds-download-db-log.sumo"
     },
     {
       "file": "rules/credential-access/secretsmanager-batch-get-secret-value.yml",
@@ -301,7 +306,8 @@
         "userIdentity.arn",
         "eventName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/credential-access/secretsmanager-batch-get-secret-value.json"
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/secretsmanager-batch-get-secret-value.json",
+      "sumo": "dist/behavioral/sumo/credential-access/secretsmanager-batch-get-secret-value.sumo"
     },
     {
       "file": "rules/credential-access/secretsmanager-get-secret-value.yml",
@@ -326,7 +332,8 @@
         "userIdentity.arn",
         "requestParameters.secretId"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/credential-access/secretsmanager-get-secret-value.json"
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/secretsmanager-get-secret-value.json",
+      "sumo": "dist/behavioral/sumo/credential-access/secretsmanager-get-secret-value.sumo"
     },
     {
       "file": "rules/credential-access/secretsmanager-put-resource-policy.yml",
@@ -405,7 +412,8 @@
         "userIdentity.arn",
         "requestParameters.roleArn"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/credential-access/sts-assume-role-with-web-identity.json"
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/sts-assume-role-with-web-identity.json",
+      "sumo": "dist/behavioral/sumo/credential-access/sts-assume-role-with-web-identity.sumo"
     },
     {
       "file": "rules/credential-access/sts-get-federation-token.yml",
@@ -430,7 +438,8 @@
         "userIdentity.arn",
         "eventName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/credential-access/sts-get-federation-token.json"
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/sts-get-federation-token.json",
+      "sumo": "dist/behavioral/sumo/credential-access/sts-get-federation-token.sumo"
     },
     {
       "file": "rules/credential-access/sts-get-session-token.yml",
@@ -456,7 +465,8 @@
         "userIdentity.arn",
         "eventName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/credential-access/sts-get-session-token.json"
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/sts-get-session-token.json",
+      "sumo": "dist/behavioral/sumo/credential-access/sts-get-session-token.sumo"
     },
     {
       "file": "rules/defense-evasion/cloud-security-service-disabled.yml",
@@ -1001,7 +1011,8 @@
         "userIdentity.arn",
         "eventName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/discovery/account-describe-regions.json"
+      "newterms": "dist/behavioral/elastic-newterms/discovery/account-describe-regions.json",
+      "sumo": "dist/behavioral/sumo/discovery/account-describe-regions.sumo"
     },
     {
       "file": "rules/discovery/ec2-describe-enumeration.yml",
@@ -1031,7 +1042,8 @@
         "userIdentity.arn",
         "eventName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/discovery/ec2-describe-enumeration.json"
+      "newterms": "dist/behavioral/elastic-newterms/discovery/ec2-describe-enumeration.json",
+      "sumo": "dist/behavioral/sumo/discovery/ec2-describe-enumeration.sumo"
     },
     {
       "file": "rules/discovery/iam-enumerate-principals.yml",
@@ -1060,7 +1072,8 @@
         "userIdentity.arn",
         "eventName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/discovery/iam-enumerate-principals.json"
+      "newterms": "dist/behavioral/elastic-newterms/discovery/iam-enumerate-principals.json",
+      "sumo": "dist/behavioral/sumo/discovery/iam-enumerate-principals.sumo"
     },
     {
       "file": "rules/discovery/iam-get-account-authorization-details.yml",
@@ -1085,7 +1098,8 @@
         "userIdentity.arn",
         "eventName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/discovery/iam-get-account-authorization-details.json"
+      "newterms": "dist/behavioral/elastic-newterms/discovery/iam-get-account-authorization-details.json",
+      "sumo": "dist/behavioral/sumo/discovery/iam-get-account-authorization-details.sumo"
     },
     {
       "file": "rules/discovery/iam-permission-enumeration.yml",
@@ -1113,7 +1127,8 @@
         "userIdentity.arn",
         "eventName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/discovery/iam-permission-enumeration.json"
+      "newterms": "dist/behavioral/elastic-newterms/discovery/iam-permission-enumeration.json",
+      "sumo": "dist/behavioral/sumo/discovery/iam-permission-enumeration.sumo"
     },
     {
       "file": "rules/discovery/organizations-describe.yml",
@@ -1141,7 +1156,8 @@
         "userIdentity.arn",
         "eventName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/discovery/organizations-describe.json"
+      "newterms": "dist/behavioral/elastic-newterms/discovery/organizations-describe.json",
+      "sumo": "dist/behavioral/sumo/discovery/organizations-describe.sumo"
     },
     {
       "file": "rules/discovery/s3-list-buckets.yml",
@@ -1167,7 +1183,8 @@
         "userIdentity.arn",
         "eventName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/discovery/s3-list-buckets.json"
+      "newterms": "dist/behavioral/elastic-newterms/discovery/s3-list-buckets.json",
+      "sumo": "dist/behavioral/sumo/discovery/s3-list-buckets.sumo"
     },
     {
       "file": "rules/discovery/sts-get-caller-identity.yml",
@@ -1193,7 +1210,8 @@
         "userIdentity.arn",
         "eventName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/discovery/sts-get-caller-identity.json"
+      "newterms": "dist/behavioral/elastic-newterms/discovery/sts-get-caller-identity.json",
+      "sumo": "dist/behavioral/sumo/discovery/sts-get-caller-identity.sumo"
     },
     {
       "file": "rules/execution/ec2-modify-instance-attribute-userdata.yml",
@@ -1245,7 +1263,8 @@
         "userIdentity.arn",
         "requestParameters.taskDefinition"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/execution/ecs-run-task.json"
+      "newterms": "dist/behavioral/elastic-newterms/execution/ecs-run-task.json",
+      "sumo": "dist/behavioral/sumo/execution/ecs-run-task.sumo"
     },
     {
       "file": "rules/execution/lambda-invoke.yml",
@@ -1270,7 +1289,8 @@
         "userIdentity.arn",
         "requestParameters.functionName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/execution/lambda-invoke.json"
+      "newterms": "dist/behavioral/elastic-newterms/execution/lambda-invoke.json",
+      "sumo": "dist/behavioral/sumo/execution/lambda-invoke.sumo"
     },
     {
       "file": "rules/execution/ssm-create-document.yml",
@@ -1321,7 +1341,8 @@
         "userIdentity.arn",
         "requestParameters.documentName"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/execution/ssm-send-command.json"
+      "newterms": "dist/behavioral/elastic-newterms/execution/ssm-send-command.json",
+      "sumo": "dist/behavioral/sumo/execution/ssm-send-command.sumo"
     },
     {
       "file": "rules/execution/ssm-start-session.yml",
@@ -1347,7 +1368,8 @@
         "userIdentity.arn",
         "requestParameters.target"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/execution/ssm-start-session.json"
+      "newterms": "dist/behavioral/elastic-newterms/execution/ssm-start-session.json",
+      "sumo": "dist/behavioral/sumo/execution/ssm-start-session.sumo"
     },
     {
       "file": "rules/exfiltration/datasync-create-task.yml",
@@ -2158,7 +2180,8 @@
         "userIdentity.arn",
         "requestParameters.roleArn"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/lateral-movement/sts-assume-role-cross-account.json"
+      "newterms": "dist/behavioral/elastic-newterms/lateral-movement/sts-assume-role-cross-account.json",
+      "sumo": "dist/behavioral/sumo/lateral-movement/sts-assume-role-cross-account.sumo"
     },
     {
       "file": "rules/lateral-movement/sts-assume-role.yml",
@@ -2184,7 +2207,8 @@
         "userIdentity.arn",
         "requestParameters.roleArn"
       ],
-      "newterms": "dist/behavioral/elastic-newterms/lateral-movement/sts-assume-role.json"
+      "newterms": "dist/behavioral/elastic-newterms/lateral-movement/sts-assume-role.json",
+      "sumo": "dist/behavioral/sumo/lateral-movement/sts-assume-role.sumo"
     },
     {
       "file": "rules/persistence/ec2-create-key-pair.yml",

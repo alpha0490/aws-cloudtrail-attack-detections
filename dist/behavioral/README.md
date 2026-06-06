@@ -23,11 +23,21 @@ Security's native **New Terms** rule type:
 adjust `new_terms_fields` + the query to your CloudTrail field mapping (e.g. `aws.cloudtrail.*` with the
 Fleet integration). Anomaly keys for every rule: [`../../behavioral-keys.yml`](../../behavioral-keys.yml).
 
-## Sumo Logic — baseline lookup
+## Sumo Logic — complete first-seen queries (ready to run)
 
-Use the 90-day baseline pattern in
-[`../../docs/enrichment-and-baselining.md`](../../docs/enrichment-and-baselining.md): the base predicate
-+ a `lookup` against `aws_seen_user_*` keyed on the rule's anomaly fields; alert when the lookup misses.
+[`sumo/`](sumo/) has a **full, self-contained** first-seen query per behavioral rule — no lookup tables
+required (the 90-day search window *is* the baseline). Each one parses the event, **normalizes the
+principal** (assumed-role → role), collapses to one row per `(principal, <resource>)`, and surfaces the
+pairs whose *first* occurrence is in the last 24h:
+
+```
+| min(_messagetime) as first_seen_ms, max(_messagetime) as last_seen_ms, count as events ... by principal, function_name
+| where first_seen_ms > (now() - 86400000)
+```
+
+Run over a **90-day** range. For a live alert at scale, swap the 90-day scan for a daily-maintained
+`aws_seen_user_*` lookup (see [`../../docs/enrichment-and-baselining.md`](../../docs/enrichment-and-baselining.md))
+and add the threat/allow-list `lookup`s.
 
 ## Splunk — first-seen lookup
 

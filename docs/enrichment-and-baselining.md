@@ -343,3 +343,38 @@ Then, **after** you've created the lookup tables (§3b and `lookups/`), confirm 
 Only once steps 1–5 behave should you deploy the full §3c tail in a Monitor. If a step returns
 nothing, fix that layer first — most "it doesn't work" reports trace back to step 1 (field paths /
 source category) or step 5 (lookup table path or key-column names).
+
+---
+
+## 9. Self-contained first-seen (no lookup tables needed)
+
+The enrichment tail above is the production path (cheap lookups, scales). For **ad-hoc hunting** you
+don't even need the lookup tables — a single query over a 90-day window computes first-seen inline. A
+complete one is generated for **every behavioral rule** in
+[`../dist/behavioral/sumo/`](../dist/behavioral/sumo/). The Lambda-escalation example —
+*"a principal invoked a function it has never invoked in 90 days"*:
+
+```
+// Run over a 90-DAY range; rows are (principal, function) pairs first seen in the last 24h.
+_sourceCategory=*cloudtrail* ("Invoke")
+| json field=_raw "eventName", "eventSource", "errorCode", "userIdentity.type", "userIdentity.arn",
+        "userIdentity.sessionContext.sessionIssuer.arn", "requestParameters.functionName",
+        "sourceIPAddress", "awsRegion"
+     as eventName, eventSource, errorCode, id_type, raw_arn, issuer_arn, function_name, src_ip, region nodrop
+| where eventSource = "lambda.amazonaws.com" and eventName = "Invoke" and isBlank(errorCode)
+| parse regex field=raw_arn "assumed-role/(?<role>[^/]+)/(?<session>.+)$" nodrop
+| if(id_type = "AssumedRole" and !isBlank(issuer_arn), issuer_arn, raw_arn) as principal
+| if(isBlank(function_name), "unknown", function_name) as function_name
+| replace(function_name, /^arn:aws:lambda:[^:]+:\d+:function:/, "") as function_name
+| min(_messagetime) as first_seen_ms, max(_messagetime) as last_seen_ms, count as events,
+      count_distinct(src_ip) as distinct_source_ips, count_distinct(region) as distinct_regions
+   by principal, function_name
+| where first_seen_ms > (now() - 86400000)
+| formatDate(toLong(first_seen_ms), "yyyy-MM-dd HH:mm:ss", "UTC") as first_seen
+| sort by first_seen_ms asc
+| fields principal, function_name, first_seen, events, distinct_source_ips, distinct_regions
+```
+
+To adapt to any other behavioral rule, change the `eventName`/`eventSource` and the `by principal, …`
+key (the anomaly key from [`../behavioral-keys.yml`](../behavioral-keys.yml)). These are
+**reference queries — validate field paths against your CloudTrail in the Sumo UI** before alerting.

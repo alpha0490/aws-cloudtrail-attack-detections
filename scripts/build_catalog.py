@@ -75,6 +75,7 @@ def main():
         if c["behavioral"]:
             entry["anomaly_key"] = ANOMALY_OVERRIDES.get(rel, DEFAULT_KEY)
             entry["newterms"] = "dist/behavioral/elastic-newterms/%s/%s.json" % (tactic, stem)
+            entry["sumo"] = "dist/behavioral/sumo/%s/%s.sumo" % (tactic, stem)
         detections.append(entry)
 
     catalog = {

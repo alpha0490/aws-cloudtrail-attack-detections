@@ -102,11 +102,67 @@ def kql(events, src):
     return q
 
 
+# anomaly resource field -> (Sumo alias, json path to extract or None if already extracted)
+DIM = {
+    "eventName": ("eventName", None),
+    "sourceIPAddress": ("src_ip", None),
+    "requestParameters.functionName": ("function_name", "requestParameters.functionName"),
+    "requestParameters.roleArn": ("role_arn", "requestParameters.roleArn"),
+    "requestParameters.bucketName": ("bucket", "requestParameters.bucketName"),
+    "requestParameters.documentName": ("document", "requestParameters.documentName"),
+    "requestParameters.target": ("target", "requestParameters.target"),
+    "requestParameters.secretId": ("secret_id", "requestParameters.secretId"),
+    "requestParameters.keyId": ("key_id", "requestParameters.keyId"),
+    "requestParameters.taskDefinition": ("task_def", "requestParameters.taskDefinition"),
+}
+
+
+def sumo_query(title, events, src, key, rationale):
+    """A complete, self-contained Sumo Logic first-seen query (the 90-day window is the baseline)."""
+    resource = key[1] if len(key) > 1 else "eventName"
+    alias, jpath = DIM.get(resource, ("dim", resource if resource.startswith("requestParameters") else None))
+    kw = " OR ".join('"%s"' % e for e in events)
+    ev = ('eventName = "%s"' % events[0] if len(events) == 1
+          else "eventName in (%s)" % ", ".join('"%s"' % e for e in events))
+    where = (['eventSource = "%s"' % src] if src else []) + ["(%s)" % ev, "isBlank(errorCode)"]
+    L = [
+        "// AWS CloudTrail behavioral first-seen — %s" % title,
+        "// %s" % rationale,
+        "// Run over a 90-DAY range; each row is a (principal, %s) pair first seen in the last 24h." % alias,
+        "_sourceCategory=*cloudtrail* (%s)" % kw,
+        '| json field=_raw "eventName", "eventSource", "errorCode",',
+        '        "userIdentity.type", "userIdentity.arn",',
+        '        "userIdentity.sessionContext.sessionIssuer.arn",',
+        '        "sourceIPAddress", "awsRegion"%s' % ((',\n        "%s"' % jpath) if jpath else ""),
+        '     as eventName, eventSource, errorCode, id_type, raw_arn, issuer_arn,',
+        '        src_ip, region%s nodrop' % ((", %s" % alias) if jpath else ""),
+        "| where %s" % " and ".join(where),
+        '| parse regex field=raw_arn "assumed-role/(?<role>[^/]+)/(?<session>.+)$" nodrop',
+        '| if(id_type = "AssumedRole" and !isBlank(issuer_arn), issuer_arn, raw_arn) as principal',
+    ]
+    if jpath:
+        L.append('| if(isBlank(%s), "unknown", %s) as %s' % (alias, alias, alias))
+        if resource == "requestParameters.functionName":
+            L.append('| replace(%s, /^arn:aws:lambda:[^:]+:\\d+:function:/, "") as %s' % (alias, alias))
+    L += [
+        "| min(_messagetime) as first_seen_ms, max(_messagetime) as last_seen_ms, count as events,",
+        "      count_distinct(src_ip) as distinct_source_ips, count_distinct(region) as distinct_regions",
+        "   by principal, %s" % alias,
+        "| where first_seen_ms > (now() - 86400000)",
+        '| formatDate(toLong(first_seen_ms), "yyyy-MM-dd HH:mm:ss", "UTC") as first_seen',
+        '| formatDate(toLong(last_seen_ms),  "yyyy-MM-dd HH:mm:ss", "UTC") as last_seen',
+        "| sort by first_seen_ms asc",
+        "| fields principal, %s, first_seen, last_seen, events, distinct_source_ips, distinct_regions" % alias,
+    ]
+    return "\n".join(L) + "\n"
+
+
 def main():
     rules = sorted(glob.glob(os.path.join(ROOT, "rules", "**", "*.yml"), recursive=True))
-    nt_root = os.path.join(ROOT, "dist", "behavioral", "elastic-newterms")
-    if os.path.isdir(nt_root):  # clean stale new_terms files
-        shutil.rmtree(nt_root)
+    for sub in ("elastic-newterms", "sumo"):  # clean stale generated queries
+        d = os.path.join(ROOT, "dist", "behavioral", sub)
+        if os.path.isdir(d):
+            shutil.rmtree(d)
     audit = []
     keys = {}
     violations = []
@@ -121,7 +177,8 @@ def main():
         if c["behavioral"]:
             key = ANOMALY_OVERRIDES.get(rel, DEFAULT_KEY)
             keys[rel] = {"anomaly_key": key, "window": "90d",
-                         "rationale": "first time this principal matches %s in 90 days" % " + ".join(key)}
+                         "rationale": "first time this principal is seen with %s in 90 days"
+                                      % (key[1] if len(key) > 1 else key[0])}
             # emit Elastic new_terms detection
             tactic = rel.split(os.sep)[1]
             stem = os.path.splitext(os.path.basename(rel))[0]
@@ -143,6 +200,12 @@ def main():
             with open(os.path.join(outdir, stem + ".json"), "w") as f:
                 json.dump(nt, f, indent=2)
                 f.write("\n")
+            # full Sumo Logic first-seen query
+            sdir = os.path.join(ROOT, "dist", "behavioral", "sumo", tactic)
+            os.makedirs(sdir, exist_ok=True)
+            with open(os.path.join(sdir, stem + ".sumo"), "w") as f:
+                f.write(sumo_query(stem, c["events"], c["src"],
+                                   keys[rel]["anomaly_key"], keys[rel]["rationale"]))
             newterms_written += 1
 
     with open(os.path.join(ROOT, "behavioral-keys.yml"), "w") as f:

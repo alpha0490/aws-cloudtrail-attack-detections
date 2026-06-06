@@ -1,0 +1,1 @@
+(eventName in~ ("DisableSecurityHub", "BatchDisableStandards", "DeleteInsight")) and eventSource =~ "securityhub.amazonaws.com"

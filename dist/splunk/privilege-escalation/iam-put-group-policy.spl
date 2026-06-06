@@ -1,0 +1,1 @@
+eventName IN ("AttachGroupPolicy", "PutGroupPolicy") eventSource="iam.amazonaws.com"

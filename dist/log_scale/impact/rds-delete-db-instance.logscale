@@ -1,0 +1,1 @@
+eventName=/^DeleteDBInstance$/i or eventName=/^DeleteDBCluster$/i eventSource=/^rds\.amazonaws\.com$/i

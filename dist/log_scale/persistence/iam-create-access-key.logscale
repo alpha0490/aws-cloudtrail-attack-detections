@@ -1,0 +1,1 @@
+eventName=/^CreateAccessKey$/i eventSource=/^iam\.amazonaws\.com$/i

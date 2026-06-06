@@ -1,0 +1,3 @@
+from * metadata _id, _index, _version | where eventName=="ConsoleLogin" and eventSource=="signin.amazonaws.com" and responseElements.ConsoleLogin=="Failure"
+| eval timebucket=date_trunc(10minutes, @timestamp) | stats event_count=count() by timebucket, sourceIPAddress
+| where event_count >= 5

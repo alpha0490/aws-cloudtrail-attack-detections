@@ -1,0 +1,1 @@
+eventName=/^SendCommand$/i eventSource=/^ssm\.amazonaws\.com$/i

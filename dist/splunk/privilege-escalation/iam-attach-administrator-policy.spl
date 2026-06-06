@@ -1,0 +1,1 @@
+eventName IN ("AttachUserPolicy", "AttachRolePolicy", "AttachGroupPolicy") eventSource="iam.amazonaws.com" requestParameters.policyArn="*AdministratorAccess*"

@@ -1,0 +1,1 @@
+eventName IN ("StopConfigurationRecorder", "DeleteConfigurationRecorder", "DeleteDeliveryChannel", "DeleteConfigRule") eventSource="config.amazonaws.com"

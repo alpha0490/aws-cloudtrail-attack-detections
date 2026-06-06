@@ -1,0 +1,1 @@
+eventName=/^CreateKeyPair$/i or eventName=/^ImportKeyPair$/i eventSource=/^ec2\.amazonaws\.com$/i

@@ -1,0 +1,1 @@
+eventName =~ "Invoke" and eventSource =~ "lambda.amazonaws.com"

@@ -1,0 +1,1 @@
+eventName =~ "PutImage" and eventSource =~ "ecr.amazonaws.com"

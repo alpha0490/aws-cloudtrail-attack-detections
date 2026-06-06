@@ -1,0 +1,6 @@
+eventName="ConsoleLogin" eventSource="signin.amazonaws.com" responseElements.ConsoleLogin="Failure"
+
+| bin _time span=10m
+| stats count as event_count by _time sourceIPAddress
+
+| search event_count >= 5

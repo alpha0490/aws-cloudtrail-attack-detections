@@ -1,0 +1,1 @@
+eventName=/^DisableKey$/i or eventName=/^DisableKeyRotation$/i or eventName=/^PutKeyPolicy$/i eventSource=/^kms\.amazonaws\.com$/i

@@ -1,0 +1,1 @@
+eventName=/^DeleteWebACL$/i or eventName=/^DeleteRuleGroup$/i or eventName=/^DeleteIPSet$/i eventSource=/waf/i

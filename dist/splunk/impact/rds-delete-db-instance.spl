@@ -1,0 +1,1 @@
+eventName IN ("DeleteDBInstance", "DeleteDBCluster") eventSource="rds.amazonaws.com"

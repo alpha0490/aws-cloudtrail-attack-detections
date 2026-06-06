@@ -1,0 +1,1 @@
+eventName=/^AttachUserPolicy$/i or eventName=/^AttachRolePolicy$/i or eventName=/^AttachGroupPolicy$/i eventSource=/^iam\.amazonaws\.com$/i requestParameters.policyArn=/AdministratorAccess/i

@@ -1,0 +1,1 @@
+eventName=/^GetObject$/i eventSource=/^s3\.amazonaws\.com$/i

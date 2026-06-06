@@ -1,0 +1,6 @@
+errorCode="*AccessDenied*"
+
+| bin _time span=30m
+| stats dc(eventName) as value_count by _time userIdentity.arn
+
+| search value_count >= 3

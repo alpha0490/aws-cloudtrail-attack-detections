@@ -1,0 +1,1 @@
+(eventName in~ ("AssumeRole", "AssumeRoleWithSAML", "AssumeRoleWithWebIdentity")) and eventSource =~ "sts.amazonaws.com"

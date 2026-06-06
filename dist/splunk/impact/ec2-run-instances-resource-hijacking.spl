@@ -1,0 +1,1 @@
+eventName="RunInstances" eventSource="ec2.amazonaws.com" requestParameters.instanceType IN ("p2*", "p3*", "p4*", "p5*", "g3*", "g4*", "g5*", "g6*", "x1*", "x2*", "inf1*", "inf2*", "trn1*", "dl1*")

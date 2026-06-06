@@ -1,0 +1,1 @@
+eventName=/^DeleteUser$/i or eventName=/^DeleteLoginProfile$/i or eventName=/^DeleteAccessKey$/i eventSource=/^iam\.amazonaws\.com$/i

@@ -1,0 +1,1 @@
+eventName =~ "CreateVirtualMFADevice" and eventSource =~ "iam.amazonaws.com"

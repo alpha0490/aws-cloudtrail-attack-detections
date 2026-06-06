@@ -1,0 +1,1 @@
+(eventName in~ ("GetParameter", "GetParameters", "GetParametersByPath")) and eventSource =~ "ssm.amazonaws.com" and 'requestParameters.withDecryption' =~ true

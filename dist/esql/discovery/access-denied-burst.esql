@@ -1,0 +1,3 @@
+from * metadata _id, _index, _version | where errorCode like "*AccessDenied*"
+| eval timebucket=date_trunc(30minutes, @timestamp) | stats value_count=count_distinct(eventName) by timebucket, userIdentity.arn
+| where value_count >= 3

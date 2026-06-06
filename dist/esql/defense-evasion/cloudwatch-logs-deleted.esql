@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where (eventName in ("DeleteLogGroup", "DeleteLogStream")) and eventSource=="logs.amazonaws.com"

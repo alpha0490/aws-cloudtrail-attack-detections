@@ -1,0 +1,1 @@
+eventName=/^DownloadDBLogFilePortion$/i or eventName=/^DownloadCompleteDBLogFile$/i eventSource=/^rds\.amazonaws\.com$/i

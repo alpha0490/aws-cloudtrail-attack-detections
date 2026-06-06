@@ -1,0 +1,1 @@
+eventName =~ "SetDefaultPolicyVersion" and eventSource =~ "iam.amazonaws.com"

@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where eventName=="ModifyImageAttribute" and eventSource=="ec2.amazonaws.com"

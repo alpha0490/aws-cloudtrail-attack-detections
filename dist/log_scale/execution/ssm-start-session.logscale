@@ -1,0 +1,1 @@
+eventName=/^StartSession$/i eventSource=/^ssm\.amazonaws\.com$/i

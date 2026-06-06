@@ -1,0 +1,1 @@
+eventName=/^ListUsers$/i or eventName=/^ListRoles$/i or eventName=/^ListGroups$/i or eventName=/^ListPolicies$/i or eventName=/^GetAccountSummary$/i eventSource=/^iam\.amazonaws\.com$/i

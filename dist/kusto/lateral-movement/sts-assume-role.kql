@@ -1,0 +1,1 @@
+eventName =~ "AssumeRole" and eventSource =~ "sts.amazonaws.com"

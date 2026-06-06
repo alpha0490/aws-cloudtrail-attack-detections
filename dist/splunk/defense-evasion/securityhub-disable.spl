@@ -1,0 +1,1 @@
+eventName IN ("DisableSecurityHub", "BatchDisableStandards", "DeleteInsight") eventSource="securityhub.amazonaws.com"

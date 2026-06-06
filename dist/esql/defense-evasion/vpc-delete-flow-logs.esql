@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where eventName=="DeleteFlowLogs" and eventSource=="ec2.amazonaws.com"

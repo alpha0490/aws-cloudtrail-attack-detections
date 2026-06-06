@@ -1,0 +1,1 @@
+eventName=/^DeleteDBSnapshot$/i or eventName=/^DeleteDBClusterSnapshot$/i eventSource=/^rds\.amazonaws\.com$/i

@@ -1,0 +1,1 @@
+eventName=/^DeleteAccountPublicAccessBlock$/i or eventName=/^DeletePublicAccessBlock$/i or eventName=/^PutAccountPublicAccessBlock$/i or eventName=/^PutPublicAccessBlock$/i eventSource=/^s3\.amazonaws\.com$/i

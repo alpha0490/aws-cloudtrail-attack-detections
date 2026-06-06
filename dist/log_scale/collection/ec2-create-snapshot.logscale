@@ -1,0 +1,1 @@
+eventName=/^CreateSnapshot$/i or eventName=/^CreateSnapshots$/i eventSource=/^ec2\.amazonaws\.com$/i

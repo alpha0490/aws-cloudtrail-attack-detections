@@ -1,0 +1,1 @@
+eventName =~ "ModifySnapshotAttribute" and eventSource =~ "ec2.amazonaws.com"

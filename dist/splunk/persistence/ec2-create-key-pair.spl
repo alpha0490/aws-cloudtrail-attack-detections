@@ -1,0 +1,1 @@
+eventName IN ("CreateKeyPair", "ImportKeyPair") eventSource="ec2.amazonaws.com"

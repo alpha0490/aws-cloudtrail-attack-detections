@@ -1,0 +1,1 @@
+eventName =~ "EnableMFADevice" and eventSource =~ "iam.amazonaws.com"

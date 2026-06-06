@@ -1,0 +1,1 @@
+eventName=/^ModifyImageAttribute$/i eventSource=/^ec2\.amazonaws\.com$/i

@@ -1,0 +1,1 @@
+eventName=/^ExportTableToPointInTime$/i eventSource=/^dynamodb\.amazonaws\.com$/i

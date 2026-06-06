@@ -1,0 +1,1 @@
+eventName=/^CreatePolicyVersion$/i eventSource=/^iam\.amazonaws\.com$/i

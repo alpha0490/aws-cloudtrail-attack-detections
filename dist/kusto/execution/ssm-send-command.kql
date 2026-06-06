@@ -1,0 +1,1 @@
+eventName =~ "SendCommand" and eventSource =~ "ssm.amazonaws.com"

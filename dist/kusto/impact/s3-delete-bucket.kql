@@ -1,0 +1,1 @@
+eventName =~ "DeleteBucket" and eventSource =~ "s3.amazonaws.com"

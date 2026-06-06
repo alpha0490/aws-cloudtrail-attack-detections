@@ -1,0 +1,1 @@
+eventName=/^DeleteLogGroup$/i or eventName=/^DeleteLogStream$/i eventSource=/^logs\.amazonaws\.com$/i

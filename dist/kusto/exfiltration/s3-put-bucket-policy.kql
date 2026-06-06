@@ -1,0 +1,1 @@
+eventName =~ "PutBucketPolicy" and eventSource =~ "s3.amazonaws.com"

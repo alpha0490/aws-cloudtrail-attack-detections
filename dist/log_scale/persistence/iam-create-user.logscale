@@ -1,0 +1,1 @@
+eventName=/^CreateUser$/i eventSource=/^iam\.amazonaws\.com$/i

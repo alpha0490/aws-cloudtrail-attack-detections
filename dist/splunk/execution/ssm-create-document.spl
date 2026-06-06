@@ -1,0 +1,1 @@
+eventName IN ("CreateDocument", "UpdateDocument") eventSource="ssm.amazonaws.com"

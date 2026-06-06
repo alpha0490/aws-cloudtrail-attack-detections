@@ -1,0 +1,1 @@
+eventName =~ "GetFederationToken" and eventSource =~ "sts.amazonaws.com"

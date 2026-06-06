@@ -1,0 +1,1 @@
+eventName IN ("RunTask", "StartTask") eventSource="ecs.amazonaws.com"

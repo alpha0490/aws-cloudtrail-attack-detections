@@ -1,0 +1,1 @@
+eventName =~ "StartSession" and eventSource =~ "ssm.amazonaws.com"

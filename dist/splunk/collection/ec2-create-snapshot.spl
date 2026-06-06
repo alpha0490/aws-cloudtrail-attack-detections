@@ -1,0 +1,1 @@
+eventName IN ("CreateSnapshot", "CreateSnapshots") eventSource="ec2.amazonaws.com"

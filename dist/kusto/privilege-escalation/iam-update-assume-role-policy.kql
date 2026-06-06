@@ -1,0 +1,1 @@
+eventName =~ "UpdateAssumeRolePolicy" and eventSource =~ "iam.amazonaws.com"

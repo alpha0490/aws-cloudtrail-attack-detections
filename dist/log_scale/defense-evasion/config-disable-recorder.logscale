@@ -1,0 +1,1 @@
+eventName=/^StopConfigurationRecorder$/i or eventName=/^DeleteConfigurationRecorder$/i or eventName=/^DeleteDeliveryChannel$/i or eventName=/^DeleteConfigRule$/i eventSource=/^config\.amazonaws\.com$/i

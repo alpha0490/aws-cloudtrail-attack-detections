@@ -1,0 +1,1 @@
+(eventName in~ ("DeleteBackupVault", "DeleteRecoveryPoint", "DeleteBackupPlan")) and eventSource =~ "backup.amazonaws.com"

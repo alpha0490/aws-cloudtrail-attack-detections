@@ -1,0 +1,1 @@
+eventName IN ("CreateDBSnapshot", "CreateDBClusterSnapshot") eventSource="rds.amazonaws.com"

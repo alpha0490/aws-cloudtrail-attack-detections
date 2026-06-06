@@ -1,0 +1,1 @@
+eventName=/^AcceptHandshake$/i eventSource=/^organizations\.amazonaws\.com$/i

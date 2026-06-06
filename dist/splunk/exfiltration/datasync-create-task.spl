@@ -1,0 +1,1 @@
+eventName IN ("CreateTask", "CreateLocationS3", "CreateLocationObjectStorage") eventSource="datasync.amazonaws.com"

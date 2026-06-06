@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where eventName=="DeleteTable" and eventSource=="dynamodb.amazonaws.com"

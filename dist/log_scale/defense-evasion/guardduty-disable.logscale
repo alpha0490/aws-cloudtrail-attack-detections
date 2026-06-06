@@ -1,0 +1,1 @@
+eventName=/^DeleteDetector$/i or eventName=/^StopMonitoringMembers$/i or eventName=/^DeleteMembers$/i or eventName=/^DisassociateFromMasterAccount$/i or eventName=/^UpdateDetector$/i eventSource=/^guardduty\.amazonaws\.com$/i

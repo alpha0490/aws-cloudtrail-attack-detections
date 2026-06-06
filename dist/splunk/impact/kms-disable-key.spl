@@ -1,0 +1,1 @@
+eventName IN ("DisableKey", "DisableKeyRotation", "PutKeyPolicy") eventSource="kms.amazonaws.com"

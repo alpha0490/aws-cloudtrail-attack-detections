@@ -1,0 +1,1 @@
+eventName=/^CreateTask$/i or eventName=/^CreateLocationS3$/i or eventName=/^CreateLocationObjectStorage$/i eventSource=/^datasync\.amazonaws\.com$/i

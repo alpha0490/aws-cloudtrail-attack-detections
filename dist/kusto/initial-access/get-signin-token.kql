@@ -1,0 +1,1 @@
+eventName =~ "GetSigninToken" and eventSource =~ "signin.amazonaws.com"

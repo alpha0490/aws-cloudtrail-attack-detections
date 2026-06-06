@@ -1,0 +1,1 @@
+eventName=/^CreateDBSnapshot$/i or eventName=/^CreateDBClusterSnapshot$/i eventSource=/^rds\.amazonaws\.com$/i

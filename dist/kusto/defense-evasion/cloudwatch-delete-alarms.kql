@@ -1,0 +1,1 @@
+eventName =~ "DeleteAlarms" and eventSource =~ "monitoring.amazonaws.com"

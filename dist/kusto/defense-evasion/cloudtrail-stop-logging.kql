@@ -1,0 +1,1 @@
+eventName =~ "StopLogging" and eventSource =~ "cloudtrail.amazonaws.com"

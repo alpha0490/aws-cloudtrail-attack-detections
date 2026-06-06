@@ -1,0 +1,1 @@
+eventName=/^DescribeOrganization$/i or eventName=/^ListAccounts$/i or eventName=/^ListOrganizationalUnitsForParent$/i eventSource=/^organizations\.amazonaws\.com$/i

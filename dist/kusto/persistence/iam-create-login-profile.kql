@@ -1,0 +1,1 @@
+eventName =~ "CreateLoginProfile" and eventSource =~ "iam.amazonaws.com"

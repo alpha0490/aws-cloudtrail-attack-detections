@@ -1,0 +1,1 @@
+eventName =~ "ScheduleKeyDeletion" and eventSource =~ "kms.amazonaws.com"

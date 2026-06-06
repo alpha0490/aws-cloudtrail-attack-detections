@@ -1,0 +1,1 @@
+eventName =~ "ConsoleLogin" and eventSource =~ "signin.amazonaws.com" and 'responseElements.ConsoleLogin' =~ "Success" and 'additionalEventData.MFAUsed' =~ "No"

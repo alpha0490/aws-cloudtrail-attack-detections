@@ -1,0 +1,1 @@
+eventName=/^CreateDocument$/i or eventName=/^UpdateDocument$/i eventSource=/^ssm\.amazonaws\.com$/i

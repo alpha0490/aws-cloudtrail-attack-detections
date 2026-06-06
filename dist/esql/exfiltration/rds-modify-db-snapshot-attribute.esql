@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where (eventName in ("ModifyDBSnapshotAttribute", "ModifyDBClusterSnapshotAttribute")) and eventSource=="rds.amazonaws.com"

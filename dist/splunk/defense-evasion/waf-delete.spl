@@ -1,0 +1,1 @@
+eventName IN ("DeleteWebACL", "DeleteRuleGroup", "DeleteIPSet") eventSource="*waf*"

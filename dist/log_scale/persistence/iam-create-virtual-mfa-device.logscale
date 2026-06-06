@@ -1,0 +1,1 @@
+eventName=/^CreateVirtualMFADevice$/i eventSource=/^iam\.amazonaws\.com$/i

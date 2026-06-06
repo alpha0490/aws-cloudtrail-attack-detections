@@ -1,0 +1,1 @@
+eventName=/^TerminateInstances$/i or eventName=/^StopInstances$/i eventSource=/^ec2\.amazonaws\.com$/i

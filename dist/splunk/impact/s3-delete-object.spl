@@ -1,0 +1,1 @@
+eventName IN ("DeleteObject", "DeleteObjects") eventSource="s3.amazonaws.com"

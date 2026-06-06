@@ -1,0 +1,1 @@
+(eventName in~ ("DeleteLogGroup", "DeleteLogStream")) and eventSource =~ "logs.amazonaws.com"

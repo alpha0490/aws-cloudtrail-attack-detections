@@ -1,0 +1,1 @@
+(eventName in~ ("DeleteWebACL", "DeleteRuleGroup", "DeleteIPSet")) and eventSource contains "waf"

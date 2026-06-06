@@ -1,0 +1,1 @@
+eventName=/^GetAccountAuthorizationDetails$/i eventSource=/^iam\.amazonaws\.com$/i

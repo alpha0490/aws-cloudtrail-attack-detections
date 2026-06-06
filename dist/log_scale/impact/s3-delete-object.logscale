@@ -1,0 +1,1 @@
+eventName=/^DeleteObject$/i or eventName=/^DeleteObjects$/i eventSource=/^s3\.amazonaws\.com$/i

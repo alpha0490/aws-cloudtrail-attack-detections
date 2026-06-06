@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where (eventName in ("ListUsers", "ListRoles", "ListGroups", "ListPolicies", "GetAccountSummary")) and eventSource=="iam.amazonaws.com"

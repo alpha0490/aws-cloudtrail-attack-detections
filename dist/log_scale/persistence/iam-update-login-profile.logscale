@@ -1,0 +1,1 @@
+eventName=/^UpdateLoginProfile$/i eventSource=/^iam\.amazonaws\.com$/i

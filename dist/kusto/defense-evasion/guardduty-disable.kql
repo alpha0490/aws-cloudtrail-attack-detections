@@ -1,0 +1,1 @@
+(eventName in~ ("DeleteDetector", "StopMonitoringMembers", "DeleteMembers", "DisassociateFromMasterAccount", "UpdateDetector")) and eventSource =~ "guardduty.amazonaws.com"

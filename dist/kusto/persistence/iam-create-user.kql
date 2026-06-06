@@ -1,0 +1,1 @@
+eventName =~ "CreateUser" and eventSource =~ "iam.amazonaws.com"

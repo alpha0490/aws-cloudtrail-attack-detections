@@ -1,0 +1,1 @@
+eventName=/^CreateLoginProfile$/i eventSource=/^iam\.amazonaws\.com$/i

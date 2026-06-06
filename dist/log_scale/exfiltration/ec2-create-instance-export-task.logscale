@@ -1,0 +1,1 @@
+eventName=/^CreateInstanceExportTask$/i or eventName=/^ExportImage$/i eventSource=/^ec2\.amazonaws\.com$/i

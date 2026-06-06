@@ -1,0 +1,1 @@
+(eventName in~ ("DownloadDBLogFilePortion", "DownloadCompleteDBLogFile")) and eventSource =~ "rds.amazonaws.com"

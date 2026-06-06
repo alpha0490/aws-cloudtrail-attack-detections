@@ -1,0 +1,1 @@
+eventName=/^SendSerialConsoleSSHPublicKey$/i or eventName=/^StartSerialConsoleSession$/i

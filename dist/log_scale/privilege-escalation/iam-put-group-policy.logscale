@@ -1,0 +1,1 @@
+eventName=/^AttachGroupPolicy$/i or eventName=/^PutGroupPolicy$/i eventSource=/^iam\.amazonaws\.com$/i

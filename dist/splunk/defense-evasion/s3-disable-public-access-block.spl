@@ -1,0 +1,1 @@
+eventName IN ("DeleteAccountPublicAccessBlock", "DeletePublicAccessBlock", "PutAccountPublicAccessBlock", "PutPublicAccessBlock") eventSource="s3.amazonaws.com"

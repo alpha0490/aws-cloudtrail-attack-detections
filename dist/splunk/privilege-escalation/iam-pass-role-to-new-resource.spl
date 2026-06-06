@@ -1,0 +1,1 @@
+eventName IN ("RunInstances", "CreateFunction20150331", "CreateFunction") requestParameters.iamInstanceProfile=*

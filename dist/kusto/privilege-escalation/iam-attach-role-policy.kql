@@ -1,0 +1,1 @@
+eventName =~ "AttachRolePolicy" and eventSource =~ "iam.amazonaws.com"

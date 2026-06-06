@@ -1,0 +1,1 @@
+(eventName in~ ("CreateTask", "CreateLocationS3", "CreateLocationObjectStorage")) and eventSource =~ "datasync.amazonaws.com"

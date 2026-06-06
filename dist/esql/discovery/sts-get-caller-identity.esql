@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where eventName=="GetCallerIdentity" and eventSource=="sts.amazonaws.com"

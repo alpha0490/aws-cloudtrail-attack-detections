@@ -1,0 +1,1 @@
+(eventName in~ ("StopConfigurationRecorder", "DeleteConfigurationRecorder", "DeleteDeliveryChannel", "DeleteConfigRule")) and eventSource =~ "config.amazonaws.com"

@@ -1,0 +1,1 @@
+eventName IN ("DeleteUser", "DeleteLoginProfile", "DeleteAccessKey") eventSource="iam.amazonaws.com"

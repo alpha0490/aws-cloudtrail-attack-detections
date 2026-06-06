@@ -1,0 +1,1 @@
+eventName=/^DeactivateMFADevice$/i eventSource=/^iam\.amazonaws\.com$/i

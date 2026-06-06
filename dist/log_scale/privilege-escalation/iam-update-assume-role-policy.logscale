@@ -1,0 +1,1 @@
+eventName=/^UpdateAssumeRolePolicy$/i eventSource=/^iam\.amazonaws\.com$/i

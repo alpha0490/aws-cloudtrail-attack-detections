@@ -1,0 +1,1 @@
+(eventName in~ ("ListUsers", "ListRoles", "ListGroups", "ListPolicies", "GetAccountSummary")) and eventSource =~ "iam.amazonaws.com"

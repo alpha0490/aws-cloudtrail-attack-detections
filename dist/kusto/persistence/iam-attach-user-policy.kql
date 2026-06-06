@@ -1,0 +1,1 @@
+eventName =~ "AttachUserPolicy" and eventSource =~ "iam.amazonaws.com"

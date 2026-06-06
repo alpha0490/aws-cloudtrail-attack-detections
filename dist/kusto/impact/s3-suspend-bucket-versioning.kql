@@ -1,0 +1,1 @@
+eventName =~ "PutBucketVersioning" and eventSource =~ "s3.amazonaws.com"

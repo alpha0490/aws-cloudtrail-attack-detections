@@ -1,0 +1,1 @@
+(eventName in~ ("DisableKey", "DisableKeyRotation", "PutKeyPolicy")) and eventSource =~ "kms.amazonaws.com"

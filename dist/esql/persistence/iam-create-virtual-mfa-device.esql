@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where eventName=="CreateVirtualMFADevice" and eventSource=="iam.amazonaws.com"

@@ -1,0 +1,1 @@
+eventName=/^UpdateTrail$/i eventSource=/^cloudtrail\.amazonaws\.com$/i

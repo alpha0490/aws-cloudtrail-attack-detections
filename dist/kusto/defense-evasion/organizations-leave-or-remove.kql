@@ -1,0 +1,1 @@
+(eventName in~ ("LeaveOrganization", "RemoveAccountFromOrganization")) and eventSource =~ "organizations.amazonaws.com"

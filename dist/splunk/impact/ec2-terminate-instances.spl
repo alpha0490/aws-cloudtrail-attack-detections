@@ -1,0 +1,1 @@
+eventName IN ("TerminateInstances", "StopInstances") eventSource="ec2.amazonaws.com"

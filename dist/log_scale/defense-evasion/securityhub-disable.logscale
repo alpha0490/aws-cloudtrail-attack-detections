@@ -1,0 +1,1 @@
+eventName=/^DisableSecurityHub$/i or eventName=/^BatchDisableStandards$/i or eventName=/^DeleteInsight$/i eventSource=/^securityhub\.amazonaws\.com$/i

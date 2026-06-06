@@ -1,0 +1,1 @@
+eventName=/^GetFederationToken$/i eventSource=/^sts\.amazonaws\.com$/i

@@ -1,0 +1,1 @@
+eventName=/^AssumeRole$/i eventSource=/^sts\.amazonaws\.com$/i

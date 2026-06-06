@@ -1,0 +1,1 @@
+eventName IN ("DeleteDetector", "StopMonitoringMembers", "DeleteMembers", "DisassociateFromMasterAccount", "UpdateDetector") eventSource="guardduty.amazonaws.com"

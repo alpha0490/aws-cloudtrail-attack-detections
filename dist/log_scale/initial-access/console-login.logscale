@@ -1,0 +1,1 @@
+eventName=/^ConsoleLogin$/i eventSource=/^signin\.amazonaws\.com$/i responseElements.ConsoleLogin=/^Success$/i

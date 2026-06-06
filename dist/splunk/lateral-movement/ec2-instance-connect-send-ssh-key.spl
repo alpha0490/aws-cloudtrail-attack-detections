@@ -1,0 +1,1 @@
+eventName="SendSSHPublicKey" eventSource="ec2-instance-connect.amazonaws.com"

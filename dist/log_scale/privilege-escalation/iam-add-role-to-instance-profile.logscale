@@ -1,0 +1,1 @@
+eventName=/^AddRoleToInstanceProfile$/i or eventName=/^AssociateIamInstanceProfile$/i

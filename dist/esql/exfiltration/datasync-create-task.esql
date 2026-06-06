@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where (eventName in ("CreateTask", "CreateLocationS3", "CreateLocationObjectStorage")) and eventSource=="datasync.amazonaws.com"

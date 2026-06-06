@@ -1,0 +1,1 @@
+eventName=/^DeleteBackupVault$/i or eventName=/^DeleteRecoveryPoint$/i or eventName=/^DeleteBackupPlan$/i eventSource=/^backup\.amazonaws\.com$/i

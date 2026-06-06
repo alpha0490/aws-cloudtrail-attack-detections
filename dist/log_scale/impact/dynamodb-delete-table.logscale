@@ -1,0 +1,1 @@
+eventName=/^DeleteTable$/i eventSource=/^dynamodb\.amazonaws\.com$/i

@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where (eventName in ("GetParameter", "GetParameters", "GetParametersByPath")) and eventSource=="ssm.amazonaws.com" and requestParameters.withDecryption==true

@@ -1,0 +1,1 @@
+eventName=/^GetParameter$/i or eventName=/^GetParameters$/i or eventName=/^GetParametersByPath$/i eventSource=/^ssm\.amazonaws\.com$/i requestParameters.withDecryption=true

@@ -1,0 +1,1 @@
+(eventName in~ ("RunTask", "StartTask")) and eventSource =~ "ecs.amazonaws.com"

@@ -1,0 +1,1 @@
+(eventName in~ ("RunInstances", "CreateFunction20150331", "CreateFunction")) and isnotempty('requestParameters.iamInstanceProfile')

@@ -1,0 +1,1 @@
+(eventName in~ ("CreateKeyPair", "ImportKeyPair")) and eventSource =~ "ec2.amazonaws.com"

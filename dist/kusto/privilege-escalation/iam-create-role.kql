@@ -1,0 +1,1 @@
+eventName =~ "CreateRole" and eventSource =~ "iam.amazonaws.com"

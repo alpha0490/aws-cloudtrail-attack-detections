@@ -1,0 +1,1 @@
+eventName=/^PutImage$/i eventSource=/^ecr\.amazonaws\.com$/i

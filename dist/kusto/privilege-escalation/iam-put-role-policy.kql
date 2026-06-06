@@ -1,0 +1,1 @@
+eventName =~ "PutRolePolicy" and eventSource =~ "iam.amazonaws.com"

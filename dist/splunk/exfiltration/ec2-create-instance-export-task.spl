@@ -1,0 +1,1 @@
+eventName IN ("CreateInstanceExportTask", "ExportImage") eventSource="ec2.amazonaws.com"

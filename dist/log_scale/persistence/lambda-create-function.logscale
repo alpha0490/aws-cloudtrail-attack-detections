@@ -1,0 +1,1 @@
+eventName=/^CreateFunction20150331$/i or eventName=/^CreateFunction$/i eventSource=/^lambda\.amazonaws\.com$/i

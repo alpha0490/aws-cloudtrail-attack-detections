@@ -1,0 +1,1 @@
+eventName=/^DeleteSnapshot$/i eventSource=/^ec2\.amazonaws\.com$/i

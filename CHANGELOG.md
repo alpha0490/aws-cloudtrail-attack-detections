@@ -5,6 +5,18 @@ All notable changes to this project are documented here. Format follows
 
 ## [Unreleased]
 
+### Added
+- **16 new detections** (98 → 114 rules), incl. security-group-opened-to-internet, GuardDuty
+  finding suppression, cloud-security-service disablement, IAM Roles Anywhere trust anchors, SAML/OIDC
+  federation providers, Lambda resource-policy backdoors, Lambda code updates, IAM Identity Center
+  permission-set assignments, EC2 user-data modification, KMS grants, Secrets Manager resource
+  policies, federated `AssumeRoleWith*`, and `CreateImage`.
+- Logic tests for all new rules (30 → **46 rules / 92 checks**).
+
+### Changed
+- **Coverage scorecard is now 25/25 (100%)** — both prior gaps (Roles Anywhere trust anchor, SG
+  open-to-world ingress) are closed and logic-tested; the Lambda backdoor maps to a dedicated rule.
+
 ## [0.1.0] - 2026-06-05
 First public release.
 

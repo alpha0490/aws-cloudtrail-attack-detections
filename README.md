@@ -5,7 +5,7 @@ incident-responder **cheatsheet**, mapping the [MITRE ATT&CK](https://attack.mit
 IaaS (AWS) matrix to suspicious activity in CloudTrail.
 
 [![CI](https://github.com/alpha0490/aws-cloudtrail-attack-detections/actions/workflows/sigma-validate.yml/badge.svg)](https://github.com/alpha0490/aws-cloudtrail-attack-detections/actions/workflows/sigma-validate.yml)
-![Stratus coverage](https://img.shields.io/badge/Stratus%20coverage-23%2F25%20tested-brightgreen)
+![Stratus coverage](https://img.shields.io/badge/Stratus%20coverage-25%2F25%20tested-brightgreen)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 ![Sigma](https://img.shields.io/badge/format-Sigma-green.svg)
 ![CloudTrail](https://img.shields.io/badge/log%20source-AWS%20CloudTrail-orange.svg)
@@ -18,7 +18,7 @@ IaaS (AWS) matrix to suspicious activity in CloudTrail.
 
 ## What this is
 
-- **~98 Sigma rules** (`logsource: { product: aws, service: cloudtrail }`) across **11 ATT&CK
+- **110+ Sigma rules** (`logsource: { product: aws, service: cloudtrail }`) across **11 ATT&CK
   tactics**: Initial Access, Execution, Persistence, Privilege Escalation, Defense Evasion,
   Credential Access, Discovery, Lateral Movement, Collection, Exfiltration, Impact.
 - A **Markdown cheatsheet** ([`cheatsheet/README.md`](cheatsheet/README.md)) for incident
@@ -88,7 +88,7 @@ shoulders rather than pretend to replace them:
 
 **What this repo adds that the above don't bundle together:**
 1. A **tactic-first IR cheatsheet** mapping CloudTrail events → meaning → fields to inspect (responder workflow, not just rules).
-2. An explicit **deploy-tier** split (`alert` vs `hunt`) so it's not 98 equal-looking rules.
+2. An explicit **deploy-tier** split (`alert` vs `hunt`) so it's not an undifferentiated wall of rules.
 3. A documented **Sumo Logic enrichment + 90-day baseline** layer (IP allow/threat-list, first-seen novelty, assumed-role normalization) that wraps the stateless rules.
 4. **Honesty about AWS sharp edges** (e.g. `PassRole` isn't a CloudTrail event; data-events caveats) rather than silent best-effort.
 5. A structure intended to be **fed to an AI** to generate environment-specific detections.

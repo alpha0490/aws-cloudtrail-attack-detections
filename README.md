@@ -16,6 +16,14 @@ IaaS (AWS) matrix to suspicious activity in CloudTrail.
 
 ---
 
+## Quick start
+
+- **Incident responder** — "what does `eventName=X` mean and which fields do I check?" → the [cheatsheet](cheatsheet/README.md).
+- **Detection engineer** — grab a ready-to-paste query for your SIEM from [`dist/`](dist/) (CrowdStrike LogScale, KQL, Splunk, Elastic), or [convert the Sigma rules](#converting-rules-to-your-siem) yourself.
+- **Coverage at a glance** — the [scorecard](docs/coverage-scorecard.md) and the [ATT&CK Navigator layer](docs/attack-navigator-layer.json).
+- **See it against real attacks** — the [threat-mapping](docs/threat-mapping.md) (Capital One, Scattered Spider…).
+- **Build detections with AI** — point your assistant at [`detections.json`](detections.json) + [`docs/using-with-ai.md`](docs/using-with-ai.md).
+
 ## What this is
 
 - **110+ Sigma rules** (`logsource: { product: aws, service: cloudtrail }`) across **11 ATT&CK

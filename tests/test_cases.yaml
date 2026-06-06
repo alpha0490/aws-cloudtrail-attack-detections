@@ -341,3 +341,85 @@
     event:
       eventSource: rds.amazonaws.com
       eventName: DescribeDBSnapshots
+
+- rule: rules/credential-access/secretsmanager-batch-get-secret-value.yml
+  stratus: aws.credential-access.secretsmanager-batch-retrieve-secrets
+  positive:
+    note: Multiple secrets retrieved in one call
+    event:
+      eventSource: secretsmanager.amazonaws.com
+      eventName: BatchGetSecretValue
+  negative:
+    note: Read-only ListSecrets (no values)
+    event:
+      eventSource: secretsmanager.amazonaws.com
+      eventName: ListSecrets
+
+- rule: rules/defense-evasion/cloudtrail-put-event-selectors.yml
+  stratus: aws.defense-evasion.cloudtrail-event-selectors
+  positive:
+    note: Event selectors modified to reduce logging
+    event:
+      eventSource: cloudtrail.amazonaws.com
+      eventName: PutEventSelectors
+      requestParameters: { trailName: org-trail }
+  negative:
+    note: Read-only GetEventSelectors
+    event:
+      eventSource: cloudtrail.amazonaws.com
+      eventName: GetEventSelectors
+
+- rule: rules/discovery/ec2-describe-enumeration.yml
+  stratus: aws.discovery.ec2-enumerate-from-instance
+  positive:
+    note: EC2 enumeration (one of a value list)
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: DescribeInstances
+  negative:
+    note: RunInstances is a mutation, not enumeration (not in the list)
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: RunInstances
+
+- rule: rules/execution/ssm-send-command.yml
+  stratus: aws.execution.ssm-send-command
+  positive:
+    note: Remote command run on an instance via SSM
+    event:
+      eventSource: ssm.amazonaws.com
+      eventName: SendCommand
+      requestParameters: { documentName: AWS-RunShellScript }
+  negative:
+    note: Read-only ListCommands
+    event:
+      eventSource: ssm.amazonaws.com
+      eventName: ListCommands
+
+- rule: rules/execution/ssm-start-session.yml
+  stratus: aws.execution.ssm-start-session
+  positive:
+    note: Interactive Session Manager session opened to an instance
+    event:
+      eventSource: ssm.amazonaws.com
+      eventName: StartSession
+      requestParameters: { target: i-0abc123def456 }
+  negative:
+    note: Read-only DescribeSessions
+    event:
+      eventSource: ssm.amazonaws.com
+      eventName: DescribeSessions
+
+- rule: rules/persistence/lambda-create-function.yml
+  stratus: aws.persistence.lambda-backdoor-function
+  positive:
+    note: Lambda function created (versioned eventName)
+    event:
+      eventSource: lambda.amazonaws.com
+      eventName: CreateFunction20150331
+      requestParameters: { functionName: backdoor }
+  negative:
+    note: Read-only GetFunction
+    event:
+      eventSource: lambda.amazonaws.com
+      eventName: GetFunction

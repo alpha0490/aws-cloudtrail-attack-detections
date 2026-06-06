@@ -74,7 +74,11 @@ with a `name:` and the `correlation:` document in the **same file** (see
 pip install sigma-cli pyyaml
 sigma check rules/                 # 1. schema: must report 0 errors and 0 issues
 python3 tests/run_tests.py         # 2. logic: true-positive/benign event tests must pass
-python3 scripts/build_docs.py      # 3. regenerate cheatsheet + matrix from the rules
+python3 scripts/build_docs.py      # 3. regenerate cheatsheet + matrix
+python3 scripts/build_navigator.py # 4. regenerate the ATT&CK Navigator layer
+python3 scripts/build_scorecard.py # 5. regenerate the coverage scorecard
+# If you added/changed rules, also refresh the pre-built queries (needs the backends):
+#   sigma plugin install crowdstrike kusto splunk elasticsearch && python3 scripts/build_dist.py
 ```
 
 - Confirm `sigma check` is clean **and** `tests/run_tests.py` is green.

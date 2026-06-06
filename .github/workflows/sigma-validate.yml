@@ -6,22 +6,25 @@ on:
       - "rules/**"
       - "scripts/**"
       - "tests/**"
+      - "docs/**"
+      - "dist/**"
       - ".github/workflows/sigma-validate.yml"
   pull_request:
     paths:
       - "rules/**"
       - "scripts/**"
       - "tests/**"
+      - "docs/**"
+      - "dist/**"
   workflow_dispatch:
 
 jobs:
-  sigma-check:
+  rules:
+    name: rules, tests, generated docs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
@@ -34,12 +37,39 @@ jobs:
       - name: Run rule logic tests (true-positive / benign events)
         run: python3 tests/run_tests.py
 
-      - name: Verify docs are in sync with rules
+      - name: Verify generated docs/navigator/scorecard are in sync
         run: |
           python3 scripts/build_docs.py
-          if ! git diff --quiet -- cheatsheet/README.md docs/mitre-matrix.md; then
-            echo "::error::cheatsheet/README.md or docs/mitre-matrix.md are out of date."
-            echo "Run 'python3 scripts/build_docs.py' and commit the result."
-            git --no-pager diff -- cheatsheet/README.md docs/mitre-matrix.md
+          python3 scripts/build_navigator.py
+          python3 scripts/build_scorecard.py
+          if ! git diff --quiet -- cheatsheet docs; then
+            echo "::error::Generated files are stale. Run scripts/build_docs.py, build_navigator.py, build_scorecard.py and commit."
+            git --no-pager diff --stat -- cheatsheet docs
             exit 1
+          fi
+
+  dist:
+    name: pre-built queries (advisory)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install sigma-cli + backends
+        run: |
+          pip install sigma-cli pyyaml
+          sigma plugin install crowdstrike
+          sigma plugin install kusto
+          sigma plugin install splunk
+          sigma plugin install elasticsearch
+
+      - name: Rebuild dist/ and report drift (advisory — backend versions can shift output)
+        continue-on-error: true
+        run: |
+          python3 scripts/build_dist.py
+          if ! git diff --quiet -- dist; then
+            echo "::warning::dist/ differs from committed output. Run scripts/build_dist.py and commit (or it's a pySigma backend version change)."
+            git --no-pager diff --stat -- dist
           fi

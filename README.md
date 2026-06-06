@@ -1,9 +1,11 @@
 # AWS CloudTrail × MITRE ATT&CK Detections
 
-Vendor-neutral **Sigma** detections and an incident-responder **cheatsheet** that map the
-[MITRE ATT&CK](https://attack.mitre.org/) Cloud / IaaS (AWS) matrix to suspicious activity
-observable in **AWS CloudTrail**.
+**AWS CloudTrail** detections written in **Sigma** — write once, run on any SIEM — plus an
+incident-responder **cheatsheet**, mapping the [MITRE ATT&CK](https://attack.mitre.org/) Cloud /
+IaaS (AWS) matrix to suspicious activity in CloudTrail.
 
+[![CI](https://github.com/alpha0490/aws-cloudtrail-attack-detections/actions/workflows/sigma-validate.yml/badge.svg)](https://github.com/alpha0490/aws-cloudtrail-attack-detections/actions/workflows/sigma-validate.yml)
+![Stratus coverage](https://img.shields.io/badge/Stratus%20coverage-23%2F25%20tested-brightgreen)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 ![Sigma](https://img.shields.io/badge/format-Sigma-green.svg)
 ![CloudTrail](https://img.shields.io/badge/log%20source-AWS%20CloudTrail-orange.svg)
@@ -22,7 +24,9 @@ observable in **AWS CloudTrail**.
 - A **Markdown cheatsheet** ([`cheatsheet/README.md`](cheatsheet/README.md)) for incident
   responders: per-tactic tables of *what the event means* and *which fields to inspect*.
 - A **coverage matrix** ([`docs/mitre-matrix.md`](docs/mitre-matrix.md)) showing covered
-  techniques and known gaps (marked TODO).
+  techniques and known gaps (marked TODO), an [ATT&CK Navigator heatmap](docs/attack-navigator-layer.json),
+  and a Stratus-mapped [coverage scorecard](docs/coverage-scorecard.md).
+- **Pre-built queries** ([`dist/`](dist/)) for CrowdStrike LogScale, KQL, Splunk, and Elastic — no sigma-cli needed.
 
 Detections key off CloudTrail `eventName` / `eventSource` and relevant
 `requestParameters.*` / `responseElements.*` / `userIdentity.*` fields.
@@ -40,20 +44,24 @@ Detections key off CloudTrail `eventName` / `eventSource` and relevant
 ```
 .
 ├── cheatsheet/README.md       # IR cheatsheet, tables by ATT&CK tactic
-├── docs/
-│   ├── mitre-matrix.md         # ATT&CK Cloud (IaaS) coverage matrix + TODO gaps
-│   ├── sumologic-quickstart.md # beginner's guide: build these as Sumo alerts, step by step
-│   ├── enrichment-and-baselining.md  # IP allow/threat lists + 90d behavioral baseline (Sumo)
-│   └── validation-with-stratus.md    # validate detections against Stratus Red Team attacks
-├── lookups/                    # IP allowlist + CrowdStrike threatlist (CSV) for the enrichment layer
 ├── rules/                     # Sigma rules, one folder per tactic
 │   ├── initial-access/  execution/  persistence/  privilege-escalation/
 │   ├── defense-evasion/ credential-access/ discovery/ lateral-movement/
 │   └── collection/  exfiltration/  impact/
-├── scripts/build_docs.py      # regenerates cheatsheet + matrix from the rules
+├── dist/                      # pre-built queries: CrowdStrike LogScale, KQL, Splunk, Elastic ES|QL
+├── docs/
+│   ├── mitre-matrix.md         # ATT&CK Cloud (IaaS) coverage matrix + TODO gaps
+│   ├── coverage-scorecard.md   # Stratus-mapped tested-coverage scorecard (+ badge)
+│   ├── attack-navigator-layer.json   # ATT&CK Navigator heatmap (colored by tier)
+│   ├── validation-with-stratus.md    # validate detections against Stratus Red Team attacks
+│   ├── enrichment-and-baselining.md  # IP allow/threat lists + 90d behavioral baseline (Sumo)
+│   ├── sumologic-quickstart.md # beginner's guide: build these as Sumo alerts, step by step
+│   └── using-with-ai.md        # point an AI assistant at the repo to generate tuned detections
+├── lookups/                    # IP allowlist + CrowdStrike threatlist (CSV) for the enrichment layer
 ├── tests/                     # logic tests: true-positive / benign CloudTrail events per rule
-├── .github/workflows/         # CI: sigma check + logic tests + docs-in-sync
-├── CONTRIBUTING.md
+├── scripts/                   # generators: build_docs / build_dist / build_navigator / build_scorecard
+├── .github/workflows/         # CI: sigma check + logic tests + docs/dist/navigator/scorecard in-sync
+├── CHANGELOG.md  CONTRIBUTING.md
 └── LICENSE                    # Apache-2.0
 ```
 
@@ -90,7 +98,11 @@ tiering/enrichment model, and as a learning + AI-assist substrate.
 
 ## Converting rules to your SIEM
 
-Install the toolchain and the backend for your platform:
+**Want copy-paste queries with no setup?** [`dist/`](dist/) ships every rule pre-converted for
+**CrowdStrike LogScale**, **Microsoft KQL (Sentinel)**, **Splunk**, and **Elastic ES|QL**. Grab the
+file for your SIEM and adjust field names to your ingest schema (see [`dist/README.md`](dist/README.md)).
+
+To convert yourself, install the toolchain and the backend for your platform:
 
 ```bash
 pip install sigma-cli

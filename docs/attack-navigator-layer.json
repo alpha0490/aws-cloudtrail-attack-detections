@@ -131,9 +131,9 @@
     {
       "techniqueID": "T1098.003",
       "tactic": "privilege-escalation",
-      "score": 7,
+      "score": 8,
       "color": "#e6550d",
-      "comment": "7 rule(s): iam-attach-administrator-policy.yml, iam-attach-role-policy.yml, iam-create-policy-version.yml, iam-create-role.yml, iam-put-group-policy.yml, iam-put-role-policy.yml, iam-set-default-policy-version.yml",
+      "comment": "8 rule(s): iam-attach-administrator-policy.yml, iam-attach-role-policy.yml, iam-create-policy-version.yml, iam-create-role.yml, iam-put-group-policy.yml, iam-put-role-policy.yml, iam-set-default-policy-version.yml, iam-wildcard-policy-document.yml",
       "enabled": true
     },
     {

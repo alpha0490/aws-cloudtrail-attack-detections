@@ -2,9 +2,9 @@
 
 Coverage of the ATT&CK Cloud (IaaS) matrix by the AWS CloudTrail Sigma rules in this repo. Generated from the rules by `scripts/build_docs.py` — do not edit by hand.
 
-**Coverage:** 114 rules across 11 tactics and 42 ATT&CK techniques/sub-techniques.
+**Coverage:** 115 rules across 11 tactics and 42 ATT&CK techniques/sub-techniques.
 
-**Deploy tiers:** 37 `alert` (page on sight) · 77 `hunt` (correlate / baseline first — see [enrichment-and-baselining.md](enrichment-and-baselining.md)).
+**Deploy tiers:** 38 `alert` (page on sight) · 77 `hunt` (correlate / baseline first — see [enrichment-and-baselining.md](enrichment-and-baselining.md)).
 
 Legend: ✅ covered (rule exists) · ☐ TODO (gap, contributions welcome).
 
@@ -47,7 +47,7 @@ Legend: ✅ covered (rule exists) · ☐ TODO (gap, contributions welcome).
 | | ATT&CK ID | Technique | Rules |
 |---|---|---|---|
 | ✅ | [T1098](https://attack.mitre.org/techniques/T1098/) | Account Manipulation | [`iam-add-role-to-instance-profile.yml`](../rules/privilege-escalation/iam-add-role-to-instance-profile.yml), [`iam-add-user-to-group.yml`](../rules/privilege-escalation/iam-add-user-to-group.yml), [`iam-pass-role-to-new-resource.yml`](../rules/privilege-escalation/iam-pass-role-to-new-resource.yml), [`iam-update-assume-role-policy.yml`](../rules/privilege-escalation/iam-update-assume-role-policy.yml) |
-| ✅ | [T1098.003](https://attack.mitre.org/techniques/T1098/003/) | Additional Cloud Roles | [`iam-attach-administrator-policy.yml`](../rules/privilege-escalation/iam-attach-administrator-policy.yml), [`iam-attach-role-policy.yml`](../rules/privilege-escalation/iam-attach-role-policy.yml), [`iam-create-policy-version.yml`](../rules/privilege-escalation/iam-create-policy-version.yml), [`iam-create-role.yml`](../rules/privilege-escalation/iam-create-role.yml), [`iam-put-group-policy.yml`](../rules/privilege-escalation/iam-put-group-policy.yml), [`iam-put-role-policy.yml`](../rules/privilege-escalation/iam-put-role-policy.yml), [`iam-set-default-policy-version.yml`](../rules/privilege-escalation/iam-set-default-policy-version.yml) |
+| ✅ | [T1098.003](https://attack.mitre.org/techniques/T1098/003/) | Additional Cloud Roles | [`iam-attach-administrator-policy.yml`](../rules/privilege-escalation/iam-attach-administrator-policy.yml), [`iam-attach-role-policy.yml`](../rules/privilege-escalation/iam-attach-role-policy.yml), [`iam-create-policy-version.yml`](../rules/privilege-escalation/iam-create-policy-version.yml), [`iam-create-role.yml`](../rules/privilege-escalation/iam-create-role.yml), [`iam-put-group-policy.yml`](../rules/privilege-escalation/iam-put-group-policy.yml), [`iam-put-role-policy.yml`](../rules/privilege-escalation/iam-put-role-policy.yml), [`iam-set-default-policy-version.yml`](../rules/privilege-escalation/iam-set-default-policy-version.yml), [`iam-wildcard-policy-document.yml`](../rules/privilege-escalation/iam-wildcard-policy-document.yml) |
 
 ### Defense Evasion ([TA0005](https://attack.mitre.org/tactics/TA0005/))
 

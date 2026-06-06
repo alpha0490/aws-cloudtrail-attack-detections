@@ -6,13 +6,13 @@
       "product": "aws",
       "service": "cloudtrail"
     },
-    "count": 114,
+    "count": 115,
     "tiers": {
-      "alert": 37,
+      "alert": 38,
       "hunt": 77
     },
     "types": {
-      "signature": 90,
+      "signature": 91,
       "behavioral": 24
     },
     "query_languages": [
@@ -2752,7 +2752,7 @@
     },
     {
       "file": "rules/privilege-escalation/iam-attach-administrator-policy.yml",
-      "title": "AWS IAM Administrator/Wildcard Policy Attached",
+      "title": "AWS IAM Privileged/Admin Managed Policy Attached",
       "id": "76a8a573-05c1-4e77-9b98-b797f149a7c3",
       "tactic": "privilege-escalation",
       "techniques": [
@@ -2976,6 +2976,35 @@
         "kql": "dist/kusto/privilege-escalation/iam-update-assume-role-policy.kql",
         "splunk": "dist/splunk/privilege-escalation/iam-update-assume-role-policy.spl",
         "esql": "dist/esql/privilege-escalation/iam-update-assume-role-policy.esql"
+      }
+    },
+    {
+      "file": "rules/privilege-escalation/iam-wildcard-policy-document.yml",
+      "title": "AWS IAM Wildcard (Admin) Policy Document Created",
+      "id": "b16b4c06-6efb-42e6-bf8d-2b955fed96d1",
+      "tactic": "privilege-escalation",
+      "techniques": [
+        "T1098.003"
+      ],
+      "tier": "alert",
+      "level": "high",
+      "type": "signature",
+      "correlation": false,
+      "eventNames": [
+        "CreatePolicy",
+        "CreatePolicyVersion",
+        "PutGroupPolicy",
+        "PutRolePolicy",
+        "PutUserPolicy"
+      ],
+      "eventSources": [
+        "iam.amazonaws.com"
+      ],
+      "queries": {
+        "crowdstrike": "dist/log_scale/privilege-escalation/iam-wildcard-policy-document.logscale",
+        "kql": "dist/kusto/privilege-escalation/iam-wildcard-policy-document.kql",
+        "splunk": "dist/splunk/privilege-escalation/iam-wildcard-policy-document.spl",
+        "esql": "dist/esql/privilege-escalation/iam-wildcard-policy-document.esql"
       }
     }
   ]

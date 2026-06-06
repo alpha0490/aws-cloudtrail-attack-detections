@@ -1,0 +1,1 @@
+eventName=/^CreatePermissionSet$/i or eventName=/^CreateAccountAssignment$/i or eventName=/^AttachManagedPolicyToPermissionSet$/i or eventName=/^PutInlinePolicyToPermissionSet$/i eventSource=/^sso\.amazonaws\.com$/i

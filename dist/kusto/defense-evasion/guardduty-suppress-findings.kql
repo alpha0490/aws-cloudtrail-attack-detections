@@ -1,0 +1,1 @@
+(eventName in~ ("CreateFilter", "UpdateFilter", "CreateIPSet", "UpdateFindingsFeedback")) and eventSource =~ "guardduty.amazonaws.com"

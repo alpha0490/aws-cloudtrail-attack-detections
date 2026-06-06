@@ -1,0 +1,1 @@
+eventName=/^CreateSAMLProvider$/i or eventName=/^UpdateSAMLProvider$/i or eventName=/^CreateOpenIDConnectProvider$/i eventSource=/^iam\.amazonaws\.com$/i

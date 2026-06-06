@@ -1,0 +1,1 @@
+eventName="ModifyInstanceAttribute" eventSource="ec2.amazonaws.com" requestParameters.userData=*

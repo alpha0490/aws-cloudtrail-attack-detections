@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where (eventName in ("CreateFilter", "UpdateFilter", "CreateIPSet", "UpdateFindingsFeedback")) and eventSource=="guardduty.amazonaws.com"

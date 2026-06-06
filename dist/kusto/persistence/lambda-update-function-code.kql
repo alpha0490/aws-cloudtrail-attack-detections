@@ -1,0 +1,1 @@
+(eventName in~ ("UpdateFunctionCode20150331", "UpdateFunctionCode20150331v2", "UpdateFunctionCode")) and eventSource =~ "lambda.amazonaws.com"

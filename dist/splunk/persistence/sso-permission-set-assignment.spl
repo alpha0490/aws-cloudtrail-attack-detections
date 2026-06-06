@@ -1,0 +1,1 @@
+eventName IN ("CreatePermissionSet", "CreateAccountAssignment", "AttachManagedPolicyToPermissionSet", "PutInlinePolicyToPermissionSet") eventSource="sso.amazonaws.com"

@@ -1,0 +1,1 @@
+eventName=/^AuthorizeSecurityGroupIngress$/i eventSource=/^ec2\.amazonaws\.com$/i requestParameters.ipPermissions.items.ipRanges.items.cidrIp=/^0\.0\.0\.0\/0$/i

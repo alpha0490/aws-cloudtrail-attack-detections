@@ -1,0 +1,1 @@
+eventName=/^CreateTrustAnchor$/i or eventName=/^CreateProfile$/i eventSource=/^rolesanywhere\.amazonaws\.com$/i

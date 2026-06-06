@@ -1,0 +1,1 @@
+eventName =~ "ModifyInstanceAttribute" and eventSource =~ "ec2.amazonaws.com" and isnotempty('requestParameters.userData')

@@ -1,0 +1,1 @@
+eventName="AuthorizeSecurityGroupIngress" eventSource="ec2.amazonaws.com" requestParameters.ipPermissions.items.ipRanges.items.cidrIp="0.0.0.0/0"

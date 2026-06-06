@@ -1,0 +1,1 @@
+eventName IN ("CreateFilter", "UpdateFilter", "CreateIPSet", "UpdateFindingsFeedback") eventSource="guardduty.amazonaws.com"

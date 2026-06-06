@@ -1,0 +1,1 @@
+eventName IN ("CreateSAMLProvider", "UpdateSAMLProvider", "CreateOpenIDConnectProvider") eventSource="iam.amazonaws.com"

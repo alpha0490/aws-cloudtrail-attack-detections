@@ -1,0 +1,1 @@
+eventName IN ("AddPermission20150331", "AddPermission20150331v2", "AddPermission") eventSource="lambda.amazonaws.com"

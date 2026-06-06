@@ -1,0 +1,1 @@
+eventName=/^CreateFilter$/i or eventName=/^UpdateFilter$/i or eventName=/^CreateIPSet$/i or eventName=/^UpdateFindingsFeedback$/i eventSource=/^guardduty\.amazonaws\.com$/i

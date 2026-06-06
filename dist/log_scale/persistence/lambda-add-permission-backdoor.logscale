@@ -1,0 +1,1 @@
+eventName=/^AddPermission20150331$/i or eventName=/^AddPermission20150331v2$/i or eventName=/^AddPermission$/i eventSource=/^lambda\.amazonaws\.com$/i

@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where eventName=="ModifyInstanceAttribute" and eventSource=="ec2.amazonaws.com" and requestParameters.userData is not null

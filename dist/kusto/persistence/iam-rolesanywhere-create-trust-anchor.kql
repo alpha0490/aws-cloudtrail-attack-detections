@@ -1,0 +1,1 @@
+(eventName in~ ("CreateTrustAnchor", "CreateProfile")) and eventSource =~ "rolesanywhere.amazonaws.com"

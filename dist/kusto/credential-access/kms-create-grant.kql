@@ -1,0 +1,1 @@
+eventName =~ "CreateGrant" and eventSource =~ "kms.amazonaws.com"

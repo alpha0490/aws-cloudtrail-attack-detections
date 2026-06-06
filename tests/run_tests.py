@@ -47,19 +47,42 @@ def _as_bool(v):
     return v if isinstance(v, bool) else str(v).strip().lower() == "true"
 
 
+def _sigma_regex(value):
+    """Translate a Sigma value to a regex: `*` -> .* and `?` -> . (wildcards), `\\*`/`\\?` literal."""
+    out, i = [], 0
+    while i < len(value):
+        c = value[i]
+        if c == "\\" and i + 1 < len(value) and value[i + 1] in "*?\\":
+            out.append(re.escape(value[i + 1])); i += 2
+        elif c == "*":
+            out.append(".*"); i += 1
+        elif c == "?":
+            out.append("."); i += 1
+        else:
+            out.append(re.escape(c)); i += 1
+    return "".join(out)
+
+
 def _match_one(actual, expected, mods):
     if actual is MISSING:
         return False
     if isinstance(expected, bool):
         return _as_bool(actual) == expected
-    a, e = str(actual).lower(), str(expected).lower()
+    a = str(actual)
+    if "re" in mods:                      # |re modifier: value is a raw regex (case-sensitive)
+        try:
+            return re.search(str(expected), a) is not None
+        except re.error:
+            return False
+    pat = _sigma_regex(str(expected))
+    flags = re.IGNORECASE | re.DOTALL
     if "contains" in mods:
-        return e in a
+        return re.search(pat, a, flags) is not None
     if "startswith" in mods:
-        return a.startswith(e)
+        return re.match(pat, a, flags) is not None
     if "endswith" in mods:
-        return a.endswith(e)
-    return a == e  # Sigma default: case-insensitive equality
+        return re.search(pat + r"\Z", a, flags) is not None
+    return re.fullmatch(pat, a, flags) is not None  # Sigma default: full-value, case-insensitive
 
 
 def _field_match(flat, key, expected):

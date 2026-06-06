@@ -1,7 +1,7 @@
-title: AWS IAM Administrator/Wildcard Policy Attached
+title: AWS IAM Privileged/Admin Managed Policy Attached
 id: 76a8a573-05c1-4e77-9b98-b797f149a7c3
 status: experimental
-description: Detects attachment of the AWS managed AdministratorAccess policy to a user, role, or group. Matches the well-known admin policy ARN; custom wildcard (Action:* Resource:*) policies should be detected separately by inspecting the policy document.
+description: Detects attachment of an escalation-equivalent AWS managed policy (AdministratorAccess, IAMFullAccess, or PowerUserAccess) to a user, role, or group. IAMFullAccess is itself an escalation primitive - the grantee can then attach AdministratorAccess. The match also covers the AdministratorAccess-* job-function variants. Custom wildcard (Action:* Resource:*) policies are caught separately by iam-wildcard-policy-document.yml.
 references:
 - https://attack.mitre.org/techniques/T1098/003/
 - https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
@@ -20,9 +20,13 @@ detection:
     - AttachRolePolicy
     - AttachGroupPolicy
     eventSource: iam.amazonaws.com
-    requestParameters.policyArn|contains: AdministratorAccess
+    requestParameters.policyArn|contains:
+    - AdministratorAccess
+    - IAMFullAccess
+    - PowerUserAccess
   condition: selection
 falsepositives:
-- Deliberate granting of administrator access (should be rare and reviewed).
+- Deliberate, reviewed granting of privileged access (should be rare).
+- PowerUserAccess can be attached routinely in dev/sandbox accounts - tune or drop it there.
 level: high
 tier: alert

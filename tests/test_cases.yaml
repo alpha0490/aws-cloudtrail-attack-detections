@@ -80,15 +80,15 @@
 
 - rule: rules/privilege-escalation/iam-attach-administrator-policy.yml
   positive:
-    note: AdministratorAccess attached to a user (list eventName + contains)
+    note: IAMFullAccess attached to a user (proves the broadened privileged-policy match)
     event:
       eventSource: iam.amazonaws.com
       eventName: AttachUserPolicy
       requestParameters:
         userName: bob
-        policyArn: "arn:aws:iam::aws:policy/AdministratorAccess"
+        policyArn: "arn:aws:iam::aws:policy/IAMFullAccess"
   negative:
-    note: A non-admin managed policy attached
+    note: A non-privileged managed policy attached
     event:
       eventSource: iam.amazonaws.com
       eventName: AttachUserPolicy
@@ -580,3 +580,21 @@
   negative:
     note: Read-only DescribeImages
     event: { eventSource: ec2.amazonaws.com, eventName: DescribeImages }
+
+- rule: rules/privilege-escalation/iam-wildcard-policy-document.yml
+  positive:
+    note: Inline policy granting Action * on Resource * (custom admin)
+    event:
+      eventSource: iam.amazonaws.com
+      eventName: PutUserPolicy
+      requestParameters:
+        userName: bob
+        policyDocument: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"*","Resource":"*"}]}'
+  negative:
+    note: Scoped inline policy (specific action + resource)
+    event:
+      eventSource: iam.amazonaws.com
+      eventName: PutUserPolicy
+      requestParameters:
+        userName: bob
+        policyDocument: '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"s3:GetObject","Resource":"arn:aws:s3:::my-bucket/*"}]}'

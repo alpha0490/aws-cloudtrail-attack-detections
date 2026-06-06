@@ -1,0 +1,34 @@
+title: AWS IAM Wildcard (Admin) Policy Document Created
+id: b16b4c06-6efb-42e6-bf8d-2b955fed96d1
+status: experimental
+description: Detects creation of a custom IAM policy that grants full administrative access via a wildcard statement (Action *, Resource *), whether attached inline (PutUserPolicy/PutRolePolicy/PutGroupPolicy) or as a managed policy/version (CreatePolicy/CreatePolicyVersion). This is the custom-policy equivalent of attaching AdministratorAccess and a classic privilege-escalation step. NOTE - this is a string heuristic over requestParameters.policyDocument, which CloudTrail records as a (often URL-encoded) JSON string; it can miss documents where Action is an array, has unusual spacing/encoding, or scopes Resource. Always inspect the full policy document.
+references:
+- https://attack.mitre.org/techniques/T1098/003/
+- https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutUserPolicy.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-06'
+tags:
+- attack.privilege-escalation
+- attack.t1098.003
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - PutUserPolicy
+    - PutRolePolicy
+    - PutGroupPolicy
+    - CreatePolicy
+    - CreatePolicyVersion
+    eventSource: iam.amazonaws.com
+  wildcard_action:
+    requestParameters.policyDocument|re: '"Action":\s*"\*"'
+  wildcard_resource:
+    requestParameters.policyDocument|re: '"Resource":\s*"\*"'
+  condition: selection and wildcard_action and wildcard_resource
+falsepositives:
+- Legitimate creation of an admin/break-glass policy (should be rare and reviewed).
+- Infrastructure-as-code that intentionally provisions broad policies.
+level: high
+tier: alert

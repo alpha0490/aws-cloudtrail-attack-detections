@@ -130,15 +130,14 @@ def sumo_query(title, events, src, key, rationale):
         "// %s" % rationale,
         "// Run over a 90-DAY range; each row is a (principal, %s) pair first seen in the last 24h." % alias,
         "_sourceCategory=*cloudtrail* (%s)" % kw,
-        '| json field=_raw "eventName", "eventSource", "errorCode",',
-        '        "userIdentity.type", "userIdentity.arn",',
+        '| json field=_raw "eventName", "eventSource", "errorCode", "userIdentity.arn",',
         '        "userIdentity.sessionContext.sessionIssuer.arn",',
         '        "sourceIPAddress", "awsRegion"%s' % ((',\n        "%s"' % jpath) if jpath else ""),
-        '     as eventName, eventSource, errorCode, id_type, raw_arn, issuer_arn,',
+        '     as eventName, eventSource, errorCode, raw_arn, issuer_arn,',
         '        src_ip, region%s nodrop' % ((", %s" % alias) if jpath else ""),
         "| where %s" % " and ".join(where),
-        '| parse regex field=raw_arn "assumed-role/(?<role>[^/]+)/(?<session>.+)$" nodrop',
-        '| if(id_type = "AssumedRole" and !isBlank(issuer_arn), issuer_arn, raw_arn) as principal',
+        "// normalize principal: assumed-role sessions collapse to the role (sessionIssuer); else the identity itself",
+        "| if(isBlank(issuer_arn), raw_arn, issuer_arn) as principal",
     ]
     if jpath:
         L.append('| if(isBlank(%s), "unknown", %s) as %s' % (alias, alias, alias))

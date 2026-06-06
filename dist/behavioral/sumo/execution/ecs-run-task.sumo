@@ -2,16 +2,15 @@
 // first time this principal is seen with requestParameters.taskDefinition in 90 days
 // Run over a 90-DAY range; each row is a (principal, task_def) pair first seen in the last 24h.
 _sourceCategory=*cloudtrail* ("RunTask" OR "StartTask")
-| json field=_raw "eventName", "eventSource", "errorCode",
-        "userIdentity.type", "userIdentity.arn",
+| json field=_raw "eventName", "eventSource", "errorCode", "userIdentity.arn",
         "userIdentity.sessionContext.sessionIssuer.arn",
         "sourceIPAddress", "awsRegion",
         "requestParameters.taskDefinition"
-     as eventName, eventSource, errorCode, id_type, raw_arn, issuer_arn,
+     as eventName, eventSource, errorCode, raw_arn, issuer_arn,
         src_ip, region, task_def nodrop
 | where eventSource = "ecs.amazonaws.com" and (eventName in ("RunTask", "StartTask")) and isBlank(errorCode)
-| parse regex field=raw_arn "assumed-role/(?<role>[^/]+)/(?<session>.+)$" nodrop
-| if(id_type = "AssumedRole" and !isBlank(issuer_arn), issuer_arn, raw_arn) as principal
+// normalize principal: assumed-role sessions collapse to the role (sessionIssuer); else the identity itself
+| if(isBlank(issuer_arn), raw_arn, issuer_arn) as principal
 | if(isBlank(task_def), "unknown", task_def) as task_def
 | min(_messagetime) as first_seen_ms, max(_messagetime) as last_seen_ms, count as events,
       count_distinct(src_ip) as distinct_source_ips, count_distinct(region) as distinct_regions

@@ -357,13 +357,13 @@ complete one is generated for **every behavioral rule** in
 ```
 // Run over a 90-DAY range; rows are (principal, function) pairs first seen in the last 24h.
 _sourceCategory=*cloudtrail* ("Invoke")
-| json field=_raw "eventName", "eventSource", "errorCode", "userIdentity.type", "userIdentity.arn",
+| json field=_raw "eventName", "eventSource", "errorCode", "userIdentity.arn",
         "userIdentity.sessionContext.sessionIssuer.arn", "requestParameters.functionName",
         "sourceIPAddress", "awsRegion"
-     as eventName, eventSource, errorCode, id_type, raw_arn, issuer_arn, function_name, src_ip, region nodrop
+     as eventName, eventSource, errorCode, raw_arn, issuer_arn, function_name, src_ip, region nodrop
 | where eventSource = "lambda.amazonaws.com" and eventName = "Invoke" and isBlank(errorCode)
-| parse regex field=raw_arn "assumed-role/(?<role>[^/]+)/(?<session>.+)$" nodrop
-| if(id_type = "AssumedRole" and !isBlank(issuer_arn), issuer_arn, raw_arn) as principal
+// normalize principal: assumed-role sessions collapse to the role (sessionIssuer); else the identity
+| if(isBlank(issuer_arn), raw_arn, issuer_arn) as principal
 | if(isBlank(function_name), "unknown", function_name) as function_name
 | replace(function_name, /^arn:aws:lambda:[^:]+:\d+:function:/, "") as function_name
 | min(_messagetime) as first_seen_ms, max(_messagetime) as last_seen_ms, count as events,

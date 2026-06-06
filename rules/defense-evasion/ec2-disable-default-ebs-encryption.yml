@@ -1,0 +1,24 @@
+title: AWS EC2 Default EBS Encryption Disabled
+id: 6848fb7d-6969-4ac0-8243-979745988a0e
+status: experimental
+description: Detects disabling of account/region default EBS encryption (DisableEbsEncryptionByDefault), weakening data-at-rest protection for future volumes.
+references:
+- https://attack.mitre.org/techniques/T1562/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: DisableEbsEncryptionByDefault
+    eventSource: ec2.amazonaws.com
+  condition: selection
+falsepositives:
+- Rare, deliberate change to encryption defaults (should be reviewed).
+level: medium
+tier: hunt

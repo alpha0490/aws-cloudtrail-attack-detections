@@ -1,0 +1,28 @@
+title: AWS STS Federated Role Assumption
+id: 88feb8d0-509e-4d19-8031-d455f1276808
+status: experimental
+description: Detects federated role assumption (AssumeRoleWithWebIdentity/AssumeRoleWithSAML). Abuse of a compromised IdP or OIDC trust (e.g. over-permissive GitHub Actions trust) shows up here - correlate the provider and the subject claim.
+references:
+- https://attack.mitre.org/techniques/T1550/001/
+- https://attack.mitre.org/techniques/T1199/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.credential-access
+- attack.t1550.001
+- attack.t1199
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - AssumeRoleWithWebIdentity
+    - AssumeRoleWithSAML
+    eventSource: sts.amazonaws.com
+  condition: selection
+falsepositives:
+- Normal federation / CI-CD OIDC and SSO logins (baseline per provider/role).
+level: low
+tier: hunt

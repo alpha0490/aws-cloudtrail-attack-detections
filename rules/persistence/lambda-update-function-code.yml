@@ -1,0 +1,29 @@
+title: AWS Lambda Function Code Updated
+id: a8d443f8-22ad-4a87-9178-d1fab5157588
+status: experimental
+description: Detects updates to Lambda function code (UpdateFunctionCode). Outside a deploy pipeline this can be a backdoor or supply-chain tamper. (Logged as UpdateFunctionCode20150331/...v2.)
+references:
+- https://attack.mitre.org/techniques/T1525/
+- https://attack.mitre.org/techniques/T1059/009/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1525
+- attack.t1059.009
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - UpdateFunctionCode20150331
+    - UpdateFunctionCode20150331v2
+    - UpdateFunctionCode
+    eventSource: lambda.amazonaws.com
+  condition: selection
+falsepositives:
+- Normal application/IaC deployments. Baseline against your CI/CD principals.
+level: medium
+tier: hunt

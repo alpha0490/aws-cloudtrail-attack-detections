@@ -1,0 +1,28 @@
+title: AWS GuardDuty Findings Suppressed
+id: 06420b68-9315-42f4-8e91-4499f9648c3f
+status: experimental
+description: Detects creation of GuardDuty suppression filters or trusted-IP sets, or archiving findings (CreateFilter, CreateIPSet, UpdateFindingsFeedback) - used to hide attacker activity without disabling GuardDuty outright.
+references:
+- https://attack.mitre.org/techniques/T1562/008/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562.008
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - CreateFilter
+    - UpdateFilter
+    - CreateIPSet
+    - UpdateFindingsFeedback
+    eventSource: guardduty.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate tuning of GuardDuty noise (review the filter/IP set contents).
+level: high
+tier: alert

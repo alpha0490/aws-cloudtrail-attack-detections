@@ -43,18 +43,18 @@ Coverage: ✅ logic-tested in `tests/` · 🟡 rule exists (schema-validated onl
 | `aws.persistence.iam-backdoor-role` | `UpdateAssumeRolePolicy` | privilege-escalation/iam-update-assume-role-policy.yml | ✅ |
 | `aws.persistence.iam-create-admin-user` | `CreateUser` + `AttachUserPolicy` | persistence/iam-create-user.yml + privilege-escalation/iam-attach-administrator-policy.yml | ✅ |
 | `aws.persistence.iam-create-user-login-profile` | `CreateLoginProfile` | persistence/iam-create-login-profile.yml | ✅ |
-| `aws.persistence.lambda-backdoor-function` | `AddPermission*` (resource policy) | persistence/lambda-create-function.yml | 🟡 (different event — see note) |
-| `aws.persistence.rolesanywhere-create-trust-anchor` | `CreateTrustAnchor` | — | ⬜ |
-| `aws.exfiltration.ec2-security-group-open-port-22-ingress` | `AuthorizeSecurityGroupIngress` | — | ⬜ |
+| `aws.persistence.lambda-backdoor-function` | `AddPermission*` (resource policy) | persistence/lambda-add-permission-backdoor.yml | ✅ |
+| `aws.persistence.rolesanywhere-create-trust-anchor` | `CreateTrustAnchor` | persistence/iam-rolesanywhere-create-trust-anchor.yml | ✅ |
+| `aws.exfiltration.ec2-security-group-open-port-22-ingress` | `AuthorizeSecurityGroupIngress` (0.0.0.0/0) | defense-evasion/ec2-authorize-security-group-ingress-world.yml | ✅ |
 
 > ⚠️ **`ec2-launch-unusual-instances`:** our rule is a heuristic keyed on GPU/large instance-type
 > families. Stratus may launch a type outside that list — if so the rule won't fire until you add the
 > type to `requestParameters.instanceType|startswith`. This is the honest limitation of an
 > instance-type heuristic; tune to your environment.
 >
-> **`lambda-backdoor-function`** adds a resource-policy statement (`AddPermission20150331`), which is a
-> *different* event than `CreateFunction`. A dedicated rule for `AddPermission` is a good follow-up
-> (tracked as a gap). The ⬜ rows are real coverage gaps and good first PRs.
+> **`lambda-backdoor-function`** adds a resource-policy statement (`AddPermission20150331`) — detected
+> by the dedicated `lambda-add-permission-backdoor.yml` rule (a `CreateFunction` rule also exists for
+> the create-a-new-backdoor variant).
 
 > Technique IDs reflect the Stratus catalog at time of writing — verify with `stratus list` as the
 > catalog evolves.

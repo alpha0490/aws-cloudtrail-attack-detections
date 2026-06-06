@@ -423,3 +423,160 @@
     event:
       eventSource: lambda.amazonaws.com
       eventName: GetFunction
+
+# --- Coverage-expansion batch (v0.2) ---
+
+- rule: rules/defense-evasion/ec2-authorize-security-group-ingress-world.yml
+  stratus: aws.exfiltration.ec2-security-group-open-port-22-ingress
+  positive:
+    note: SSH opened to the whole internet (0.0.0.0/0)
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: AuthorizeSecurityGroupIngress
+      requestParameters:
+        ipPermissions:
+          items:
+            - ipProtocol: tcp
+              fromPort: 22
+              ipRanges:
+                items:
+                  - cidrIp: "0.0.0.0/0"
+  negative:
+    note: Ingress scoped to a private CIDR (not world-open)
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: AuthorizeSecurityGroupIngress
+      requestParameters:
+        ipPermissions:
+          items:
+            - ipRanges:
+                items:
+                  - cidrIp: "10.0.0.0/8"
+
+- rule: rules/defense-evasion/guardduty-suppress-findings.yml
+  positive:
+    note: GuardDuty suppression filter created
+    event: { eventSource: guardduty.amazonaws.com, eventName: CreateFilter }
+  negative:
+    note: Read-only ListFilters
+    event: { eventSource: guardduty.amazonaws.com, eventName: ListFilters }
+
+- rule: rules/defense-evasion/cloud-security-service-disabled.yml
+  positive:
+    note: Macie disabled
+    event: { eventName: DisableMacie, eventSource: macie2.amazonaws.com }
+  negative:
+    note: Macie enabled (opposite)
+    event: { eventName: EnableMacie, eventSource: macie2.amazonaws.com }
+
+- rule: rules/defense-evasion/s3-disable-bucket-logging.yml
+  positive:
+    note: Bucket access logging changed
+    event: { eventSource: s3.amazonaws.com, eventName: PutBucketLogging }
+  negative:
+    note: Read-only GetBucketLogging
+    event: { eventSource: s3.amazonaws.com, eventName: GetBucketLogging }
+
+- rule: rules/defense-evasion/ec2-disable-default-ebs-encryption.yml
+  positive:
+    note: Default EBS encryption disabled
+    event: { eventSource: ec2.amazonaws.com, eventName: DisableEbsEncryptionByDefault }
+  negative:
+    note: Default EBS encryption enabled (opposite)
+    event: { eventSource: ec2.amazonaws.com, eventName: EnableEbsEncryptionByDefault }
+
+- rule: rules/persistence/iam-rolesanywhere-create-trust-anchor.yml
+  stratus: aws.persistence.rolesanywhere-create-trust-anchor
+  positive:
+    note: Roles Anywhere trust anchor created (cert-based persistence)
+    event: { eventSource: rolesanywhere.amazonaws.com, eventName: CreateTrustAnchor }
+  negative:
+    note: Read-only ListTrustAnchors
+    event: { eventSource: rolesanywhere.amazonaws.com, eventName: ListTrustAnchors }
+
+- rule: rules/persistence/iam-create-saml-oidc-provider.yml
+  positive:
+    note: SAML identity provider created
+    event: { eventSource: iam.amazonaws.com, eventName: CreateSAMLProvider }
+  negative:
+    note: Read-only GetSAMLProvider
+    event: { eventSource: iam.amazonaws.com, eventName: GetSAMLProvider }
+
+- rule: rules/persistence/lambda-add-permission-backdoor.yml
+  stratus: aws.persistence.lambda-backdoor-function
+  positive:
+    note: Lambda resource policy granted (versioned eventName)
+    event: { eventSource: lambda.amazonaws.com, eventName: AddPermission20150331 }
+  negative:
+    note: Permission removed (opposite)
+    event: { eventSource: lambda.amazonaws.com, eventName: RemovePermission20150331 }
+
+- rule: rules/persistence/lambda-update-function-code.yml
+  positive:
+    note: Lambda code updated outside a pipeline
+    event: { eventSource: lambda.amazonaws.com, eventName: UpdateFunctionCode20150331v2 }
+  negative:
+    note: Read-only GetFunction
+    event: { eventSource: lambda.amazonaws.com, eventName: GetFunction }
+
+- rule: rules/persistence/iam-create-policy.yml
+  positive:
+    note: New customer-managed policy created
+    event: { eventSource: iam.amazonaws.com, eventName: CreatePolicy }
+  negative:
+    note: Read-only GetPolicy
+    event: { eventSource: iam.amazonaws.com, eventName: GetPolicy }
+
+- rule: rules/persistence/sso-permission-set-assignment.yml
+  positive:
+    note: Identity Center account assignment created
+    event: { eventSource: sso.amazonaws.com, eventName: CreateAccountAssignment }
+  negative:
+    note: Read-only ListPermissionSets
+    event: { eventSource: sso.amazonaws.com, eventName: ListPermissionSets }
+
+- rule: rules/execution/ec2-modify-instance-attribute-userdata.yml
+  positive:
+    note: Instance user data modified (runs as root on boot)
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: ModifyInstanceAttribute
+      requestParameters: { userData: "<base64 payload>" }
+  negative:
+    note: ModifyInstanceAttribute on a different attribute (no userData)
+    event:
+      eventSource: ec2.amazonaws.com
+      eventName: ModifyInstanceAttribute
+      requestParameters: { disableApiTermination: { value: true } }
+
+- rule: rules/credential-access/kms-create-grant.yml
+  positive:
+    note: KMS grant created (out-of-band key access)
+    event: { eventSource: kms.amazonaws.com, eventName: CreateGrant }
+  negative:
+    note: Read-only ListGrants
+    event: { eventSource: kms.amazonaws.com, eventName: ListGrants }
+
+- rule: rules/credential-access/secretsmanager-put-resource-policy.yml
+  positive:
+    note: Secret resource policy modified (possible backdoor)
+    event: { eventSource: secretsmanager.amazonaws.com, eventName: PutResourcePolicy }
+  negative:
+    note: Read-only GetResourcePolicy
+    event: { eventSource: secretsmanager.amazonaws.com, eventName: GetResourcePolicy }
+
+- rule: rules/credential-access/sts-assume-role-with-web-identity.yml
+  positive:
+    note: Federated (OIDC) role assumption
+    event: { eventSource: sts.amazonaws.com, eventName: AssumeRoleWithWebIdentity }
+  negative:
+    note: Plain AssumeRole (covered by a different rule; not in this list)
+    event: { eventSource: sts.amazonaws.com, eventName: AssumeRole }
+
+- rule: rules/collection/ec2-create-image.yml
+  positive:
+    note: AMI created from a running instance
+    event: { eventSource: ec2.amazonaws.com, eventName: CreateImage }
+  negative:
+    note: Read-only DescribeImages
+    event: { eventSource: ec2.amazonaws.com, eventName: DescribeImages }

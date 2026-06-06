@@ -1,0 +1,24 @@
+title: AWS S3 Bucket Access Logging Changed
+id: b5dc4fda-2564-4313-82a9-d134f7603de0
+status: experimental
+description: Detects changes to S3 server access logging (PutBucketLogging). Attackers disable logging by submitting an empty LoggingEnabled - inspect requestParameters to confirm logging was removed vs. enabled.
+references:
+- https://attack.mitre.org/techniques/T1562/008/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562.008
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: PutBucketLogging
+    eventSource: s3.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate logging configuration changes (including enabling logging).
+level: medium
+tier: hunt

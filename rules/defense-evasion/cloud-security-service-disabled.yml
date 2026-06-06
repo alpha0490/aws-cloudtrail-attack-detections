@@ -1,0 +1,28 @@
+title: AWS Cloud Security Service Disabled
+id: 1e12e77a-e686-4602-92e8-e4480021b744
+status: experimental
+description: Detects disabling of additional AWS security services - Macie (DisableMacie), IAM Access Analyzer (DeleteAnalyzer), Inspector (Disable), Security Hub admin (DisableOrganizationAdminAccount). Matched by eventName across services.
+references:
+- https://attack.mitre.org/techniques/T1562/008/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562.008
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - DisableMacie
+    - DeleteAnalyzer
+    - DisableOrganizationAdminAccount
+    - DisableSecurityHub
+    - DisableImportFindingsForProduct
+  condition: selection
+falsepositives:
+- Planned decommissioning of a security service.
+level: high
+tier: alert

@@ -1,0 +1,26 @@
+title: AWS IAM Roles Anywhere Trust Anchor Created
+id: e5ba173a-ccf9-4324-aa06-d609c2bc351e
+status: experimental
+description: Detects creation of an IAM Roles Anywhere trust anchor or profile (CreateTrustAnchor/CreateProfile). This lets an external X.509 certificate obtain AWS credentials - a powerful, often-overlooked persistence mechanism.
+references:
+- https://attack.mitre.org/techniques/T1098/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1098
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - CreateTrustAnchor
+    - CreateProfile
+    eventSource: rolesanywhere.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate onboarding of certificate-based workloads (should be rare and reviewed).
+level: high
+tier: alert

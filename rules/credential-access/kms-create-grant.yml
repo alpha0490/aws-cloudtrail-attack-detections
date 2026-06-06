@@ -1,0 +1,26 @@
+title: AWS KMS Grant Created
+id: a586d544-03b0-4b48-a78e-716a32f1520e
+status: experimental
+description: Detects creation of a KMS grant (CreateGrant). A grant can give another principal decrypt/encrypt permission on a key out-of-band of the key policy - useful for stealthy access to protected data.
+references:
+- https://attack.mitre.org/techniques/T1098/
+- https://attack.mitre.org/techniques/T1555/006/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.credential-access
+- attack.t1098
+- attack.t1555.006
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: CreateGrant
+    eventSource: kms.amazonaws.com
+  condition: selection
+falsepositives:
+- Applications and AWS services that legitimately create grants (e.g. EBS, RDS).
+level: medium
+tier: hunt

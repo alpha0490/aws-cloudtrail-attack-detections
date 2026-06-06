@@ -25,6 +25,22 @@
       "enabled": true
     },
     {
+      "techniqueID": "T1059.009",
+      "tactic": "execution",
+      "score": 1,
+      "color": "#e6550d",
+      "comment": "1 rule(s): ec2-modify-instance-attribute-userdata.yml",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1059.009",
+      "tactic": "persistence",
+      "score": 1,
+      "color": "#3182bd",
+      "comment": "1 rule(s): lambda-update-function-code.yml",
+      "enabled": true
+    },
+    {
       "techniqueID": "T1069.003",
       "tactic": "discovery",
       "score": 2,
@@ -66,6 +82,14 @@
     },
     {
       "techniqueID": "T1098",
+      "tactic": "credential-access",
+      "score": 2,
+      "color": "#e6550d",
+      "comment": "2 rule(s): kms-create-grant.yml, secretsmanager-put-resource-policy.yml",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1098",
       "tactic": "initial-access",
       "score": 1,
       "color": "#3182bd",
@@ -75,9 +99,9 @@
     {
       "techniqueID": "T1098",
       "tactic": "persistence",
-      "score": 4,
+      "score": 7,
       "color": "#e6550d",
-      "comment": "4 rule(s): ec2-create-key-pair.yml, iam-create-login-profile.yml, iam-update-login-profile.yml, lambda-create-function.yml",
+      "comment": "7 rule(s): ec2-create-key-pair.yml, iam-create-login-profile.yml, iam-rolesanywhere-create-trust-anchor.yml, iam-update-login-profile.yml, lambda-add-permission-backdoor.yml, lambda-create-function.yml, sso-permission-set-assignment.yml",
       "enabled": true
     },
     {
@@ -99,9 +123,9 @@
     {
       "techniqueID": "T1098.003",
       "tactic": "persistence",
-      "score": 2,
+      "score": 3,
       "color": "#3182bd",
-      "comment": "2 rule(s): iam-attach-user-policy.yml, iam-put-user-policy.yml",
+      "comment": "3 rule(s): iam-attach-user-policy.yml, iam-create-policy.yml, iam-put-user-policy.yml",
       "enabled": true
     },
     {
@@ -138,10 +162,26 @@
     },
     {
       "techniqueID": "T1199",
+      "tactic": "credential-access",
+      "score": 1,
+      "color": "#3182bd",
+      "comment": "1 rule(s): sts-assume-role-with-web-identity.yml",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1199",
       "tactic": "initial-access",
       "score": 1,
       "color": "#3182bd",
       "comment": "1 rule(s): accept-organization-handshake.yml",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1199",
+      "tactic": "persistence",
+      "score": 1,
+      "color": "#e6550d",
+      "comment": "1 rule(s): iam-create-saml-oidc-provider.yml",
       "enabled": true
     },
     {
@@ -179,9 +219,9 @@
     {
       "techniqueID": "T1525",
       "tactic": "persistence",
-      "score": 2,
+      "score": 3,
       "color": "#3182bd",
-      "comment": "2 rule(s): ec2-register-image.yml, ecr-put-image.yml",
+      "comment": "3 rule(s): ec2-register-image.yml, ecr-put-image.yml, lambda-update-function-code.yml",
       "enabled": true
     },
     {
@@ -203,9 +243,9 @@
     {
       "techniqueID": "T1530",
       "tactic": "collection",
-      "score": 5,
+      "score": 6,
       "color": "#3182bd",
-      "comment": "5 rule(s): dynamodb-export-table.yml, ec2-create-snapshot.yml, rds-create-db-snapshot.yml, s3-get-object.yml, s3-mass-list-objects.yml",
+      "comment": "6 rule(s): dynamodb-export-table.yml, ec2-create-image.yml, ec2-create-snapshot.yml, rds-create-db-snapshot.yml, s3-get-object.yml, s3-mass-list-objects.yml",
       "enabled": true
     },
     {
@@ -266,6 +306,14 @@
     },
     {
       "techniqueID": "T1550.001",
+      "tactic": "credential-access",
+      "score": 1,
+      "color": "#3182bd",
+      "comment": "1 rule(s): sts-assume-role-with-web-identity.yml",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1550.001",
       "tactic": "initial-access",
       "score": 1,
       "color": "#3182bd",
@@ -283,9 +331,17 @@
     {
       "techniqueID": "T1555.006",
       "tactic": "credential-access",
-      "score": 4,
+      "score": 5,
       "color": "#3182bd",
-      "comment": "4 rule(s): kms-decrypt.yml, secretsmanager-batch-get-secret-value.yml, secretsmanager-get-secret-value.yml, ssm-get-parameter-decrypt.yml",
+      "comment": "5 rule(s): kms-create-grant.yml, kms-decrypt.yml, secretsmanager-batch-get-secret-value.yml, secretsmanager-get-secret-value.yml, ssm-get-parameter-decrypt.yml",
+      "enabled": true
+    },
+    {
+      "techniqueID": "T1556",
+      "tactic": "persistence",
+      "score": 1,
+      "color": "#e6550d",
+      "comment": "1 rule(s): iam-create-saml-oidc-provider.yml",
       "enabled": true
     },
     {
@@ -307,9 +363,9 @@
     {
       "techniqueID": "T1562",
       "tactic": "defense-evasion",
-      "score": 2,
+      "score": 3,
       "color": "#e6550d",
-      "comment": "2 rule(s): organizations-leave-or-remove.yml, s3-disable-public-access-block.yml",
+      "comment": "3 rule(s): ec2-disable-default-ebs-encryption.yml, organizations-leave-or-remove.yml, s3-disable-public-access-block.yml",
       "enabled": true
     },
     {
@@ -321,11 +377,19 @@
       "enabled": true
     },
     {
+      "techniqueID": "T1562.007",
+      "tactic": "defense-evasion",
+      "score": 1,
+      "color": "#e6550d",
+      "comment": "1 rule(s): ec2-authorize-security-group-ingress-world.yml",
+      "enabled": true
+    },
+    {
       "techniqueID": "T1562.008",
       "tactic": "defense-evasion",
-      "score": 9,
+      "score": 12,
       "color": "#e6550d",
-      "comment": "9 rule(s): cloudtrail-delete-trail.yml, cloudtrail-put-event-selectors.yml, cloudtrail-stop-logging.yml, cloudtrail-update-trail.yml, cloudwatch-logs-deleted.yml, config-disable-recorder.yml, guardduty-disable.yml, securityhub-disable.yml, vpc-delete-flow-logs.yml",
+      "comment": "12 rule(s): cloud-security-service-disabled.yml, cloudtrail-delete-trail.yml, cloudtrail-put-event-selectors.yml, cloudtrail-stop-logging.yml, cloudtrail-update-trail.yml, cloudwatch-logs-deleted.yml, config-disable-recorder.yml, guardduty-disable.yml, guardduty-suppress-findings.yml, s3-disable-bucket-logging.yml, securityhub-disable.yml, vpc-delete-flow-logs.yml",
       "enabled": true
     },
     {
@@ -371,9 +435,9 @@
     {
       "techniqueID": "T1648",
       "tactic": "execution",
-      "score": 2,
-      "color": "#3182bd",
-      "comment": "2 rule(s): ecs-run-task.yml, lambda-invoke.yml",
+      "score": 3,
+      "color": "#e6550d",
+      "comment": "3 rule(s): ec2-modify-instance-attribute-userdata.yml, ecs-run-task.yml, lambda-invoke.yml",
       "enabled": true
     },
     {
@@ -399,7 +463,7 @@
       "#3182bd"
     ],
     "minValue": 0,
-    "maxValue": 9
+    "maxValue": 12
   },
   "legendItems": [
     {

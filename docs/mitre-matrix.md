@@ -2,9 +2,9 @@
 
 Coverage of the ATT&CK Cloud (IaaS) matrix by the AWS CloudTrail Sigma rules in this repo. Generated from the rules by `scripts/build_docs.py` — do not edit by hand.
 
-**Coverage:** 98 rules across 11 tactics and 39 ATT&CK techniques/sub-techniques.
+**Coverage:** 114 rules across 11 tactics and 42 ATT&CK techniques/sub-techniques.
 
-**Deploy tiers:** 28 `alert` (page on sight) · 70 `hunt` (correlate / baseline first — see [enrichment-and-baselining.md](enrichment-and-baselining.md)).
+**Deploy tiers:** 37 `alert` (page on sight) · 77 `hunt` (correlate / baseline first — see [enrichment-and-baselining.md](enrichment-and-baselining.md)).
 
 Legend: ✅ covered (rule exists) · ☐ TODO (gap, contributions welcome).
 
@@ -25,6 +25,7 @@ Legend: ✅ covered (rule exists) · ☐ TODO (gap, contributions welcome).
 
 | | ATT&CK ID | Technique | Rules |
 |---|---|---|---|
+| ✅ | [T1059.009](https://attack.mitre.org/techniques/T1059/009/) |  | [`ec2-modify-instance-attribute-userdata.yml`](../rules/execution/ec2-modify-instance-attribute-userdata.yml) |
 | ✅ | [T1610](https://attack.mitre.org/techniques/T1610/) | Deploy Container | [`ecs-run-task.yml`](../rules/execution/ecs-run-task.yml) |
 | ✅ | [T1648](https://attack.mitre.org/techniques/T1648/) | Serverless Execution | [`lambda-invoke.yml`](../rules/execution/lambda-invoke.yml) |
 | ✅ | [T1651](https://attack.mitre.org/techniques/T1651/) | Cloud Administration Command | [`ssm-create-document.yml`](../rules/execution/ssm-create-document.yml), [`ssm-send-command.yml`](../rules/execution/ssm-send-command.yml), [`ssm-start-session.yml`](../rules/execution/ssm-start-session.yml) |
@@ -33,11 +34,12 @@ Legend: ✅ covered (rule exists) · ☐ TODO (gap, contributions welcome).
 
 | | ATT&CK ID | Technique | Rules |
 |---|---|---|---|
-| ✅ | [T1098](https://attack.mitre.org/techniques/T1098/) | Account Manipulation | [`ec2-create-key-pair.yml`](../rules/persistence/ec2-create-key-pair.yml), [`iam-create-login-profile.yml`](../rules/persistence/iam-create-login-profile.yml), [`iam-update-login-profile.yml`](../rules/persistence/iam-update-login-profile.yml), [`lambda-create-function.yml`](../rules/persistence/lambda-create-function.yml) |
+| ✅ | [T1098](https://attack.mitre.org/techniques/T1098/) | Account Manipulation | [`ec2-create-key-pair.yml`](../rules/persistence/ec2-create-key-pair.yml), [`iam-create-login-profile.yml`](../rules/persistence/iam-create-login-profile.yml), [`iam-rolesanywhere-create-trust-anchor.yml`](../rules/persistence/iam-rolesanywhere-create-trust-anchor.yml), [`iam-update-login-profile.yml`](../rules/persistence/iam-update-login-profile.yml), [`lambda-add-permission-backdoor.yml`](../rules/persistence/lambda-add-permission-backdoor.yml), [`lambda-create-function.yml`](../rules/persistence/lambda-create-function.yml), [`sso-permission-set-assignment.yml`](../rules/persistence/sso-permission-set-assignment.yml) |
 | ✅ | [T1098.001](https://attack.mitre.org/techniques/T1098/001/) | Additional Cloud Credentials | [`iam-create-access-key.yml`](../rules/persistence/iam-create-access-key.yml), [`iam-create-service-specific-credential.yml`](../rules/persistence/iam-create-service-specific-credential.yml) |
-| ✅ | [T1098.003](https://attack.mitre.org/techniques/T1098/003/) | Additional Cloud Roles | [`iam-attach-user-policy.yml`](../rules/persistence/iam-attach-user-policy.yml), [`iam-put-user-policy.yml`](../rules/persistence/iam-put-user-policy.yml) |
+| ✅ | [T1098.003](https://attack.mitre.org/techniques/T1098/003/) | Additional Cloud Roles | [`iam-attach-user-policy.yml`](../rules/persistence/iam-attach-user-policy.yml), [`iam-create-policy.yml`](../rules/persistence/iam-create-policy.yml), [`iam-put-user-policy.yml`](../rules/persistence/iam-put-user-policy.yml) |
 | ✅ | [T1136.003](https://attack.mitre.org/techniques/T1136/003/) | Cloud Account | [`iam-create-user.yml`](../rules/persistence/iam-create-user.yml) |
-| ✅ | [T1525](https://attack.mitre.org/techniques/T1525/) | Implant Internal Image | [`ec2-register-image.yml`](../rules/persistence/ec2-register-image.yml), [`ecr-put-image.yml`](../rules/persistence/ecr-put-image.yml) |
+| ✅ | [T1525](https://attack.mitre.org/techniques/T1525/) | Implant Internal Image | [`ec2-register-image.yml`](../rules/persistence/ec2-register-image.yml), [`ecr-put-image.yml`](../rules/persistence/ecr-put-image.yml), [`lambda-update-function-code.yml`](../rules/persistence/lambda-update-function-code.yml) |
+| ✅ | [T1556](https://attack.mitre.org/techniques/T1556/) |  | [`iam-create-saml-oidc-provider.yml`](../rules/persistence/iam-create-saml-oidc-provider.yml) |
 | ✅ | [T1556.006](https://attack.mitre.org/techniques/T1556/006/) | Multi-Factor Authentication | [`iam-create-virtual-mfa-device.yml`](../rules/persistence/iam-create-virtual-mfa-device.yml), [`iam-enable-mfa-device.yml`](../rules/persistence/iam-enable-mfa-device.yml) |
 
 ### Privilege Escalation ([TA0004](https://attack.mitre.org/tactics/TA0004/))
@@ -52,15 +54,18 @@ Legend: ✅ covered (rule exists) · ☐ TODO (gap, contributions welcome).
 | | ATT&CK ID | Technique | Rules |
 |---|---|---|---|
 | ✅ | [T1556.006](https://attack.mitre.org/techniques/T1556/006/) | Multi-Factor Authentication | [`iam-deactivate-mfa-device.yml`](../rules/defense-evasion/iam-deactivate-mfa-device.yml) |
-| ✅ | [T1562](https://attack.mitre.org/techniques/T1562/) | Impair Defenses | [`organizations-leave-or-remove.yml`](../rules/defense-evasion/organizations-leave-or-remove.yml), [`s3-disable-public-access-block.yml`](../rules/defense-evasion/s3-disable-public-access-block.yml) |
+| ✅ | [T1562](https://attack.mitre.org/techniques/T1562/) | Impair Defenses | [`ec2-disable-default-ebs-encryption.yml`](../rules/defense-evasion/ec2-disable-default-ebs-encryption.yml), [`organizations-leave-or-remove.yml`](../rules/defense-evasion/organizations-leave-or-remove.yml), [`s3-disable-public-access-block.yml`](../rules/defense-evasion/s3-disable-public-access-block.yml) |
 | ✅ | [T1562.001](https://attack.mitre.org/techniques/T1562/001/) | Disable or Modify Tools | [`cloudwatch-delete-alarms.yml`](../rules/defense-evasion/cloudwatch-delete-alarms.yml), [`waf-delete.yml`](../rules/defense-evasion/waf-delete.yml) |
-| ✅ | [T1562.008](https://attack.mitre.org/techniques/T1562/008/) | Disable or Modify Cloud Logs | [`cloudtrail-delete-trail.yml`](../rules/defense-evasion/cloudtrail-delete-trail.yml), [`cloudtrail-put-event-selectors.yml`](../rules/defense-evasion/cloudtrail-put-event-selectors.yml), [`cloudtrail-stop-logging.yml`](../rules/defense-evasion/cloudtrail-stop-logging.yml), [`cloudtrail-update-trail.yml`](../rules/defense-evasion/cloudtrail-update-trail.yml), [`cloudwatch-logs-deleted.yml`](../rules/defense-evasion/cloudwatch-logs-deleted.yml), [`config-disable-recorder.yml`](../rules/defense-evasion/config-disable-recorder.yml), [`guardduty-disable.yml`](../rules/defense-evasion/guardduty-disable.yml), [`securityhub-disable.yml`](../rules/defense-evasion/securityhub-disable.yml), [`vpc-delete-flow-logs.yml`](../rules/defense-evasion/vpc-delete-flow-logs.yml) |
+| ✅ | [T1562.007](https://attack.mitre.org/techniques/T1562/007/) |  | [`ec2-authorize-security-group-ingress-world.yml`](../rules/defense-evasion/ec2-authorize-security-group-ingress-world.yml) |
+| ✅ | [T1562.008](https://attack.mitre.org/techniques/T1562/008/) | Disable or Modify Cloud Logs | [`cloud-security-service-disabled.yml`](../rules/defense-evasion/cloud-security-service-disabled.yml), [`cloudtrail-delete-trail.yml`](../rules/defense-evasion/cloudtrail-delete-trail.yml), [`cloudtrail-put-event-selectors.yml`](../rules/defense-evasion/cloudtrail-put-event-selectors.yml), [`cloudtrail-stop-logging.yml`](../rules/defense-evasion/cloudtrail-stop-logging.yml), [`cloudtrail-update-trail.yml`](../rules/defense-evasion/cloudtrail-update-trail.yml), [`cloudwatch-logs-deleted.yml`](../rules/defense-evasion/cloudwatch-logs-deleted.yml), [`config-disable-recorder.yml`](../rules/defense-evasion/config-disable-recorder.yml), [`guardduty-disable.yml`](../rules/defense-evasion/guardduty-disable.yml), [`guardduty-suppress-findings.yml`](../rules/defense-evasion/guardduty-suppress-findings.yml), [`s3-disable-bucket-logging.yml`](../rules/defense-evasion/s3-disable-bucket-logging.yml), [`securityhub-disable.yml`](../rules/defense-evasion/securityhub-disable.yml), [`vpc-delete-flow-logs.yml`](../rules/defense-evasion/vpc-delete-flow-logs.yml) |
 
 ### Credential Access ([TA0006](https://attack.mitre.org/tactics/TA0006/))
 
 | | ATT&CK ID | Technique | Rules |
 |---|---|---|---|
+| ✅ | [T1098](https://attack.mitre.org/techniques/T1098/) | Account Manipulation | [`kms-create-grant.yml`](../rules/credential-access/kms-create-grant.yml), [`secretsmanager-put-resource-policy.yml`](../rules/credential-access/secretsmanager-put-resource-policy.yml) |
 | ✅ | [T1528](https://attack.mitre.org/techniques/T1528/) | Steal Application Access Token | [`sts-get-federation-token.yml`](../rules/credential-access/sts-get-federation-token.yml), [`sts-get-session-token.yml`](../rules/credential-access/sts-get-session-token.yml) |
+| ✅ | [T1550.001](https://attack.mitre.org/techniques/T1550/001/) | Application Access Token | [`sts-assume-role-with-web-identity.yml`](../rules/credential-access/sts-assume-role-with-web-identity.yml) |
 | ✅ | [T1552](https://attack.mitre.org/techniques/T1552/) | Unsecured Credentials | [`ec2-get-password-data.yml`](../rules/credential-access/ec2-get-password-data.yml), [`rds-download-db-log.yml`](../rules/credential-access/rds-download-db-log.yml) |
 | ✅ | [T1555.006](https://attack.mitre.org/techniques/T1555/006/) | Cloud Secrets Management Stores | [`kms-decrypt.yml`](../rules/credential-access/kms-decrypt.yml), [`secretsmanager-batch-get-secret-value.yml`](../rules/credential-access/secretsmanager-batch-get-secret-value.yml), [`secretsmanager-get-secret-value.yml`](../rules/credential-access/secretsmanager-get-secret-value.yml), [`ssm-get-parameter-decrypt.yml`](../rules/credential-access/ssm-get-parameter-decrypt.yml) |
 
@@ -83,7 +88,7 @@ Legend: ✅ covered (rule exists) · ☐ TODO (gap, contributions welcome).
 
 | | ATT&CK ID | Technique | Rules |
 |---|---|---|---|
-| ✅ | [T1530](https://attack.mitre.org/techniques/T1530/) | Data from Cloud Storage | [`dynamodb-export-table.yml`](../rules/collection/dynamodb-export-table.yml), [`ec2-create-snapshot.yml`](../rules/collection/ec2-create-snapshot.yml), [`rds-create-db-snapshot.yml`](../rules/collection/rds-create-db-snapshot.yml), [`s3-get-object.yml`](../rules/collection/s3-get-object.yml), [`s3-mass-list-objects.yml`](../rules/collection/s3-mass-list-objects.yml) |
+| ✅ | [T1530](https://attack.mitre.org/techniques/T1530/) | Data from Cloud Storage | [`dynamodb-export-table.yml`](../rules/collection/dynamodb-export-table.yml), [`ec2-create-image.yml`](../rules/collection/ec2-create-image.yml), [`ec2-create-snapshot.yml`](../rules/collection/ec2-create-snapshot.yml), [`rds-create-db-snapshot.yml`](../rules/collection/rds-create-db-snapshot.yml), [`s3-get-object.yml`](../rules/collection/s3-get-object.yml), [`s3-mass-list-objects.yml`](../rules/collection/s3-mass-list-objects.yml) |
 
 ### Exfiltration ([TA0010](https://attack.mitre.org/tactics/TA0010/))
 

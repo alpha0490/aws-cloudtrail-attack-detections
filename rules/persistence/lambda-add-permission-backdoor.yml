@@ -1,0 +1,27 @@
+title: AWS Lambda Resource Policy Modified
+id: 2b7cec4e-d68d-4dc8-a785-782f172bcfde
+status: experimental
+description: Detects changes to a Lambda function's resource policy (AddPermission). Granting invoke/management permission to an external account or '*' backdoors the function. Inspect requestParameters.principal. (Logged as AddPermission20150331/...v2.)
+references:
+- https://attack.mitre.org/techniques/T1098/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1098
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - AddPermission20150331
+    - AddPermission20150331v2
+    - AddPermission
+    eventSource: lambda.amazonaws.com
+  condition: selection
+falsepositives:
+- Legitimate cross-service or cross-account invoke grants (allowlist known principals).
+level: high
+tier: alert

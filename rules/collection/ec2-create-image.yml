@@ -1,0 +1,24 @@
+title: AWS EC2 AMI Created From Instance
+id: c9039f3e-361c-45de-99da-2b8e2b8e75ce
+status: experimental
+description: Detects creation of an AMI from a running instance (CreateImage). Captures the instance's disk (and any secrets on it); often paired with ModifyImageAttribute to share the image out.
+references:
+- https://attack.mitre.org/techniques/T1530/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.collection
+- attack.t1530
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: CreateImage
+    eventSource: ec2.amazonaws.com
+  condition: selection
+falsepositives:
+- Image-bakery and backup workflows.
+level: low
+tier: hunt

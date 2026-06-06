@@ -1,0 +1,29 @@
+title: AWS IAM Federation Provider Created or Modified
+id: b414ddea-e5c4-445c-8d09-8e13c1c9644d
+status: experimental
+description: Detects creation/modification of a SAML or OIDC identity provider (CreateSAMLProvider, UpdateSAMLProvider, CreateOpenIDConnectProvider). A rogue federation provider lets an attacker mint federated access into the account.
+references:
+- https://attack.mitre.org/techniques/T1556/
+- https://attack.mitre.org/techniques/T1199/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1556
+- attack.t1199
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - CreateSAMLProvider
+    - UpdateSAMLProvider
+    - CreateOpenIDConnectProvider
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Planned SSO/federation setup by the identity team.
+level: high
+tier: alert

@@ -1,0 +1,27 @@
+title: AWS EC2 Instance User Data Modified
+id: f1079b9b-a634-44f0-ae06-5837204be9aa
+status: experimental
+description: Detects modification of an EC2 instance's user data (ModifyInstanceAttribute with userData). User data runs as root on next boot - a stealthy code-execution and persistence path. Pair with a subsequent stop/start of the instance.
+references:
+- https://attack.mitre.org/techniques/T1059/009/
+- https://attack.mitre.org/techniques/T1648/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.execution
+- attack.t1059.009
+- attack.t1648
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: ModifyInstanceAttribute
+    eventSource: ec2.amazonaws.com
+    requestParameters.userData|exists: true
+  condition: selection
+falsepositives:
+- Legitimate re-configuration of instance bootstrap (rare on running instances).
+level: high
+tier: alert

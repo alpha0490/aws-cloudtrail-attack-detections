@@ -1,0 +1,25 @@
+title: AWS Security Group Opened to the Internet
+id: a4bf2dfd-dc2d-4453-a363-7f6ac673757a
+status: experimental
+description: Detects a security-group ingress rule that allows traffic from anywhere (0.0.0.0/0) - e.g. exposing SSH/RDP/databases. Inspect requestParameters for the CIDR and port; also check ::/0 for IPv6.
+references:
+- https://attack.mitre.org/techniques/T1562/007/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.defense-evasion
+- attack.t1562.007
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: AuthorizeSecurityGroupIngress
+    eventSource: ec2.amazonaws.com
+    requestParameters.ipPermissions.items.ipRanges.items.cidrIp: 0.0.0.0/0
+  condition: selection
+falsepositives:
+- Deliberate exposure of a public-facing service (should be reviewed and tightly scoped).
+level: high
+tier: alert

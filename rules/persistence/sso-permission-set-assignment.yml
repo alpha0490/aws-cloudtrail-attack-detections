@@ -1,0 +1,28 @@
+title: AWS IAM Identity Center Permission Set or Assignment Created
+id: 8ad464be-b1a1-4da6-b129-e79c79252254
+status: experimental
+description: Detects creation of IAM Identity Center (SSO) permission sets or account assignments (CreatePermissionSet, CreateAccountAssignment, AttachManagedPolicyToPermissionSet) - a direct grant of standing access across accounts.
+references:
+- https://attack.mitre.org/techniques/T1098/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1098
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName:
+    - CreatePermissionSet
+    - CreateAccountAssignment
+    - AttachManagedPolicyToPermissionSet
+    - PutInlinePolicyToPermissionSet
+    eventSource: sso.amazonaws.com
+  condition: selection
+falsepositives:
+- Planned SSO access provisioning by the identity team.
+level: high
+tier: alert

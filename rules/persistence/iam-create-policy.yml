@@ -1,0 +1,24 @@
+title: AWS IAM Customer Managed Policy Created
+id: b0611724-eefc-4570-88d1-ae3f17a7a6d3
+status: experimental
+description: Detects creation of a new customer-managed IAM policy (CreatePolicy). Attackers craft permissive policies to attach later; inspect the policy document for wildcards.
+references:
+- https://attack.mitre.org/techniques/T1098/003/
+- https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html
+author: aws-cloudtrail-attack-detections contributors
+date: '2026-06-05'
+tags:
+- attack.persistence
+- attack.t1098.003
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  selection:
+    eventName: CreatePolicy
+    eventSource: iam.amazonaws.com
+  condition: selection
+falsepositives:
+- Routine policy authoring by platform/IaC.
+level: low
+tier: hunt

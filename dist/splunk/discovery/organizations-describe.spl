@@ -1,1 +1,0 @@
-eventName IN ("DescribeOrganization", "ListAccounts", "ListOrganizationalUnitsForParent") eventSource="organizations.amazonaws.com"

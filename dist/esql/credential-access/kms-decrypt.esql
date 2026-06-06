@@ -1,1 +1,0 @@
-from * metadata _id, _index, _version | where eventName=="Decrypt" and eventSource=="kms.amazonaws.com"

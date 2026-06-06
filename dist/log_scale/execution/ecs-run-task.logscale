@@ -1,1 +1,0 @@
-eventName=/^RunTask$/i or eventName=/^StartTask$/i eventSource=/^ecs\.amazonaws\.com$/i

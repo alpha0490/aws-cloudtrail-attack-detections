@@ -1,1 +1,0 @@
-eventName IN ("DescribeRegions", "ListRegions", "GetRegions")

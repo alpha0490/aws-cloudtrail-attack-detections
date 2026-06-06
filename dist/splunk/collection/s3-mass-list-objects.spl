@@ -1,1 +1,0 @@
-eventName IN ("ListObjects", "ListObjectsV2") eventSource="s3.amazonaws.com"

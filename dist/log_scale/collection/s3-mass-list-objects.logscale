@@ -1,1 +1,0 @@
-eventName=/^ListObjects$/i or eventName=/^ListObjectsV2$/i eventSource=/^s3\.amazonaws\.com$/i

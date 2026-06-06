@@ -1,1 +1,0 @@
-eventName=/^DescribeInstances$/i or eventName=/^DescribeSecurityGroups$/i or eventName=/^DescribeVpcs$/i or eventName=/^DescribeSnapshots$/i or eventName=/^DescribeImages$/i or eventName=/^DescribeAddresses$/i eventSource=/^ec2\.amazonaws\.com$/i

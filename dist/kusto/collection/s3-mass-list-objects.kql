@@ -1,1 +1,0 @@
-(eventName in~ ("ListObjects", "ListObjectsV2")) and eventSource =~ "s3.amazonaws.com"

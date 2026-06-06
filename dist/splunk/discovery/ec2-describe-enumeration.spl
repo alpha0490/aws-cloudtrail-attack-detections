@@ -1,1 +1,0 @@
-eventName IN ("DescribeInstances", "DescribeSecurityGroups", "DescribeVpcs", "DescribeSnapshots", "DescribeImages", "DescribeAddresses") eventSource="ec2.amazonaws.com"

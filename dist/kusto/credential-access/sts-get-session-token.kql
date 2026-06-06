@@ -1,1 +1,0 @@
-eventName =~ "GetSessionToken" and eventSource =~ "sts.amazonaws.com"

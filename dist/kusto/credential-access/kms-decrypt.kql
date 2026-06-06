@@ -1,1 +1,0 @@
-eventName =~ "Decrypt" and eventSource =~ "kms.amazonaws.com"

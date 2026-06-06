@@ -1,1 +1,0 @@
-eventName=/^DescribeRegions$/i or eventName=/^ListRegions$/i or eventName=/^GetRegions$/i

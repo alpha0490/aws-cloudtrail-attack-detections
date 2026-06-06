@@ -1,1 +1,0 @@
-eventName=/^Invoke$/i eventSource=/^lambda\.amazonaws\.com$/i

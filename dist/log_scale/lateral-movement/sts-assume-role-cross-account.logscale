@@ -1,1 +1,0 @@
-eventName=/^AssumeRole$/i or eventName=/^AssumeRoleWithSAML$/i or eventName=/^AssumeRoleWithWebIdentity$/i eventSource=/^sts\.amazonaws\.com$/i

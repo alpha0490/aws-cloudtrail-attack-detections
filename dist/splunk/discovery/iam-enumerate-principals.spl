@@ -1,1 +1,0 @@
-eventName IN ("ListUsers", "ListRoles", "ListGroups", "ListPolicies", "GetAccountSummary") eventSource="iam.amazonaws.com"

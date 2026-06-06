@@ -1,0 +1,122 @@
+rules/collection/s3-get-object.yml:
+  anomaly_key:
+  - userIdentity.arn
+  - requestParameters.bucketName
+  rationale: first time this principal matches userIdentity.arn + requestParameters.bucketName in 90 days
+  window: 90d
+rules/collection/s3-mass-list-objects.yml:
+  anomaly_key:
+  - userIdentity.arn
+  - requestParameters.bucketName
+  rationale: first time this principal matches userIdentity.arn + requestParameters.bucketName in 90 days
+  window: 90d
+rules/credential-access/kms-create-grant.yml:
+  anomaly_key:
+  - userIdentity.arn
+  - requestParameters.keyId
+  rationale: first time this principal matches userIdentity.arn + requestParameters.keyId in 90 days
+  window: 90d
+rules/credential-access/kms-decrypt.yml:
+  anomaly_key:
+  - userIdentity.arn
+  - sourceIPAddress
+  rationale: first time this principal matches userIdentity.arn + sourceIPAddress in 90 days
+  window: 90d
+rules/credential-access/rds-download-db-log.yml:
+  anomaly_key: &id001
+  - userIdentity.arn
+  - eventName
+  rationale: first time this principal matches userIdentity.arn + eventName in 90 days
+  window: 90d
+rules/credential-access/secretsmanager-batch-get-secret-value.yml:
+  anomaly_key: *id001
+  rationale: first time this principal matches userIdentity.arn + eventName in 90 days
+  window: 90d
+rules/credential-access/secretsmanager-get-secret-value.yml:
+  anomaly_key:
+  - userIdentity.arn
+  - requestParameters.secretId
+  rationale: first time this principal matches userIdentity.arn + requestParameters.secretId in 90 days
+  window: 90d
+rules/credential-access/sts-assume-role-with-web-identity.yml:
+  anomaly_key:
+  - userIdentity.arn
+  - requestParameters.roleArn
+  rationale: first time this principal matches userIdentity.arn + requestParameters.roleArn in 90 days
+  window: 90d
+rules/credential-access/sts-get-federation-token.yml:
+  anomaly_key: *id001
+  rationale: first time this principal matches userIdentity.arn + eventName in 90 days
+  window: 90d
+rules/credential-access/sts-get-session-token.yml:
+  anomaly_key: *id001
+  rationale: first time this principal matches userIdentity.arn + eventName in 90 days
+  window: 90d
+rules/discovery/account-describe-regions.yml:
+  anomaly_key: *id001
+  rationale: first time this principal matches userIdentity.arn + eventName in 90 days
+  window: 90d
+rules/discovery/ec2-describe-enumeration.yml:
+  anomaly_key: *id001
+  rationale: first time this principal matches userIdentity.arn + eventName in 90 days
+  window: 90d
+rules/discovery/iam-enumerate-principals.yml:
+  anomaly_key: *id001
+  rationale: first time this principal matches userIdentity.arn + eventName in 90 days
+  window: 90d
+rules/discovery/iam-get-account-authorization-details.yml:
+  anomaly_key: *id001
+  rationale: first time this principal matches userIdentity.arn + eventName in 90 days
+  window: 90d
+rules/discovery/iam-permission-enumeration.yml:
+  anomaly_key: *id001
+  rationale: first time this principal matches userIdentity.arn + eventName in 90 days
+  window: 90d
+rules/discovery/organizations-describe.yml:
+  anomaly_key: *id001
+  rationale: first time this principal matches userIdentity.arn + eventName in 90 days
+  window: 90d
+rules/discovery/s3-list-buckets.yml:
+  anomaly_key: *id001
+  rationale: first time this principal matches userIdentity.arn + eventName in 90 days
+  window: 90d
+rules/discovery/sts-get-caller-identity.yml:
+  anomaly_key: *id001
+  rationale: first time this principal matches userIdentity.arn + eventName in 90 days
+  window: 90d
+rules/execution/ecs-run-task.yml:
+  anomaly_key:
+  - userIdentity.arn
+  - requestParameters.taskDefinition
+  rationale: first time this principal matches userIdentity.arn + requestParameters.taskDefinition in 90 days
+  window: 90d
+rules/execution/lambda-invoke.yml:
+  anomaly_key:
+  - userIdentity.arn
+  - requestParameters.functionName
+  rationale: first time this principal matches userIdentity.arn + requestParameters.functionName in 90 days
+  window: 90d
+rules/execution/ssm-send-command.yml:
+  anomaly_key:
+  - userIdentity.arn
+  - requestParameters.documentName
+  rationale: first time this principal matches userIdentity.arn + requestParameters.documentName in 90 days
+  window: 90d
+rules/execution/ssm-start-session.yml:
+  anomaly_key:
+  - userIdentity.arn
+  - requestParameters.target
+  rationale: first time this principal matches userIdentity.arn + requestParameters.target in 90 days
+  window: 90d
+rules/lateral-movement/sts-assume-role-cross-account.yml:
+  anomaly_key:
+  - userIdentity.arn
+  - requestParameters.roleArn
+  rationale: first time this principal matches userIdentity.arn + requestParameters.roleArn in 90 days
+  window: 90d
+rules/lateral-movement/sts-assume-role.yml:
+  anomaly_key:
+  - userIdentity.arn
+  - requestParameters.roleArn
+  rationale: first time this principal matches userIdentity.arn + requestParameters.roleArn in 90 days
+  window: 90d

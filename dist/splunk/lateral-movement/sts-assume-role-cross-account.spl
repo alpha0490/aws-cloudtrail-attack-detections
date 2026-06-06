@@ -1,1 +1,0 @@
-eventName IN ("AssumeRole", "AssumeRoleWithSAML", "AssumeRoleWithWebIdentity") eventSource="sts.amazonaws.com"

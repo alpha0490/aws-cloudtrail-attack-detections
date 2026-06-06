@@ -1,1 +1,0 @@
-eventName=/^ListAttachedUserPolicies$/i or eventName=/^ListAttachedRolePolicies$/i or eventName=/^ListGroupsForUser$/i or eventName=/^SimulatePrincipalPolicy$/i eventSource=/^iam\.amazonaws\.com$/i

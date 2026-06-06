@@ -1,1 +1,0 @@
-(eventName in~ ("DescribeOrganization", "ListAccounts", "ListOrganizationalUnitsForParent")) and eventSource =~ "organizations.amazonaws.com"

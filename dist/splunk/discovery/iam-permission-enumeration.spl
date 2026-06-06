@@ -1,1 +1,0 @@
-eventName IN ("ListAttachedUserPolicies", "ListAttachedRolePolicies", "ListGroupsForUser", "SimulatePrincipalPolicy") eventSource="iam.amazonaws.com"

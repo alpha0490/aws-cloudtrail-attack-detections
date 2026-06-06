@@ -1,0 +1,18 @@
+{
+  "type": "new_terms",
+  "language": "kuery",
+  "index": [
+    "logs-aws.cloudtrail-*",
+    "aws-cloudtrail-*"
+  ],
+  "name": "AWS first-seen: rds-download-db-log (behavioral)",
+  "description": "Behavioral detection. Fires when (userIdentity.arn, eventName) is new for this principal in the last 90 days. Source rule: rules/credential-access/rds-download-db-log.yml. Adjust field names to your Elastic CloudTrail mapping (e.g. aws.cloudtrail.* with the Fleet integration).",
+  "query": "eventName:(\"DownloadDBLogFilePortion\" or \"DownloadCompleteDBLogFile\") and eventSource:\"rds.amazonaws.com\"",
+  "new_terms_fields": [
+    "userIdentity.arn",
+    "eventName"
+  ],
+  "history_window_start": "now-90d",
+  "severity": "low",
+  "risk_score": 21
+}

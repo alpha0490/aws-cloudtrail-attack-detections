@@ -1,1 +1,0 @@
-from * metadata _id, _index, _version | where eventName=="StartSession" and eventSource=="ssm.amazonaws.com"

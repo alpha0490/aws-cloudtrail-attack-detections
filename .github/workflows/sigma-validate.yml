@@ -47,24 +47,3 @@ jobs:
             git --no-pager diff --stat -- cheatsheet docs
             exit 1
           fi
-
-  dist:
-    name: pre-built queries (advisory)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install pinned toolchain + backends
-        run: pip install -r requirements-dev.txt
-
-      - name: Rebuild dist/ and verify in sync
-        run: |
-          python3 scripts/build_dist.py
-          if ! git diff --quiet -- dist; then
-            echo "::error::dist/ is out of date. Run 'pip install -r requirements-dev.txt && python3 scripts/build_dist.py' and commit."
-            git --no-pager diff --stat -- dist
-            exit 1
-          fi

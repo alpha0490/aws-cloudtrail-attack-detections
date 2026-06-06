@@ -60,7 +60,7 @@ Detections key off CloudTrail `eventName` / `eventSource` and relevant
 ├── lookups/                    # IP allowlist + CrowdStrike threatlist (CSV) for the enrichment layer
 ├── tests/                     # logic tests: true-positive / benign CloudTrail events per rule
 ├── scripts/                   # generators: build_docs / build_dist / build_navigator / build_scorecard
-├── .github/workflows/         # CI: sigma check + logic tests + docs/dist/navigator/scorecard in-sync
+├── .github/workflows/         # CI: sigma check + logic tests + docs/navigator/scorecard in-sync
 ├── CHANGELOG.md  CONTRIBUTING.md
 └── LICENSE                    # Apache-2.0
 ```

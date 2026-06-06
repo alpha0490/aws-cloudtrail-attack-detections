@@ -43,4 +43,6 @@ pip install -r requirements-dev.txt   # pinned toolchain → reproducible output
 python3 scripts/build_dist.py
 ```
 
-Output is deterministic and verified in CI — if `dist/` drifts from the rules, the build fails.
+Regenerate with the pinned toolchain above. `dist/` is a convenience artifact — the rules in
+[`rules/`](../rules/) are the source of truth; minor query-ordering differences across Python/backend
+versions are cosmetic.

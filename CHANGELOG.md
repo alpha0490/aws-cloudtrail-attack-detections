@@ -12,6 +12,10 @@ All notable changes to this project are documented here. Format follows
   permission-set assignments, EC2 user-data modification, KMS grants, Secrets Manager resource
   policies, federated `AssumeRoleWith*`, and `CreateImage`.
 - Logic tests for all new rules (30 → **46 rules / 92 checks**).
+- **Threat-informed mapping** (`docs/threat-mapping.md`) tying real AWS intrusions (Capital One,
+  Scattered Spider/LUCR-3, Code Spaces, TeamTNT, SCARLETEEL) to the rules that catch each kill-chain stage.
+- **Machine-readable catalog** (`detections.json`, via `scripts/build_catalog.py`) of every rule —
+  title, tactic, technique, tier, events, and per-SIEM query paths — for tooling and AI assistants.
 
 ### Changed
 - **Coverage scorecard is now 25/25 (100%)** — both prior gaps (Roles Anywhere trust anchor, SG

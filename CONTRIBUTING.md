@@ -30,7 +30,7 @@ Every rule MUST include these keys and pass `sigma check`:
 | `detection` | Key off `eventName` / `eventSource` and relevant `requestParameters.*` / `responseElements.*` / `userIdentity.*`. |
 | `falsepositives` | At least one realistic FP. |
 | `level` | `informational` / `low` / `medium` / `high` / `critical`. |
-| `tier` | Deploy tier: `alert` (page on sight) or `hunt` (high-volume/contextual — deploy via the enrichment+baseline layer). Default: `alert` iff `level` is `high`/`critical`. |
+| `tier` | `alert` = **signature** (the event is the attack, page on sight) or `hunt` = **behavioral** (normal event; alert only when *unconventional for the principal* via the first-seen baseline — see [detection-model](docs/detection-model.md)). An `alert` rule must never be a bare match on a high-volume event (CI enforces this). |
 
 ### Example skeleton
 

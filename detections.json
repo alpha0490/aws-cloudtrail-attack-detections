@@ -11,6 +11,10 @@
       "alert": 37,
       "hunt": 77
     },
+    "types": {
+      "signature": 90,
+      "behavioral": 24
+    },
     "query_languages": [
       "crowdstrike",
       "kql",
@@ -29,6 +33,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "ExportTableToPointInTime"
@@ -53,6 +58,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateImage"
@@ -77,6 +83,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateSnapshot",
@@ -102,6 +109,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateDBClusterSnapshot",
@@ -127,6 +135,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "GetObject"
@@ -134,12 +143,12 @@
       "eventSources": [
         "s3.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/collection/s3-get-object.logscale",
-        "kql": "dist/kusto/collection/s3-get-object.kql",
-        "splunk": "dist/splunk/collection/s3-get-object.spl",
-        "esql": "dist/esql/collection/s3-get-object.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "requestParameters.bucketName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/collection/s3-get-object.json"
     },
     {
       "file": "rules/collection/s3-mass-list-objects.yml",
@@ -151,6 +160,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "ListObjects",
@@ -159,12 +169,12 @@
       "eventSources": [
         "s3.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/collection/s3-mass-list-objects.logscale",
-        "kql": "dist/kusto/collection/s3-mass-list-objects.kql",
-        "splunk": "dist/splunk/collection/s3-mass-list-objects.spl",
-        "esql": "dist/esql/collection/s3-mass-list-objects.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "requestParameters.bucketName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/collection/s3-mass-list-objects.json"
     },
     {
       "file": "rules/credential-access/ec2-get-password-data.yml",
@@ -176,6 +186,7 @@
       ],
       "tier": "alert",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "GetPasswordData"
@@ -201,6 +212,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "CreateGrant"
@@ -208,12 +220,12 @@
       "eventSources": [
         "kms.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/credential-access/kms-create-grant.logscale",
-        "kql": "dist/kusto/credential-access/kms-create-grant.kql",
-        "splunk": "dist/splunk/credential-access/kms-create-grant.spl",
-        "esql": "dist/esql/credential-access/kms-create-grant.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "requestParameters.keyId"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/kms-create-grant.json"
     },
     {
       "file": "rules/credential-access/kms-decrypt.yml",
@@ -225,6 +237,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "Decrypt"
@@ -232,12 +245,12 @@
       "eventSources": [
         "kms.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/credential-access/kms-decrypt.logscale",
-        "kql": "dist/kusto/credential-access/kms-decrypt.kql",
-        "splunk": "dist/splunk/credential-access/kms-decrypt.spl",
-        "esql": "dist/esql/credential-access/kms-decrypt.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "sourceIPAddress"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/kms-decrypt.json"
     },
     {
       "file": "rules/credential-access/rds-download-db-log.yml",
@@ -249,6 +262,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "DownloadCompleteDBLogFile",
@@ -257,12 +271,12 @@
       "eventSources": [
         "rds.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/credential-access/rds-download-db-log.logscale",
-        "kql": "dist/kusto/credential-access/rds-download-db-log.kql",
-        "splunk": "dist/splunk/credential-access/rds-download-db-log.spl",
-        "esql": "dist/esql/credential-access/rds-download-db-log.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "eventName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/rds-download-db-log.json"
     },
     {
       "file": "rules/credential-access/secretsmanager-batch-get-secret-value.yml",
@@ -274,6 +288,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "BatchGetSecretValue"
@@ -281,12 +296,12 @@
       "eventSources": [
         "secretsmanager.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/credential-access/secretsmanager-batch-get-secret-value.logscale",
-        "kql": "dist/kusto/credential-access/secretsmanager-batch-get-secret-value.kql",
-        "splunk": "dist/splunk/credential-access/secretsmanager-batch-get-secret-value.spl",
-        "esql": "dist/esql/credential-access/secretsmanager-batch-get-secret-value.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "eventName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/secretsmanager-batch-get-secret-value.json"
     },
     {
       "file": "rules/credential-access/secretsmanager-get-secret-value.yml",
@@ -298,6 +313,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "GetSecretValue"
@@ -305,12 +321,12 @@
       "eventSources": [
         "secretsmanager.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/credential-access/secretsmanager-get-secret-value.logscale",
-        "kql": "dist/kusto/credential-access/secretsmanager-get-secret-value.kql",
-        "splunk": "dist/splunk/credential-access/secretsmanager-get-secret-value.spl",
-        "esql": "dist/esql/credential-access/secretsmanager-get-secret-value.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "requestParameters.secretId"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/secretsmanager-get-secret-value.json"
     },
     {
       "file": "rules/credential-access/secretsmanager-put-resource-policy.yml",
@@ -322,6 +338,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "PutResourcePolicy"
@@ -346,6 +363,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "GetParameter",
@@ -373,6 +391,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "AssumeRoleWithSAML",
@@ -381,12 +400,12 @@
       "eventSources": [
         "sts.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/credential-access/sts-assume-role-with-web-identity.logscale",
-        "kql": "dist/kusto/credential-access/sts-assume-role-with-web-identity.kql",
-        "splunk": "dist/splunk/credential-access/sts-assume-role-with-web-identity.spl",
-        "esql": "dist/esql/credential-access/sts-assume-role-with-web-identity.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "requestParameters.roleArn"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/sts-assume-role-with-web-identity.json"
     },
     {
       "file": "rules/credential-access/sts-get-federation-token.yml",
@@ -398,6 +417,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "GetFederationToken"
@@ -405,12 +425,12 @@
       "eventSources": [
         "sts.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/credential-access/sts-get-federation-token.logscale",
-        "kql": "dist/kusto/credential-access/sts-get-federation-token.kql",
-        "splunk": "dist/splunk/credential-access/sts-get-federation-token.spl",
-        "esql": "dist/esql/credential-access/sts-get-federation-token.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "eventName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/sts-get-federation-token.json"
     },
     {
       "file": "rules/credential-access/sts-get-session-token.yml",
@@ -423,6 +443,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "GetSessionToken"
@@ -430,12 +451,12 @@
       "eventSources": [
         "sts.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/credential-access/sts-get-session-token.logscale",
-        "kql": "dist/kusto/credential-access/sts-get-session-token.kql",
-        "splunk": "dist/splunk/credential-access/sts-get-session-token.spl",
-        "esql": "dist/esql/credential-access/sts-get-session-token.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "eventName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/credential-access/sts-get-session-token.json"
     },
     {
       "file": "rules/defense-evasion/cloud-security-service-disabled.yml",
@@ -447,6 +468,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteAnalyzer",
@@ -473,6 +495,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteTrail"
@@ -497,6 +520,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "PutEventSelectors"
@@ -521,6 +545,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "StopLogging"
@@ -545,6 +570,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "UpdateTrail"
@@ -569,6 +595,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteAlarms"
@@ -594,6 +621,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteLogGroup",
@@ -619,6 +647,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteConfigRule",
@@ -646,6 +675,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "AuthorizeSecurityGroupIngress"
@@ -670,6 +700,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DisableEbsEncryptionByDefault"
@@ -694,6 +725,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteDetector",
@@ -722,6 +754,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateFilter",
@@ -750,6 +783,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeactivateMFADevice"
@@ -775,6 +809,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "LeaveOrganization",
@@ -800,6 +835,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "PutBucketLogging"
@@ -825,6 +861,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteAccountPublicAccessBlock",
@@ -852,6 +889,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "BatchDisableStandards",
@@ -878,6 +916,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteFlowLogs"
@@ -902,6 +941,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteIPSet",
@@ -929,6 +969,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": true,
       "eventNames": [],
       "eventSources": [],
@@ -947,6 +988,7 @@
       ],
       "tier": "hunt",
       "level": "informational",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "DescribeRegions",
@@ -954,12 +996,12 @@
         "ListRegions"
       ],
       "eventSources": [],
-      "queries": {
-        "crowdstrike": "dist/log_scale/discovery/account-describe-regions.logscale",
-        "kql": "dist/kusto/discovery/account-describe-regions.kql",
-        "splunk": "dist/splunk/discovery/account-describe-regions.spl",
-        "esql": "dist/esql/discovery/account-describe-regions.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "eventName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/discovery/account-describe-regions.json"
     },
     {
       "file": "rules/discovery/ec2-describe-enumeration.yml",
@@ -971,6 +1013,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "DescribeAddresses",
@@ -983,12 +1026,12 @@
       "eventSources": [
         "ec2.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/discovery/ec2-describe-enumeration.logscale",
-        "kql": "dist/kusto/discovery/ec2-describe-enumeration.kql",
-        "splunk": "dist/splunk/discovery/ec2-describe-enumeration.spl",
-        "esql": "dist/esql/discovery/ec2-describe-enumeration.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "eventName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/discovery/ec2-describe-enumeration.json"
     },
     {
       "file": "rules/discovery/iam-enumerate-principals.yml",
@@ -1000,6 +1043,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "GetAccountSummary",
@@ -1011,12 +1055,12 @@
       "eventSources": [
         "iam.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/discovery/iam-enumerate-principals.logscale",
-        "kql": "dist/kusto/discovery/iam-enumerate-principals.kql",
-        "splunk": "dist/splunk/discovery/iam-enumerate-principals.spl",
-        "esql": "dist/esql/discovery/iam-enumerate-principals.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "eventName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/discovery/iam-enumerate-principals.json"
     },
     {
       "file": "rules/discovery/iam-get-account-authorization-details.yml",
@@ -1028,6 +1072,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "GetAccountAuthorizationDetails"
@@ -1035,12 +1080,12 @@
       "eventSources": [
         "iam.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/discovery/iam-get-account-authorization-details.logscale",
-        "kql": "dist/kusto/discovery/iam-get-account-authorization-details.kql",
-        "splunk": "dist/splunk/discovery/iam-get-account-authorization-details.spl",
-        "esql": "dist/esql/discovery/iam-get-account-authorization-details.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "eventName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/discovery/iam-get-account-authorization-details.json"
     },
     {
       "file": "rules/discovery/iam-permission-enumeration.yml",
@@ -1052,6 +1097,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "ListAttachedRolePolicies",
@@ -1062,12 +1108,12 @@
       "eventSources": [
         "iam.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/discovery/iam-permission-enumeration.logscale",
-        "kql": "dist/kusto/discovery/iam-permission-enumeration.kql",
-        "splunk": "dist/splunk/discovery/iam-permission-enumeration.spl",
-        "esql": "dist/esql/discovery/iam-permission-enumeration.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "eventName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/discovery/iam-permission-enumeration.json"
     },
     {
       "file": "rules/discovery/organizations-describe.yml",
@@ -1080,6 +1126,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "DescribeOrganization",
@@ -1089,12 +1136,12 @@
       "eventSources": [
         "organizations.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/discovery/organizations-describe.logscale",
-        "kql": "dist/kusto/discovery/organizations-describe.kql",
-        "splunk": "dist/splunk/discovery/organizations-describe.spl",
-        "esql": "dist/esql/discovery/organizations-describe.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "eventName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/discovery/organizations-describe.json"
     },
     {
       "file": "rules/discovery/s3-list-buckets.yml",
@@ -1107,6 +1154,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "ListBuckets"
@@ -1114,12 +1162,12 @@
       "eventSources": [
         "s3.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/discovery/s3-list-buckets.logscale",
-        "kql": "dist/kusto/discovery/s3-list-buckets.kql",
-        "splunk": "dist/splunk/discovery/s3-list-buckets.spl",
-        "esql": "dist/esql/discovery/s3-list-buckets.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "eventName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/discovery/s3-list-buckets.json"
     },
     {
       "file": "rules/discovery/sts-get-caller-identity.yml",
@@ -1132,6 +1180,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "GetCallerIdentity"
@@ -1139,12 +1188,12 @@
       "eventSources": [
         "sts.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/discovery/sts-get-caller-identity.logscale",
-        "kql": "dist/kusto/discovery/sts-get-caller-identity.kql",
-        "splunk": "dist/splunk/discovery/sts-get-caller-identity.spl",
-        "esql": "dist/esql/discovery/sts-get-caller-identity.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "eventName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/discovery/sts-get-caller-identity.json"
     },
     {
       "file": "rules/execution/ec2-modify-instance-attribute-userdata.yml",
@@ -1157,6 +1206,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "ModifyInstanceAttribute"
@@ -1181,6 +1231,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "RunTask",
@@ -1189,12 +1240,12 @@
       "eventSources": [
         "ecs.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/execution/ecs-run-task.logscale",
-        "kql": "dist/kusto/execution/ecs-run-task.kql",
-        "splunk": "dist/splunk/execution/ecs-run-task.spl",
-        "esql": "dist/esql/execution/ecs-run-task.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "requestParameters.taskDefinition"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/execution/ecs-run-task.json"
     },
     {
       "file": "rules/execution/lambda-invoke.yml",
@@ -1206,6 +1257,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "Invoke"
@@ -1213,12 +1265,12 @@
       "eventSources": [
         "lambda.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/execution/lambda-invoke.logscale",
-        "kql": "dist/kusto/execution/lambda-invoke.kql",
-        "splunk": "dist/splunk/execution/lambda-invoke.spl",
-        "esql": "dist/esql/execution/lambda-invoke.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "requestParameters.functionName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/execution/lambda-invoke.json"
     },
     {
       "file": "rules/execution/ssm-create-document.yml",
@@ -1230,6 +1282,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateDocument",
@@ -1255,6 +1308,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "SendCommand"
@@ -1262,12 +1316,12 @@
       "eventSources": [
         "ssm.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/execution/ssm-send-command.logscale",
-        "kql": "dist/kusto/execution/ssm-send-command.kql",
-        "splunk": "dist/splunk/execution/ssm-send-command.spl",
-        "esql": "dist/esql/execution/ssm-send-command.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "requestParameters.documentName"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/execution/ssm-send-command.json"
     },
     {
       "file": "rules/execution/ssm-start-session.yml",
@@ -1280,6 +1334,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "StartSession"
@@ -1287,12 +1342,12 @@
       "eventSources": [
         "ssm.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/execution/ssm-start-session.logscale",
-        "kql": "dist/kusto/execution/ssm-start-session.kql",
-        "splunk": "dist/splunk/execution/ssm-start-session.spl",
-        "esql": "dist/esql/execution/ssm-start-session.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "requestParameters.target"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/execution/ssm-start-session.json"
     },
     {
       "file": "rules/exfiltration/datasync-create-task.yml",
@@ -1305,6 +1360,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateLocationObjectStorage",
@@ -1331,6 +1387,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateInstanceExportTask",
@@ -1356,6 +1413,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "ModifyImageAttribute"
@@ -1380,6 +1438,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "ModifySnapshotAttribute"
@@ -1404,6 +1463,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "ModifyDBClusterSnapshotAttribute",
@@ -1429,6 +1489,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "PutBucketAcl"
@@ -1453,6 +1514,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "PutBucketPolicy"
@@ -1477,6 +1539,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteBackupPlan",
@@ -1503,6 +1566,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteTable"
@@ -1527,6 +1591,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteSnapshot"
@@ -1551,6 +1616,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "RunInstances"
@@ -1576,6 +1642,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "StopInstances",
@@ -1601,6 +1668,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteAccessKey",
@@ -1627,6 +1695,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DisableKey",
@@ -1653,6 +1722,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "ScheduleKeyDeletion"
@@ -1677,6 +1747,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteDBCluster",
@@ -1702,6 +1773,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteDBClusterSnapshot",
@@ -1727,6 +1799,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteBucket"
@@ -1751,6 +1824,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "DeleteObject",
@@ -1776,6 +1850,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "PutBucketVersioning"
@@ -1800,6 +1875,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "AcceptHandshake"
@@ -1824,6 +1900,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": true,
       "eventNames": [
         "ConsoleLogin"
@@ -1846,6 +1923,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "ConsoleLogin"
@@ -1870,6 +1948,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "ConsoleLogin"
@@ -1895,6 +1974,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "GetSigninToken"
@@ -1920,6 +2000,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "PasswordRecoveryRequested"
@@ -1944,6 +2025,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": true,
       "eventNames": [
         "ConsoleLogin"
@@ -1966,6 +2048,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [],
       "eventSources": [],
@@ -1986,6 +2069,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "ConsoleLogin"
@@ -2010,6 +2094,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "SendSSHPublicKey"
@@ -2034,6 +2119,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "SendSerialConsoleSSHPublicKey",
@@ -2057,6 +2143,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "AssumeRole",
@@ -2066,12 +2153,12 @@
       "eventSources": [
         "sts.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/lateral-movement/sts-assume-role-cross-account.logscale",
-        "kql": "dist/kusto/lateral-movement/sts-assume-role-cross-account.kql",
-        "splunk": "dist/splunk/lateral-movement/sts-assume-role-cross-account.spl",
-        "esql": "dist/esql/lateral-movement/sts-assume-role-cross-account.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "requestParameters.roleArn"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/lateral-movement/sts-assume-role-cross-account.json"
     },
     {
       "file": "rules/lateral-movement/sts-assume-role.yml",
@@ -2084,6 +2171,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "behavioral",
       "correlation": false,
       "eventNames": [
         "AssumeRole"
@@ -2091,12 +2179,12 @@
       "eventSources": [
         "sts.amazonaws.com"
       ],
-      "queries": {
-        "crowdstrike": "dist/log_scale/lateral-movement/sts-assume-role.logscale",
-        "kql": "dist/kusto/lateral-movement/sts-assume-role.kql",
-        "splunk": "dist/splunk/lateral-movement/sts-assume-role.spl",
-        "esql": "dist/esql/lateral-movement/sts-assume-role.esql"
-      }
+      "queries": {},
+      "anomaly_key": [
+        "userIdentity.arn",
+        "requestParameters.roleArn"
+      ],
+      "newterms": "dist/behavioral/elastic-newterms/lateral-movement/sts-assume-role.json"
     },
     {
       "file": "rules/persistence/ec2-create-key-pair.yml",
@@ -2108,6 +2196,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateKeyPair",
@@ -2133,6 +2222,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "RegisterImage"
@@ -2157,6 +2247,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "PutImage"
@@ -2181,6 +2272,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "AttachUserPolicy"
@@ -2205,6 +2297,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateAccessKey"
@@ -2230,6 +2323,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateLoginProfile"
@@ -2254,6 +2348,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreatePolicy"
@@ -2279,6 +2374,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateOpenIDConnectProvider",
@@ -2305,6 +2401,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateServiceSpecificCredential"
@@ -2329,6 +2426,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateUser"
@@ -2353,6 +2451,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateVirtualMFADevice"
@@ -2377,6 +2476,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "EnableMFADevice"
@@ -2401,6 +2501,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "PutUserPolicy"
@@ -2425,6 +2526,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateProfile",
@@ -2450,6 +2552,7 @@
       ],
       "tier": "alert",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "UpdateLoginProfile"
@@ -2474,6 +2577,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "AddPermission",
@@ -2501,6 +2605,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateFunction",
@@ -2527,6 +2632,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "UpdateFunctionCode",
@@ -2553,6 +2659,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "AttachManagedPolicyToPermissionSet",
@@ -2580,6 +2687,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "AddRoleToInstanceProfile",
@@ -2603,6 +2711,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "AddUserToGroup"
@@ -2627,6 +2736,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "AttachGroupPolicy",
@@ -2653,6 +2763,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "AttachRolePolicy"
@@ -2677,6 +2788,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreatePolicyVersion"
@@ -2701,6 +2813,7 @@
       ],
       "tier": "hunt",
       "level": "low",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateRole"
@@ -2725,6 +2838,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "CreateFunction",
@@ -2748,6 +2862,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "AttachGroupPolicy",
@@ -2773,6 +2888,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "PutRolePolicy"
@@ -2797,6 +2913,7 @@
       ],
       "tier": "hunt",
       "level": "medium",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "SetDefaultPolicyVersion"
@@ -2822,6 +2939,7 @@
       ],
       "tier": "alert",
       "level": "high",
+      "type": "signature",
       "correlation": false,
       "eventNames": [
         "UpdateAssumeRolePolicy"

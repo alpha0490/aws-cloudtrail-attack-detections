@@ -4,7 +4,7 @@ Fast lookup of suspicious AWS CloudTrail activity, organized by MITRE ATT&CK tac
 
 > **Tip:** the highest-signal fields to pivot on for almost any CloudTrail event are `userIdentity.arn`, `sourceIPAddress`, `userAgent`, `eventName`, and `awsRegion`.
 
-> **Deploy tiers:** **alert** (37) = high-signal, page on sight · **hunt** (77) = high-volume / context-dependent — run through the [enrichment + 90-day baseline layer](../docs/enrichment-and-baselining.md) or use for threat hunting, not direct paging.
+> **Detection model:** **alert** (37) = *signature* — the event is the attack, page on sight · **hunt** (77) = *behavioral* — alert when the action is **new / unconventional for the principal** via the [first-seen baseline](../docs/detection-model.md), not on the bare event.
 
 **Jump to:** [Initial Access](#initial-access) · [Execution](#execution) · [Persistence](#persistence) · [Privilege Escalation](#privilege-escalation) · [Defense Evasion](#defense-evasion) · [Credential Access](#credential-access) · [Discovery](#discovery) · [Lateral Movement](#lateral-movement) · [Collection](#collection) · [Exfiltration](#exfiltration) · [Impact](#impact)
 

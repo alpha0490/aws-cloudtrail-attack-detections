@@ -8,6 +8,7 @@ on:
       - "tests/**"
       - "docs/**"
       - "dist/**"
+      - "behavioral-keys.yml"
       - ".github/workflows/sigma-validate.yml"
   pull_request:
     paths:
@@ -16,6 +17,7 @@ on:
       - "tests/**"
       - "docs/**"
       - "dist/**"
+      - "behavioral-keys.yml"
   workflow_dispatch:
 
 jobs:
@@ -37,14 +39,17 @@ jobs:
       - name: Run rule logic tests (true-positive / benign events)
         run: python3 tests/run_tests.py
 
-      - name: Verify generated docs/navigator/scorecard/catalog are in sync
+      - name: Fidelity gate (no alert-tier bare high-volume rules) + regen behavioral
+        run: python3 scripts/build_behavioral.py
+
+      - name: Verify generated artifacts are in sync
         run: |
           python3 scripts/build_docs.py
           python3 scripts/build_navigator.py
           python3 scripts/build_scorecard.py
           python3 scripts/build_catalog.py
-          if ! git diff --quiet -- cheatsheet docs detections.json; then
+          if ! git diff --quiet -- cheatsheet docs detections.json behavioral-keys.yml dist/behavioral; then
             echo "::error::Generated files are stale. Run the scripts/build_*.py generators and commit."
-            git --no-pager diff --stat -- cheatsheet docs detections.json
+            git --no-pager diff --stat -- cheatsheet docs detections.json behavioral-keys.yml dist/behavioral
             exit 1
           fi

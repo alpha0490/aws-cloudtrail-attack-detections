@@ -10,8 +10,12 @@ find the right rule, or generate a new one consistent with the repo. Determinist
 import glob
 import json
 import os
+import sys
 
 import yaml
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from build_behavioral import ANOMALY_OVERRIDES, DEFAULT_KEY, classify  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DIST_TARGETS = {"crowdstrike": ("log_scale", "logscale"), "kql": ("kusto", "kql"),
@@ -53,7 +57,8 @@ def main():
             q = os.path.join("dist", target, tactic, stem + "." + ext)
             if os.path.exists(os.path.join(ROOT, q)):
                 dist[label] = q
-        detections.append({
+        c = classify(path)
+        entry = {
             "file": rel,
             "title": main.get("title"),
             "id": main.get("id"),
@@ -61,11 +66,16 @@ def main():
             "techniques": [t.split("attack.")[1].upper() for t in main.get("tags", []) if t.startswith("attack.t")],
             "tier": main.get("tier", "hunt"),
             "level": main.get("level"),
+            "type": "behavioral" if c["behavioral"] else "signature",
             "correlation": bool(corr),
             "eventNames": names,
             "eventSources": sources,
             "queries": dist,
-        })
+        }
+        if c["behavioral"]:
+            entry["anomaly_key"] = ANOMALY_OVERRIDES.get(rel, DEFAULT_KEY)
+            entry["newterms"] = "dist/behavioral/elastic-newterms/%s/%s.json" % (tactic, stem)
+        detections.append(entry)
 
     catalog = {
         "meta": {
@@ -76,6 +86,8 @@ def main():
             "count": len(detections),
             "tiers": {"alert": sum(1 for d in detections if d["tier"] == "alert"),
                       "hunt": sum(1 for d in detections if d["tier"] == "hunt")},
+            "types": {"signature": sum(1 for d in detections if d["type"] == "signature"),
+                      "behavioral": sum(1 for d in detections if d["type"] == "behavioral")},
             "query_languages": list(DIST_TARGETS.keys()),
         },
         "detections": detections,

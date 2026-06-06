@@ -189,9 +189,12 @@ For end-to-end validation against **real emulated attacks**, see
 [validation with Stratus Red Team](docs/validation-with-stratus.md) — detonate a technique, confirm
 the rule fires on the CloudTrail event it produces.
 
-> **Deploy tiers:** each rule carries a `tier` — `alert` (high-signal, page on sight) or `hunt`
-> (high-volume/contextual, deploy through the enrichment + baseline layer or for threat hunting).
-> The split is shown in the [cheatsheet](cheatsheet/README.md) and [coverage matrix](docs/mitre-matrix.md).
+> **Detection model:** every rule is a **signature** (`tier: alert` — the event *is* the attack, page
+> on sight) or **behavioral** (`tier: hunt` — a normal event that's only suspicious when *unconventional
+> for the principal*; alert on the **first-seen anomaly** via the baseline, not the bare event). See
+> [`docs/detection-model.md`](docs/detection-model.md); the behavioral rules ship as Elastic `new_terms`
+> in [`dist/behavioral/`](dist/behavioral/). A bare `eventName=Invoke` is noise — *"this role invoked a
+> Lambda it never has before"* is the detection.
 
 ## Important CloudTrail caveats
 

@@ -186,10 +186,10 @@ def build_cheatsheet(rules):
     out.append("> **Tip:** the highest-signal fields to pivot on for almost any CloudTrail event are "
                "`userIdentity.arn`, `sourceIPAddress`, `userAgent`, `eventName`, and `awsRegion`.\n")
     n_alert = sum(1 for r in rules if r.get("tier") == "alert")
-    out.append("> **Deploy tiers:** **alert** (%d) = high-signal, page on sight · "
-               "**hunt** (%d) = high-volume / context-dependent — run through the "
-               "[enrichment + 90-day baseline layer](../docs/enrichment-and-baselining.md) "
-               "or use for threat hunting, not direct paging.\n" % (n_alert, len(rules) - n_alert))
+    out.append("> **Detection model:** **alert** (%d) = *signature* — the event is the attack, page on "
+               "sight · **hunt** (%d) = *behavioral* — alert when the action is **new / unconventional "
+               "for the principal** via the [first-seen baseline](../docs/detection-model.md), not on the "
+               "bare event.\n" % (n_alert, len(rules) - n_alert))
     # quick tactic index
     out.append("**Jump to:** " + " · ".join(
         "[%s](#%s)" % (name, name.lower().replace(" ", "-")) for _, name, _ in TACTICS) + "\n")

@@ -39,7 +39,7 @@ ingest schema (or use a `sigma convert` pipeline that encodes your schema). The 
 ## Regenerating
 
 ```bash
-sigma plugin install crowdstrike kusto splunk elasticsearch
+pip install -r requirements-dev.txt   # pinned toolchain → reproducible output
 python3 scripts/build_dist.py
 ```
 

@@ -77,8 +77,8 @@ python3 tests/run_tests.py         # 2. logic: true-positive/benign event tests 
 python3 scripts/build_docs.py      # 3. regenerate cheatsheet + matrix
 python3 scripts/build_navigator.py # 4. regenerate the ATT&CK Navigator layer
 python3 scripts/build_scorecard.py # 5. regenerate the coverage scorecard
-# If you added/changed rules, also refresh the pre-built queries (needs the backends):
-#   sigma plugin install crowdstrike kusto splunk elasticsearch && python3 scripts/build_dist.py
+# If you added/changed rules, also refresh the pre-built queries (pinned toolchain):
+#   pip install -r requirements-dev.txt && python3 scripts/build_dist.py
 ```
 
 - Confirm `sigma check` is clean **and** `tests/run_tests.py` is green.

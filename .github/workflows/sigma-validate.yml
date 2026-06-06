@@ -28,8 +28,8 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install sigma-cli
-        run: pip install sigma-cli pyyaml
+      - name: Install pinned toolchain
+        run: pip install -r requirements-dev.txt
 
       - name: Validate all rules (sigma check)
         run: sigma check rules/
@@ -57,19 +57,14 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install sigma-cli + backends
-        run: |
-          pip install sigma-cli pyyaml
-          sigma plugin install crowdstrike
-          sigma plugin install kusto
-          sigma plugin install splunk
-          sigma plugin install elasticsearch
+      - name: Install pinned toolchain + backends
+        run: pip install -r requirements-dev.txt
 
-      - name: Rebuild dist/ and report drift (advisory — backend versions can shift output)
-        continue-on-error: true
+      - name: Rebuild dist/ and verify in sync
         run: |
           python3 scripts/build_dist.py
           if ! git diff --quiet -- dist; then
-            echo "::warning::dist/ differs from committed output. Run scripts/build_dist.py and commit (or it's a pySigma backend version change)."
+            echo "::error::dist/ is out of date. Run 'pip install -r requirements-dev.txt && python3 scripts/build_dist.py' and commit."
             git --no-pager diff --stat -- dist
+            exit 1
           fi

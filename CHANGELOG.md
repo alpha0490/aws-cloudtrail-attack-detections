@@ -5,6 +5,8 @@ All notable changes to this project are documented here. Format follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-06-06
+
 ### Added
 - **16 new detections** (98 → 114 rules), incl. security-group-opened-to-internet, GuardDuty
   finding suppression, cloud-security-service disablement, IAM Roles Anywhere trust anchors, SAML/OIDC
@@ -16,6 +18,9 @@ All notable changes to this project are documented here. Format follows
   Scattered Spider/LUCR-3, Code Spaces, TeamTNT, SCARLETEEL) to the rules that catch each kill-chain stage.
 - **Machine-readable catalog** (`detections.json`, via `scripts/build_catalog.py`) of every rule —
   title, tactic, technique, tier, events, and per-SIEM query paths — for tooling and AI assistants.
+- **Complete first-seen queries** for every behavioral rule — native Elastic `new_terms` and full,
+  self-contained Sumo Logic queries (`dist/behavioral/`), each keyed on its anomaly key with
+  assumed-role principal normalization.
 
 ### Changed
 - **Coverage scorecard is now 25/25 (100%)** — both prior gaps (Roles Anywhere trust anchor, SG
@@ -55,5 +60,6 @@ First public release.
   detonating Stratus in a sandbox AWS account (documented).
 - Pre-built queries use raw CloudTrail field names; adjust to your SIEM's ingest schema.
 
-[Unreleased]: https://github.com/alpha0490/aws-cloudtrail-attack-detections/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/alpha0490/aws-cloudtrail-attack-detections/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/alpha0490/aws-cloudtrail-attack-detections/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/alpha0490/aws-cloudtrail-attack-detections/releases/tag/v0.1.0

@@ -11,10 +11,10 @@ This repository contains **detection content** (Sigma rules, queries, docs) — 
 ## Reporting
 
 - For a **non-sensitive** issue (most rule corrections), open a normal
-  [issue](../../issues) using the *false positive / wrong field* template. **Sanitize** any example
+  [issue](https://github.com/alpha0490/aws-cloudtrail-attack-detections/issues) using the *false positive / wrong field* template. **Sanitize** any example
   events first — remove account IDs, ARNs, IPs, and usernames.
 - For something you'd rather not disclose publicly, use
-  [**GitHub private vulnerability reporting**](../../security/advisories/new) (Security → Report a
+  [**GitHub private vulnerability reporting**](https://github.com/alpha0490/aws-cloudtrail-attack-detections/security/advisories/new) (Security → Report a
   vulnerability) if enabled, or contact the maintainer privately.
 
 Please do **not** include real customer data, credentials, or unsanitized logs in any report.

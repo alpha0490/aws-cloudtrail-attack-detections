@@ -20,7 +20,8 @@ A good assistant will produce a rule consistent with `rules/`, and a query consi
 
 | You want… | Point the model at… |
 |---|---|
-| The rule style + ~98 examples | [`rules/`](../rules/) (one tactic per folder) |
+| **A structured index of every rule** (best starting point) | [`detections.json`](../detections.json) — title, tactic, technique, tier, events, and the per-SIEM query path for each rule |
+| The rule style + 110+ examples | [`rules/`](../rules/) (one tactic per folder) |
 | What each CloudTrail event means + fields to inspect | [`cheatsheet/README.md`](../cheatsheet/README.md) |
 | Per-SIEM query syntax to mimic (CrowdStrike/KQL/Splunk/Elastic) | [`dist/`](../dist/) |
 | Coverage + known gaps to fill | [`docs/mitre-matrix.md`](mitre-matrix.md), [`docs/coverage-scorecard.md`](coverage-scorecard.md) |
